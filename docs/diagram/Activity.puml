@@ -1,0 +1,74 @@
+@startuml
+
+start
+
+:Open Application;
+
+switch (Select Window?)
+case ( Default )
+    :List of Birthdays Window;
+    :View all Birthdays;
+    :View new age;
+
+    switch (Select Action?)
+    case (  )
+        :View sort Birthdays;
+    case ( )
+        :View detailed info;
+    case (  )
+        :Search Birthday;
+    case (  )
+        :Edit Birthday;
+    case (  )
+        :Delete Birthday;
+    endSwitch
+
+case (  )
+    :Calendar Window;
+    :View all Birthdays;
+
+    switch (Select Action?)
+        case (  )
+            :View new age;
+        case ( )
+            :View detailed info;
+        case (  )
+            :Edit Birthday;
+        case (  )
+            :Delete Birthday;
+        endSwitch
+
+case ( )
+    :Adding birthday Window;
+
+    switch (Select Action?)
+        case (  )
+            repeat :Add Birthday;
+            backward :Incorrect values;
+            note right: Error message
+            repeat while (Valid values?) is (No) not (Yes)
+        case (  )
+            repeat :Import Birthdays;
+            backward :Incorrect values;
+            note right: Error message
+            repeat while (Valid values?) is (No) not (Yes)
+    endSwitch
+case (  )
+    :Settings Window;
+    switch (Select Action?)
+        case (  )
+            :Export Birthdays;
+        case (  )
+            :Change Notifications;
+        case ( )
+            :Change Language;
+        case (  )
+            :Change Detailed info;
+        case (  )
+            :About App;
+        endSwitch
+endSwitch
+
+stop
+
+@enduml

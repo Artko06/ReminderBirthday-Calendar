@@ -1,0 +1,203 @@
+@startuml
+
+actor User
+participant "Device" as Device
+participant "Database" as DB
+
+User -> Device: Open Application
+
+=== Calendar ==
+== Use Case 1: View all Birthdays ==
+User -> Device : View all Birthdays
+Device -> DB : Request all Birthdays
+alt Data successfully retrieved
+    DB -> Device : Return all Birthdays
+    Device -> User : Display list of birthdays
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 2: View sorted Birthdays ==
+User -> Device: View sorted Birthdays
+Device -> DB: Request sorted Birthdays
+alt Data successfully retrieved
+    DB -> Device: Return sorted Birthdays
+    Device -> User: Display sorted list
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 3: Search Birthday ==
+User -> Device: Search Birthday
+Device -> DB: Request Birthday Info
+alt Data successfully retrieved
+    DB -> Device: Return searched Info
+    Device -> User: Display searched Info
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 4: View new age ==
+User -> Device: View new age
+Device -> DB: Request Birthdate
+alt Data successfully retrieved
+    DB -> Device: Return Birthdate
+    Device -> User: Show new age
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 5: View detailed info ==
+User -> Device: View detailed info
+Device -> DB: Retrieve Details
+alt Data successfully retrieved
+    DB -> Device: Return Details
+    Device -> User: Show birthday details
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 6: Add Birthday ==
+User -> Device: Add Birthday
+Device -> Device : Check Valid
+alt Valid Data
+    Device -> DB: Store new birthday
+    alt Data successfully retrieved
+        DB -> Device: Confirm addition
+        Device -> User: Display about confirm addition
+    else Error retrieving data
+        DB -> Device : Error: Unable to fetch data
+        Device -> User : Display error message
+    end
+else Invalid Data
+    Device -> User : Error: Invalid data birthday
+end
+
+== Use Case 7: Edit Birthday ==
+User -> Device : Edit Birthday
+Device -> Device : Check Valid
+alt Valid Data
+    Device -> DB : Update birthday data
+    alt Data successfully retrieved
+        DB -> Device : Confirm edit
+        Device -> User : Display about confirm edit
+    else Error retrieving data
+        DB -> Device : Error: Unable to fetch data
+        Device -> User : Display error message
+    end
+else Invalid Data
+    Device -> User : Error: Invalid data birthday
+end
+
+== Use Case 8: Delete Birthday ==
+User -> Device: Delete Birthday
+Device -> DB: Remove birthday
+alt Data successfully retrieved
+    DB -> Device: Confirm deletion
+    Device -> User: Display about confirm deletion
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+=== Import/Export ==
+== Use Case 9: Import Birthdays ==
+User -> Device: Import Birthdays
+Device -> Device : Check Valid
+alt Valid Data
+    Device -> DB : Update birthday data
+    alt Data successfully retrieved
+        DB -> Device: Confirm import
+        Device -> User: Display about confirm import
+    else Error retrieving data
+        DB -> Device : Error: Unable to fetch data
+        Device -> User : Display error message
+    end
+else Invalid Data
+    Device -> User : Error: Invalid data birthday
+end
+
+== Use Case 10: Export Birthdays ==
+User -> Device: Export Birthdays
+Device -> DB: Generate export file
+alt Data successfully retrieved
+    DB -> Device: Provide export file
+    Device -> User: Provide export file
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+=== Settings ==
+== Use Case 11: Change Notifications ==
+User -> Device: Change Notifications
+Device -> DB: Update notification settings
+alt Data successfully retrieved
+    DB -> Device: Update settings
+    Device -> User: Display Updated settings
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 12: Change Language ==
+User -> Device: Change Language
+Device -> DB: Update language settings
+alt Data successfully retrieved
+    DB -> Device: Update settings
+    Device -> User: Display Updated settings
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 13: Change Theme ==
+User -> Device: Change Theme
+Device -> DB: Update new theme
+alt Data successfully retrieved
+    DB -> Device: Update settings
+    Device -> User: Display Updated settings
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 14: Change Theme ==
+User -> Device: 14. Change Detailed info settings
+Device -> DB: Update detailed info settings
+alt Data successfully retrieved
+    DB -> Device: Update settings
+    Device -> User: Display Updated settings
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 15: About app ==
+User -> Device: About app
+Device -> DB: Request info about app
+alt Data successfully retrieved
+    DB -> Device: Return info about app
+    Device -> User: Show app information
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+== Use Case 16: My settings ==
+User -> Device: Get my settings
+Device -> DB: Request my settings app
+alt Data successfully retrieved
+    DB -> Device: Return my settings app
+    Device -> User: Show my settings app
+else Error retrieving data
+    DB -> Device : Error: Unable to fetch data
+    Device -> User : Display error message
+end
+
+@enduml
