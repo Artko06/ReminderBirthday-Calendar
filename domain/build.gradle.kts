@@ -13,6 +13,7 @@ kotlin {
 }
 
 dependencies{
+    implementation(libs.androidx.annotation.jvm)
     val kotlinStandardLibVersion = "2.1.0"
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinStandardLibVersion") // Стандартная библиотека Kotlin
 

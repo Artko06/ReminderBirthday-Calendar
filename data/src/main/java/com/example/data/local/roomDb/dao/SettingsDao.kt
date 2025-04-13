@@ -1,4 +1,4 @@
-package com.example.data.local.dao
+package com.example.data.local.roomDb.dao
 
 import androidx.room.Dao
 import androidx.room.Query

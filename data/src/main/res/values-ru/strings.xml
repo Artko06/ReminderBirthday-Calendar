@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Zodiac -->
+    <string-array name="chinese_zodiac_animals">
+        <item>Обезьяна</item>
+        <item>Петух</item>
+        <item>Собака</item>
+        <item>Свинья</item>
+        <item>Крыса</item>
+        <item>Бык</item>
+        <item>Тигр</item>
+        <item>Кролик</item>
+        <item>Дракон</item>
+        <item>Змея</item>
+        <item>Лошадь</item>
+        <item>Коза</item>
+    </string-array>
+
+    <string name="zodiac_aquarius">Водолей</string>
+    <string name="zodiac_pisces">Рыбы</string>
+    <string name="zodiac_aries">Овен</string>
+    <string name="zodiac_taurus">Телец</string>
+    <string name="zodiac_gemini">Близнецы</string>
+    <string name="zodiac_cancer">Рак</string>
+    <string name="zodiac_leo">Лев</string>
+    <string name="zodiac_virgo">Дева</string>
+    <string name="zodiac_libra">Весы</string>
+    <string name="zodiac_scorpio">Скорпион</string>
+    <string name="zodiac_sagittarius">Стрелец</string>
+    <string name="zodiac_capricorn">Козерог</string>
+</resources>

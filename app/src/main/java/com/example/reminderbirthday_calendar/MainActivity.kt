@@ -11,17 +11,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.data.local.util.zodiac.ZodiacCalculatorImpl
+import com.example.domain.util.zodiac.ZodiacCalculator
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
+        val zodiacCalculator: ZodiacCalculator = ZodiacCalculatorImpl(context = this)
+
+        // Пример получения знака зодиака по дате
+        val date = LocalDate.of(2006, 1, 3)  // Пример даты
+        val westernZodiac = zodiacCalculator.getWesternZodiac(date)
+        val chineseZodiac = zodiacCalculator.getChineseZodiac(date)
+
         setContent {
             ReminderBirthday_CalendarTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        info = "$westernZodiac, $chineseZodiac",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -31,9 +43,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(info: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = info,
         modifier = modifier
     )
 }

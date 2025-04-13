@@ -44,8 +44,16 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    val room_version = "2.7.0"
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    val roomDb = "2.7.0"
+    implementation("androidx.room:room-ktx:$roomDb")
+    implementation("androidx.room:room-runtime:$roomDb")
+    kapt("androidx.room:room-compiler:$roomDb")
+
+    val dataStore = "1.1.4"
+    implementation("androidx.datastore:datastore-preferences:$dataStore")
+
+    //Dagger - Hilt
+    val hiltVersion = "2.55"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt ("com.google.dagger:hilt-android-compiler:$hiltVersion")
 }

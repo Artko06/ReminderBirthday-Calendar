@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+    id("com.google.dagger.hilt.android")
     kotlin("kapt")
 }
 
@@ -12,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.reminderbirthday_calendar"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -64,8 +65,17 @@ dependencies {
     val versionIcons = "1.7.8"
     implementation("androidx.compose.material:material-icons-extended:$versionIcons")
 
-    val room_version = "2.7.0"
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    val roomDb = "2.7.0"
+    implementation("androidx.room:room-ktx:$roomDb")
+    implementation("androidx.room:room-runtime:$roomDb")
+    kapt("androidx.room:room-compiler:$roomDb")
+
+    //Dagger - Hilt
+    val hiltVersion = "2.55"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt ("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+    val hiltNavigationVersion = "1.2.0"
+    implementation ("androidx.hilt:hilt-navigation-compose:$hiltNavigationVersion")
+    kapt ("androidx.hilt:hilt-compiler:$hiltNavigationVersion")
 }
