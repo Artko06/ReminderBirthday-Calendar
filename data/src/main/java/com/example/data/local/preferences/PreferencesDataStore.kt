@@ -15,6 +15,8 @@ object PreferencesDataStore {
 
     private val LANGUAGE_KEY = stringPreferencesKey("app_language")
     private val THEME_KEY = stringPreferencesKey("app_theme")
+    private val ZODIAC_WESTERN_ENABLE_KEY = booleanPreferencesKey("app_enable_zodiac_western")
+    private val ZODIAC_CHINESE_ENABLE_KEY = booleanPreferencesKey("app_enable_zodiac_chinese")
     private val NOTIFICATION_ENABLE_KEY = booleanPreferencesKey("app_enable_notification")
 
     // Languages
@@ -48,5 +50,26 @@ object PreferencesDataStore {
 
     suspend fun setStatusNotification(context: Context, activeStatus: Boolean){
         context.dataStore.edit { it[NOTIFICATION_ENABLE_KEY] = activeStatus }
+    }
+
+    // Zodiac
+    fun getStatusZodiacWestern(context: Context): Flow<Boolean>{
+        return context.dataStore.data.map { prefs ->
+            prefs[ZODIAC_WESTERN_ENABLE_KEY] ?: false
+        }
+    }
+
+    suspend fun setStatusZodiacWestern(context: Context, activeStatus: Boolean){
+        context.dataStore.edit { it[ZODIAC_WESTERN_ENABLE_KEY] = activeStatus }
+    }
+
+    fun getStatusZodiacChinese(context: Context): Flow<Boolean>{
+        return context.dataStore.data.map { prefs ->
+            prefs[ZODIAC_CHINESE_ENABLE_KEY] ?: false
+        }
+    }
+
+    suspend fun setStatusZodiacChinese(context: Context, activeStatus: Boolean){
+        context.dataStore.edit { it[ZODIAC_CHINESE_ENABLE_KEY] = activeStatus }
     }
 }

@@ -1,0 +1,317 @@
+@startuml
+
+package "Presentation" {
+
+    package "screens" {
+        package "screen" {
+            class CalendarScreen
+            class ListOfBirthdaysScreen
+            class AddingBirthdayScreen
+            class SettingsScreen
+        }
+
+        package "navigation" {
+            class NavigationScreen
+            object RouteScreen
+        }
+    }
+
+    package "viewModel" {
+        class BirthdayViewModel {
+            +birthdayUseCases: BirthdayUseCases
+        }
+        class SettingsViewModel {
+            +settingsUseCases: SettingsUseCases
+        }
+    }
+}
+
+package "Domain" {
+
+    package "models" {
+
+        enum EventType {
+            +BIRTHDAY,
+            +OTHER
+        }
+
+        enum LanguageType {
+            RUSSIAN,
+            ENGLISH
+        }
+
+        enum ThemeType {
+            SYSTEMIC,
+            DARK,
+            LIGHT
+        }
+
+        enum SortBirthday {
+            ALL,
+            FAMILY,
+            RELATIVE,
+            FRIEND,
+            COLLEAGUE,
+            OTHER
+        }
+
+        class NotificationEvent{
+            val id: Int,
+            val hour: Int = 9,
+            val minute: Int = 0,
+            val daysBeforeEvent: Int = 0
+        }
+
+        class Settings {
+            +language: String = LanguageType.ENGLISH.name
+            +theme: String = ThemeType.SYSTEMIC.name
+            +notificationsEnabled: Boolean = false
+        }
+
+        class ContactInfo{
+            +id: String
+            +name: String
+            +surname: String
+            +image: ByteArray?
+        }
+
+        class Event {
+            +id: Int,
+            +eventType: String = EventType.BIRTHDAY.name,
+            +name: String,
+            +surname: String? = null,
+            +originalDate: LocalDate,
+            +nextDate: LocalDate? = null,
+            +notes: String? = null,
+            +image: ByteArray? = null,
+        }
+
+        class ImportedEvent {
+            +id: String,
+            +completeName: String,
+            +eventDate: String,
+            +image: ByteArray? = null,
+            +eventType: String = EventType.BIRTHDAY.name,
+            +customLabel: String? = null
+        }
+    }
+
+    package "repositories" {
+
+        interface BirthdayRepository {
+            +getAllBirthdays(): List<Birthday>
+            +getSortedBirthdays(sortType: String): List<Birthday>
+            +searchBirthday(query: String): List<Birthday>
+            +getNewAge(birthday: Birthday): Int
+            +getBirthdayDetails(id: Int): Birthday
+            +addBirthday(birthday: Birthday)
+            +updateBirthday(birthday: Birthday)
+            +deleteBirthday(id: Int)
+        }
+
+        interface SettingsRepository {
+            +getSettings(): Settings
+            +updateSettings(settings: Settings)
+            +getAboutAppInfo(): String
+        }
+    }
+
+    package "useCases" {
+
+        package "birthday" {
+            class GetAllBirthdaysUseCase
+            {
+                - birthdayRepository: BirthdayRepository
+            }
+
+            class GetSortedBirthdaysUseCase
+            {
+                - birthdayRepository: BirthdayRepository
+            }
+
+            class SearchBirthdayUseCase
+            {
+                - birthdayRepository: BirthdayRepository
+            }
+
+             class GetNewAgeUseCase
+            {
+                - birthdayRepository: BirthdayRepository
+            }
+
+             class GetBirthdayDetailsUseCase
+            {
+                - birthdayRepository: BirthdayRepository
+            }
+
+             class AddBirthdayUseCase
+            {
+                - birthdayRepository: BirthdayRepository
+            }
+
+            class DeleteBirthdayUseCase
+            {
+                - birthdayRepository: BirthdayRepository
+            }
+        }
+
+        package "settings" {
+            class GetSettingsUseCase
+            {
+                - settingsRepository: SettingsRepository
+            }
+
+            class UpdateSettingsUseCase
+            {
+                - settingsRepository: SettingsRepository
+            }
+
+            class GetAboutAppInfo
+            {
+                - settingsRepository: SettingsRepository
+            }
+        }
+
+        package "allUseCases" {
+            class SettingsUseCases{
+                + getSettingsUseCase: GetSettingsUseCase
+                + updateSettingsUseCase: UpdateSettingsUseCase
+                + getAboutAppInfo: GetAboutAppInfo
+            }
+
+            class BirthdayUseCases{
+                +getAllBirthdaysUseCase: GetAllBirthdaysUseCase
+                +getSortedBirthdaysUseCase: GetSortedBirthdaysUseCase
+                +searchBirthdayUseCase: SearchBirthdayUseCase
+                +getNewAgeUseCase: GetNewAgeUseCase
+                +getBirthdayDetailsUseCase: GetBirthdayDetailsUseCase
+                +addBirthdayUseCase: AddBirthdayUseCase
+                +deleteBirthdayUseCase: DeleteBirthdayUseCase
+            }
+        }
+    }
+
+    package "util" {
+        package "notification" {
+            class NotificationActionReceiver
+        }
+
+        package "backup" {
+            class CalendarImporter
+            class CalendarExporter
+        }
+
+        package "image" {
+            class ImageConverter
+        }
+
+        package "zodiac" {
+            class ZodiacUtil
+        }
+    }
+}
+
+package "Data" {
+
+    package "repositories" {
+        class BirthdayRepositoryImpl {
+            +getAllBirthdays(): List<Birthday>
+            +getSortedBirthdays(): List<Birthday>
+            +searchBirthday(query: String): List<Birthday>
+            +getNewAge(birthday: Birthday): Int
+            +getBirthdayDetails(id: Int): Birthday
+            +addBirthday(birthday: Birthday)
+            +updateBirthday(birthday: Birthday)
+            +deleteBirthday(id: Int)
+        }
+        class SettingsRepositoryImpl {
+            +getSettings(): Settings
+            +updateSettings(settings: Settings)
+            +getAboutAppInfo(): String
+        }
+    }
+
+    package "db" {
+        class Database
+    }
+
+     package "entity" {
+        class SettingsEntity {
+            +language: String = LanguageType.ENGLISH.name
+            +theme: String = ThemeType.SYSTEMIC.name
+            +notificationsEnabled: Boolean = false
+        }
+
+        class NotificationEvent{
+            val id: Int,
+            val hour: Int,
+            val minute: Int,
+            val daysBeforeEvent: Int
+        }
+
+        class ContactInfoEntity {
+            +id: String
+            +name: String
+            +surname: String
+            +image: ByteArray?
+        }
+
+        class EventEntity {
+            +id: Int,
+            +eventType: String = EventType.BIRTHDAY.name,
+            +name: String,
+            +surname: String? = null,
+            +originalDate: String,
+            +nextDate: String? = null,
+            +notes: String? = null,
+            +image: ByteArray? = null,
+        }
+     }
+
+     package "dao" {
+        class CalendarDao
+        class SettingsDao
+     }
+}
+
+package "di" {
+    object DatabaseModule
+    object RepositoryModule
+    object UseCaseModule
+}
+
+BirthdayViewModel *-- BirthdayRepository
+SettingsViewModel *-- SettingsRepository
+
+BirthdayRepository <|.. BirthdayRepositoryImpl
+SettingsRepository <|.. SettingsRepositoryImpl
+
+BirthdayRepositoryImpl --> Database
+SettingsRepositoryImpl --> Database
+
+DatabaseModule *-- Database
+RepositoryModule *-- CalendarDao
+RepositoryModule *-- SettingsDao
+UseCaseModule *-- BirthdayRepository
+UseCaseModule *-- SettingsRepository
+
+GetAllBirthdaysUseCase *-- BirthdayRepository
+GetSortedBirthdaysUseCase *-- BirthdayRepository
+SearchBirthdayUseCase *-- BirthdayRepository
+GetNewAgeUseCase *-- BirthdayRepository
+GetBirthdayDetailsUseCase *-- BirthdayRepository
+AddBirthdayUseCase *-- BirthdayRepository
+DeleteBirthdayUseCase *-- BirthdayRepository
+
+GetSettingsUseCase *-- SettingsRepository
+UpdateSettingsUseCase *-- SettingsRepository
+GetAboutAppInfo *-- SettingsRepository
+
+CalendarScreen <|-- BirthdayViewModel
+ListOfBirthdaysScreen <|-- BirthdayViewModel
+AddingBirthdayScreen <|-- BirthdayViewModel
+SettingsScreen <|-- SettingsViewModel
+
+
+
+@enduml

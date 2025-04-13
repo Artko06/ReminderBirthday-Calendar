@@ -1,0 +1,75 @@
+@startuml
+
+left to right direction
+
+actor User
+
+rectangle "Reminder Birthdays & Calendar" {
+    rectangle "Calendar" {
+        usecase "View all Birthdays" as UC1
+        usecase "View sort Birthdays" as UC2
+        usecase "Search Birthday" as UC3
+        usecase "View new age" as UC4
+        usecase "View detailed info" as UC5
+        usecase "Add Birthday" as UC6
+        usecase "Edit Birthday" as UC7
+        usecase "Delete Birthday" as UC8
+    }
+
+    rectangle "Import/Export" {
+        usecase "Import Birthdays" as UC9
+        usecase "Export Birthdays" as UC10
+    }
+
+    rectangle "Settings" {
+        usecase "Change Notifications" as UC11
+        usecase "Change Theme" as UC12
+        usecase "Change Language" as UC13
+        usecase "Change Detailed info" as UC14
+        usecase "About app" as UC15
+        usecase "Get settings" as UC16
+    }
+
+    rectangle "Validation" {
+        usecase "Valid data" as UC17
+        usecase "Invalid data" as UC18
+    }
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+User --> UC16
+
+' Включение зависимых вариантов использования
+UC1 ..> UC2 : <<include>>  ' Вывод отсортированных дней рождения требует вывода всех
+UC4 ..> UC5 : <<include>>  ' Просмотр возраста требует детальную информацию
+UC7 ..> UC5 : <<include>>  ' Редактирование требует просмотра деталей
+UC9 ..> UC6 : <<include>>  ' Импорт включает добавление дней рождения
+
+UC11 ..> UC16 : <<include>>  ' Изменение настроек требует вывода моих настроек
+UC12 ..> UC16 : <<include>>  ' Изменение настроек требует вывода моих настроек
+UC13 ..> UC16 : <<include>>  ' Изменение настроек требует вывода моих настроек
+
+UC17 ..> UC6 : <<Extend>>
+UC18 ..> UC6 : <<Extend>>
+
+UC17 ..> UC7 : <<Extend>>
+UC18 ..> UC7 : <<Extend>>
+
+UC17 ..> UC10 : <<Extend>>
+UC18 ..> UC10 : <<Extend>>
+
+@enduml

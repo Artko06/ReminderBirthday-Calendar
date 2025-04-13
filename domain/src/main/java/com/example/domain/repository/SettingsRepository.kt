@@ -1,5 +1,6 @@
 package com.example.domain.repository
 
+import com.example.domain.models.notification.NotificationEvent
 import com.example.domain.models.settings.LanguageType
 import com.example.domain.models.settings.ThemeType
 import kotlinx.coroutines.flow.Flow
@@ -16,4 +17,12 @@ interface SettingsRepository {
     // Notification
     fun getStatusNotification(): Flow<Boolean>
     suspend fun setStatusNotification(activeStatus: Boolean)
+    fun getAllNotificationEvent(): Flow<List<NotificationEvent>>
+    suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent)
+
+    //Zodiac
+    fun getStatusZodiacWestern(): Flow<Boolean>
+    suspend fun setStatusZodiacWestern(activeStatus: Boolean)
+    fun getStatusZodiacChinese(): Flow<Boolean>
+    suspend fun setStatusZodiacChinese(activeStatus: Boolean)
 }

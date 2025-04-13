@@ -3,17 +3,15 @@ package com.example.data.local.roomDb.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.example.data.local.entity.settings.LanguageEntity
+import com.example.data.local.entity.settings.notification.NotificationEventEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SettingsDao{
-    // Language
-    @Query("Select languageType FROM settings WHERE id = 1")
-    fun getLanguageType(): Flow<String>
+    // Notification
+    @Query("Select * FROM notification_event")
+    fun getAllNotificationEvent(): Flow<List<NotificationEventEntity>>
 
     @Upsert
-    suspend fun upsertLanguage(language: LanguageEntity)
-
-    // Theme
+    suspend fun upsertNotificationEvent(notificationEvent: NotificationEventEntity)
 }

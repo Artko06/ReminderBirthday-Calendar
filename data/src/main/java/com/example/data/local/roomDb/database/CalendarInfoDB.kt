@@ -2,12 +2,12 @@ package com.example.data.local.roomDb.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.data.local.entity.settings.notification.NotificationEventEntity
 import com.example.data.local.roomDb.dao.SettingsDao
-import com.example.data.local.entity.settings.LanguageEntity
 
 @Database(
     entities = [
-        LanguageEntity::class,
+        NotificationEventEntity::class,
 
 
             ],
