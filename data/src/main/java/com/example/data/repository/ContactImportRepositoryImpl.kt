@@ -12,18 +12,27 @@ import androidx.core.database.getStringOrNull
 import com.example.data.local.util.image.bitmapToByteArray
 import com.example.data.local.util.image.getBitmapSquareSize
 import com.example.domain.models.event.ContactInfo
+import com.example.domain.models.event.Event
+import com.example.domain.models.event.EventType
+import com.example.domain.models.event.ImportedEvent
 import com.example.domain.repository.ContactImportRepository
+import java.time.LocalDate
 
 class ContactImportRepositoryImpl(
     private val contentResolver: ContentResolver
 ): ContactImportRepository {
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     override suspend fun importContacts(): List<ContactInfo> {
-        return getContactEvents(contentResolver)
+        return getContacts(resolver = contentResolver)
     }
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
-    private fun getContactEvents(resolver: ContentResolver): List<ContactInfo> {
+    override suspend fun importEvents(): List<Event> {
+        return getEventsFromContacts(resolver = contentResolver)
+    }
+
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    private fun getContacts(resolver: ContentResolver): List<ContactInfo> {
         val contactsInfo = mutableListOf<ContactInfo>()
         val idsSet = mutableSetOf<String>() // For filter duplicate
 
@@ -108,11 +117,105 @@ class ContactImportRepositoryImpl(
                 contactsInfo.add(contactInfo)
                 idsSet.add(id)
 
-                Log.d("import", "birthday name is: ${contactInfo.fullName} for id $id")
+                Log.d("import", "birthday name is: ${contactInfo.name} ${contactInfo.surname} for id $id")
             }
         }
 
         cursor?.close()
         return contactsInfo
+    }
+
+    private fun getEventsForContact(
+        contactInfo: ContactInfo,
+        resolver: ContentResolver
+    ): List<ImportedEvent> {
+        // Retrieve the events for the current contact
+        val eventCursor = resolver.query(
+            ContactsContract.Data.CONTENT_URI,
+            arrayOf(
+                ContactsContract.CommonDataKinds.Event.DATA,
+                ContactsContract.CommonDataKinds.Event.TYPE,
+                ContactsContract.CommonDataKinds.Event.LABEL
+            ),
+            ContactsContract.Data.CONTACT_ID + " = " + contactInfo.id + " AND " +
+                    ContactsContract.Data.MIMETYPE + " = '" +
+                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE + "'",
+            null,
+            null
+        )
+
+        val events = mutableListOf<ImportedEvent>()
+
+        if (eventCursor != null && eventCursor.count > 0) {
+            while (eventCursor.moveToNext()) {
+                val dateEvent: String = eventCursor.getString(0)
+                val eventTypeNumber = eventCursor.getInt(1)
+                lateinit var eventType: EventType
+                var eventCustomLabel: String? = null
+
+                // 0 is custom event type, 1 is anniversary, 2 is other, 3 is birthday
+                when (eventTypeNumber) {
+                    0 -> {
+                        eventType = EventType.OTHER
+                        eventCustomLabel = eventCursor.getString(2)
+                    }
+                    1 -> eventType = EventType.ANNIVERSARY
+                    2 -> eventType = EventType.OTHER
+                    else -> eventType = EventType.BIRTHDAY
+                }
+
+                events += ImportedEvent(
+                    id = contactInfo.id,
+                    name = contactInfo.name,
+                    surname = contactInfo.surname,
+                    eventDate = dateEvent,
+                    image = contactInfo.image,
+                    eventType = eventType,
+                    customLabel = eventCustomLabel
+                )
+            }
+        }
+
+        eventCursor?.close()
+        return events
+    }
+
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    private fun getContactEvents(resolver: ContentResolver): List<ImportedEvent> {
+        return getContacts(resolver).asSequence()
+            .flatMap { getEventsForContact(it, resolver) }
+            .toList()
+    }
+
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    private fun getEventsFromContacts(resolver: ContentResolver): List<Event> {
+        return getContactEvents(resolver).mapNotNull { contact ->
+            val nameContact = contact.name.trim()
+            val surnameContact = contact.surname.trim()
+            var countYear = true
+            val notes = contact.customLabel
+
+            try {
+                // Missing year, simply don't consider the year exactly like the contacts app does
+                var parseDate = contact.eventDate
+                if (parseDate.length < 8) {
+                    parseDate = contact.eventDate.replaceFirst("-", "1970")
+                    countYear = false
+                }
+
+                Event(
+                    id = 0,
+                    eventType = contact.eventType,
+                    nameContact = nameContact,
+                    surnameContact = surnameContact,
+                    originalDate = LocalDate.parse(parseDate),
+                    yearMatter = countYear,
+                    image = contact.image,
+                    notes = notes
+                )
+            } catch (_: Exception) {
+                null
+            }
+        }
     }
 }

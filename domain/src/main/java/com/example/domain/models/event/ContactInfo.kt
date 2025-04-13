@@ -6,13 +6,6 @@ data class ContactInfo(
     val surname: String,
     val image: ByteArray?,
 ) {
-    val fullName: String
-        get() =
-            if (surname.isBlank())
-                name
-            else
-                "$name $surname".replace("\\s".toRegex(), " ")
-
     override fun toString() = "$name $surname"
 
     override fun equals(other: Any?): Boolean {

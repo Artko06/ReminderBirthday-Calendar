@@ -8,6 +8,7 @@ data class Event(
     val nameContact: String,
     val surnameContact: String? = null,
     val originalDate: LocalDate,
+    val yearMatter : Boolean,
     val nextDate: LocalDate? = null,
     val notes: String? = null,
     val image: ByteArray? = null
@@ -19,6 +20,7 @@ data class Event(
         other as Event
 
         if (id != other.id) return false
+        if (yearMatter != other.yearMatter) return false
         if (eventType != other.eventType) return false
         if (nameContact != other.nameContact) return false
         if (surnameContact != other.surnameContact) return false
@@ -32,6 +34,7 @@ data class Event(
 
     override fun hashCode(): Int {
         var result = id
+        result = 31 * result + yearMatter.hashCode()
         result = 31 * result + eventType.hashCode()
         result = 31 * result + nameContact.hashCode()
         result = 31 * result + (surnameContact?.hashCode() ?: 0)

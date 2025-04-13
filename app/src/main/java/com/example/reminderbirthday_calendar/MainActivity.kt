@@ -30,8 +30,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.data.local.util.image.toBitmap
 import com.example.data.repository.ContactImportRepositoryImpl
-import com.example.domain.models.event.ContactInfo
-import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
+import com.example.domain.models.event.Event
+import com.example.domain.useCase.calendar.event.ImportEventUseCase
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -68,8 +68,7 @@ fun ImportContactsScreen(modifier: Modifier) {
 
     val permissionState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
 
-    // Состояние для хранения контактов
-    var contacts = remember { mutableStateOf<List<ContactInfo>>(emptyList()) }
+    var events = remember { mutableStateOf<List<Event>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         permissionState.launchPermissionRequest()
@@ -79,11 +78,11 @@ fun ImportContactsScreen(modifier: Modifier) {
         if (permissionState.status.isGranted) {
             scope.launch(Dispatchers.IO) {
                 val repository = ContactImportRepositoryImpl(contentResolver = context.contentResolver)
-                val useCase = ImportContactsUseCase(repository)
+                val useCase = ImportEventUseCase(repository)
 
-                contacts.value = useCase() // обновляем список
+                events.value = useCase() // обновляем список
 
-                Log.d("ComposeImport", "Импортировано ${contacts.value.size} контактов")
+                Log.d("ComposeImport", "Импортировано ${events.value.size} контактов")
             }
         }
     }
@@ -93,8 +92,8 @@ fun ImportContactsScreen(modifier: Modifier) {
             Text("Нет доступа к контактам", color = Color.Red)
         } else {
             LazyColumn {
-                items(contacts.value) { contact ->
-                    ContactItem(contact = contact)
+                items(events.value) { event ->
+                    EventItem(event = event)
                 }
             }
         }
@@ -102,15 +101,15 @@ fun ImportContactsScreen(modifier: Modifier) {
 }
 
 @Composable
-fun ContactItem(contact: ContactInfo) {
+fun EventItem(event: Event) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 3.dp)
     ) {
-        if (contact.image?.toBitmap()?.asImageBitmap() != null)
-            Image(bitmap = contact.image?.toBitmap()!!.asImageBitmap(), contentDescription = "")
+        if (event.image?.toBitmap()?.asImageBitmap() != null)
+            Image(bitmap = event.image?.toBitmap()!!.asImageBitmap(), contentDescription = "")
         Spacer(modifier = Modifier.width(12.dp))
-        Text(text = contact.fullName)
+        Text(text = "${event.nameContact} ${event.surnameContact} (${event.eventType.name}) ${event.originalDate}")
     }
 }
 

@@ -1,15 +1,12 @@
 package com.example.data.local.util.zodiac
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.data.R
 import com.example.domain.util.zodiac.ZodiacCalculator
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.LocalDate
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.O)
 class ZodiacCalculatorImpl @Inject constructor(
     @ApplicationContext val context: Context
 ): ZodiacCalculator {
