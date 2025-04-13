@@ -78,4 +78,8 @@ dependencies {
     val hiltNavigationVersion = "1.2.0"
     implementation ("androidx.hilt:hilt-navigation-compose:$hiltNavigationVersion")
     kapt ("androidx.hilt:hilt-compiler:$hiltNavigationVersion")
+
+    val jetpackComposePerm = "0.37.2"
+    implementation("com.google.accompanist:accompanist-permissions:$jetpackComposePerm")
+
 }

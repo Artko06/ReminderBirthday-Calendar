@@ -11,7 +11,7 @@ data class ContactInfo(
             if (surname.isBlank())
                 name
             else
-                "$name,$surname".replace("\\s".toRegex(), " ")
+                "$name $surname".replace("\\s".toRegex(), " ")
 
     override fun toString() = "$name $surname"
 
