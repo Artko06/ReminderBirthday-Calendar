@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name" translatable="false">Birthday reminder</string>
+
+    <!-- Month -->
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <!-- Days of week -->
+    <string-array name="days_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <!-- Sort type event -->
+    <string name="sort_type_event_all">All</string>
+    <string name="sort_type_event_family">Family</string>
+    <string name="sort_type_event_relative">Relative</string>
+    <string name="sort_type_event_friend">Friend</string>
+    <string name="sort_type_event_colleague">Colleague</string>
+    <string name="sort_type_event_other">Other</string>
 </resources>

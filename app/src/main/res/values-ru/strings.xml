@@ -1,2 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- Месяцы -->
+    <string-array name="months">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+
+    <!-- Дни недели -->
+    <string-array name="days_of_week">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
+
+    <!-- Тип сортировки событий -->
+    <string name="sort_type_event_all">Все</string>
+    <string name="sort_type_event_family">Семья</string>
+    <string name="sort_type_event_relative">Родные</string>
+    <string name="sort_type_event_friend">Друзья</string>
+    <string name="sort_type_event_colleague">Коллеги</string>
+    <string name="sort_type_event_other">Другие</string>
+</resources>
