@@ -9,7 +9,7 @@ data class Event(
     val surnameContact: String? = null,
     val originalDate: LocalDate,
     val yearMatter : Boolean,
-    val nextDate: LocalDate? = null,
+    val nextDate: LocalDate,
     val notes: String? = null,
     val image: ByteArray? = null
 ) {
@@ -39,7 +39,7 @@ data class Event(
         result = 31 * result + nameContact.hashCode()
         result = 31 * result + (surnameContact?.hashCode() ?: 0)
         result = 31 * result + originalDate.hashCode()
-        result = 31 * result + (nextDate?.hashCode() ?: 0)
+        result = 31 * result + nextDate.hashCode()
         result = 31 * result + (notes?.hashCode() ?: 0)
         result = 31 * result + (image?.contentHashCode() ?: 0)
         return result

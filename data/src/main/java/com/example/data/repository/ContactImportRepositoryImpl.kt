@@ -199,9 +199,10 @@ class ContactImportRepositoryImpl(
                 // Missing year, simply don't consider the year exactly like the contacts app does
                 var parseDate = contact.eventDate
                 if (parseDate.length < 8) {
-                    parseDate = contact.eventDate.replaceFirst("-", "1970")
+                    parseDate = contact.eventDate.replaceFirst("-", "2025")
                     countYear = false
                 }
+                val nowYear = LocalDate.now().year.toString()
 
                 Event(
                     id = 0,
@@ -209,6 +210,7 @@ class ContactImportRepositoryImpl(
                     nameContact = nameContact,
                     surnameContact = surnameContact,
                     originalDate = LocalDate.parse(parseDate),
+                    nextDate = LocalDate.parse(parseDate.replaceRange(range = 0..3, nowYear)),
                     yearMatter = countYear,
                     image = contact.image,
                     notes = notes

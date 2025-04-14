@@ -1,6 +1,6 @@
 package com.example.domain.models.event
 
-enum class SortTypeBirthday {
+enum class SortTypeEvent {
     ALL,
     FAMILY,
     RELATIVE,
