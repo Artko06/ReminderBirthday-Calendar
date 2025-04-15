@@ -14,6 +14,6 @@ interface EventRepository {
     suspend fun upsertEvents(events: List<Event>)
 
     // Delete
-    suspend fun deleteEvent(event: Event)
+    suspend fun deleteEvent(event: Event): Boolean
     suspend fun deleteEvents(events: List<Event>)
 }

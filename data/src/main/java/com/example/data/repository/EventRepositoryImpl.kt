@@ -44,8 +44,10 @@ class EventRepositoryImpl(
     }
 
     // Delete
-    override suspend fun deleteEvent(event: Event) {
-        eventDao.deleteEvent(event = event.toData())
+    override suspend fun deleteEvent(event: Event): Boolean {
+       val success = eventDao.deleteEvent(event = event.toData())
+
+        return success != 0
     }
 
     override suspend fun deleteEvents(events: List<Event>) {
