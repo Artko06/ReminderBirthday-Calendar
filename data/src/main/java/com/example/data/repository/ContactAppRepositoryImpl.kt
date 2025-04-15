@@ -1,6 +1,7 @@
 package com.example.data.repository
 
 import android.Manifest
+import android.content.ContentProviderOperation
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.graphics.BitmapFactory
@@ -15,12 +16,12 @@ import com.example.domain.models.event.ContactInfo
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
 import com.example.domain.models.event.ImportedEvent
-import com.example.domain.repository.ContactImportRepository
+import com.example.domain.repository.ContactAppRepository
 import java.time.LocalDate
 
-class ContactImportRepositoryImpl(
+class ContactAppRepositoryImpl(
     private val contentResolver: ContentResolver
-): ContactImportRepository {
+) : ContactAppRepository {
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     override suspend fun importContacts(): List<ContactInfo> {
         return getContacts(resolver = contentResolver)
@@ -29,6 +30,73 @@ class ContactImportRepositoryImpl(
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     override suspend fun importEvents(): List<Event> {
         return getEventsFromContacts(resolver = contentResolver)
+    }
+
+    @RequiresPermission(allOf = [Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS])
+    override suspend fun addEvent(
+        contactId: String,
+        eventDate: String,
+        eventType: EventType
+    ): Boolean {
+        return addEventToContact(
+            resolver = contentResolver,
+            contactId = contactId,
+            eventDate = eventDate,
+            eventType = eventType
+        )
+    }
+
+    @RequiresPermission(allOf = [Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS])
+    private fun addEventToContact(
+        resolver: ContentResolver,
+        contactId: String,
+        eventDate: String,
+        eventType: EventType
+    ): Boolean {
+        val operations = ArrayList<ContentProviderOperation>()
+
+        // Get rawContactId by contactId
+        val rawContactIdCursor = resolver.query(
+            ContactsContract.RawContacts.CONTENT_URI,
+            arrayOf(ContactsContract.RawContacts._ID),
+            "${ContactsContract.RawContacts.CONTACT_ID} = ?",
+            arrayOf(contactId),
+            null
+        )
+
+        var rawContactId: Long? = null
+        if (rawContactIdCursor != null && rawContactIdCursor.moveToFirst()) {
+            rawContactId = rawContactIdCursor.getLong(0)
+            rawContactIdCursor.close()
+        }
+
+        if (rawContactId == null) return false
+
+        // Type Android event
+        val androidEventType = when (eventType) {
+            EventType.BIRTHDAY -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
+            EventType.ANNIVERSARY -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
+            EventType.OTHER -> ContactsContract.CommonDataKinds.Event.TYPE_OTHER
+        }
+
+        val builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+            .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawContactId)
+            .withValue(
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
+            )
+            .withValue(ContactsContract.CommonDataKinds.Event.TYPE, androidEventType)
+            .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, eventDate)
+
+        operations.add(builder.build())
+
+        return try {
+            resolver.applyBatch(ContactsContract.AUTHORITY, operations)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
@@ -117,7 +185,10 @@ class ContactImportRepositoryImpl(
                 contactsInfo.add(contactInfo)
                 idsSet.add(id)
 
-                Log.d("import", "birthday name is: ${contactInfo.name} ${contactInfo.surname} for id $id")
+                Log.d(
+                    "import",
+                    "birthday name is: ${contactInfo.name} ${contactInfo.surname} for id $id"
+                )
             }
         }
 
@@ -159,6 +230,7 @@ class ContactImportRepositoryImpl(
                         eventType = EventType.OTHER
                         eventCustomLabel = eventCursor.getString(2)
                     }
+
                     1 -> eventType = EventType.ANNIVERSARY
                     2 -> eventType = EventType.OTHER
                     else -> eventType = EventType.BIRTHDAY

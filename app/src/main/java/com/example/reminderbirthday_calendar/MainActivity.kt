@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.data.local.util.image.toBitmap
-import com.example.data.repository.ContactImportRepositoryImpl
+import com.example.data.repository.ContactAppRepositoryImpl
 import com.example.domain.models.event.Event
 import com.example.domain.useCase.calendar.event.ImportEventUseCase
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
@@ -77,7 +77,7 @@ fun ImportContactsScreen(modifier: Modifier) {
     LaunchedEffect(key1 = permissionState.status) {
         if (permissionState.status.isGranted) {
             scope.launch(Dispatchers.IO) {
-                val repository = ContactImportRepositoryImpl(contentResolver = context.contentResolver)
+                val repository = ContactAppRepositoryImpl(contentResolver = context.contentResolver)
                 val useCase = ImportEventUseCase(repository)
 
                 events.value = useCase() // обновляем список
