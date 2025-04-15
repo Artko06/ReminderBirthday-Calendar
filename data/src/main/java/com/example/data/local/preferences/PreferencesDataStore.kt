@@ -1,9 +1,7 @@
 package com.example.data.local.preferences
 
 import android.content.Context
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.domain.models.settings.LanguageType
 import com.example.domain.models.settings.ThemeType
@@ -12,12 +10,6 @@ import kotlinx.coroutines.flow.map
 
 object PreferencesDataStore {
     private val Context.dataStore by preferencesDataStore(name = "settings")
-
-    private val LANGUAGE_KEY = stringPreferencesKey("app_language")
-    private val THEME_KEY = stringPreferencesKey("app_theme")
-    private val ZODIAC_WESTERN_ENABLE_KEY = booleanPreferencesKey("app_enable_zodiac_western")
-    private val ZODIAC_CHINESE_ENABLE_KEY = booleanPreferencesKey("app_enable_zodiac_chinese")
-    private val NOTIFICATION_ENABLE_KEY = booleanPreferencesKey("app_enable_notification")
 
     // Languages
     fun getLanguage(context: Context): Flow<LanguageType> {

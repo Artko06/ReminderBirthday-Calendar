@@ -5,7 +5,7 @@ import com.example.domain.models.event.EventType
 import com.example.domain.repository.EventRepository
 import java.time.LocalDate
 
-class InsertEventUseCase(private val repository: EventRepository) {
+class UpsertEventUseCase(private val repository: EventRepository) {
     suspend operator fun invoke(
         eventType: EventType,
         nameContact: String,
@@ -14,13 +14,13 @@ class InsertEventUseCase(private val repository: EventRepository) {
         yearMatter: Boolean,
         notes: String?,
         image: ByteArray?
-    ) {
+    ): Boolean {
         val nowYear = LocalDate.now().year
         val month = originalDate.monthValue
         val day = originalDate.dayOfMonth
         val nextDate = LocalDate.of(nowYear, month, day)
 
-        repository.upsertEvent(
+        return repository.upsertEvent(
             event = Event(
                 id = 0,
                 eventType = eventType,
@@ -34,4 +34,6 @@ class InsertEventUseCase(private val repository: EventRepository) {
             )
         )
     }
+
+    suspend operator fun invoke(event: Event): Boolean = repository.upsertEvent(event = event)
 }

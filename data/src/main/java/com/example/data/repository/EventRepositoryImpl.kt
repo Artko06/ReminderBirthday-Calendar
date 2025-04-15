@@ -35,12 +35,16 @@ class EventRepositoryImpl(
     }
 
     // Upsert
-    override suspend fun upsertEvent(event: Event) {
-        eventDao.upsertEvent(event = event.toData())
+    override suspend fun upsertEvent(event: Event): Boolean {
+        val success = eventDao.upsertEvent(event = event.toData())
+
+        return success != 0
     }
 
-    override suspend fun upsertEvents(events: List<Event>) {
-        eventDao.upsertEvents(events = events.map { event -> event.toData() })
+    override suspend fun upsertEvents(events: List<Event>): Boolean {
+        val success = eventDao.upsertEvents(events = events.map { event -> event.toData() })
+
+        return success != 0
     }
 
     // Delete
@@ -50,7 +54,9 @@ class EventRepositoryImpl(
         return success != 0
     }
 
-    override suspend fun deleteEvents(events: List<Event>) {
-        eventDao.deleteEvents(events = events.map { event -> event.toData() })
+    override suspend fun deleteEvents(events: List<Event>): Boolean {
+        val success = eventDao.deleteEvents(events = events.map { event -> event.toData() })
+
+        return success != 0
     }
 }

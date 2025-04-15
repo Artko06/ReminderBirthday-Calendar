@@ -10,10 +10,10 @@ interface EventRepository {
     fun getByIdEvents(id: Int): Flow<Event?>
 
     // Upsert
-    suspend fun upsertEvent(event: Event)
-    suspend fun upsertEvents(events: List<Event>)
+    suspend fun upsertEvent(event: Event): Boolean
+    suspend fun upsertEvents(events: List<Event>): Boolean
 
     // Delete
     suspend fun deleteEvent(event: Event): Boolean
-    suspend fun deleteEvents(events: List<Event>)
+    suspend fun deleteEvents(events: List<Event>): Boolean
 }

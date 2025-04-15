@@ -19,14 +19,14 @@ interface EventDao {
     fun getByIdEvents(id: Int): Flow<EventEntity?>
 
     @Upsert
-    suspend fun upsertEvent(event: EventEntity)
+    suspend fun upsertEvent(event: EventEntity): Int
 
     @Upsert
-    suspend fun upsertEvents(events: List<EventEntity>)
+    suspend fun upsertEvents(events: List<EventEntity>): Int
 
     @Delete
     suspend fun deleteEvent(event: EventEntity): Int
 
     @Delete
-    suspend fun deleteEvents(events: List<EventEntity>)
+    suspend fun deleteEvents(events: List<EventEntity>): Int
 }
