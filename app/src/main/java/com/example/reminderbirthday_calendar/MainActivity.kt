@@ -31,18 +31,25 @@ import androidx.compose.ui.unit.dp
 import com.example.data.local.util.image.toBitmap
 import com.example.data.repository.ContactAppRepositoryImpl
 import com.example.domain.models.event.Event
+import com.example.domain.repository.EventRepository
 import com.example.domain.useCase.calendar.event.ImportEventUseCase
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var eventRepository: EventRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
 //        val zodiacCalculator: ZodiacCalculator = ZodiacCalculatorImpl(context = this)
 //
 //        // Пример получения знака зодиака по дате
@@ -53,7 +60,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ReminderBirthday_CalendarTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ImportContactsScreen(modifier = Modifier.padding(innerPadding))
+                    ImportContactsScreen(modifier = Modifier.padding(innerPadding), eventRepository)
                 }
             }
         }
@@ -62,7 +69,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ImportContactsScreen(modifier: Modifier) {
+fun ImportContactsScreen(modifier: Modifier, eventRepository: EventRepository) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -77,10 +84,12 @@ fun ImportContactsScreen(modifier: Modifier) {
     LaunchedEffect(key1 = permissionState.status) {
         if (permissionState.status.isGranted) {
             scope.launch(Dispatchers.IO) {
-                val repository = ContactAppRepositoryImpl(contentResolver = context.contentResolver)
-                val useCase = ImportEventUseCase(repository)
+                val repositoryContact = ContactAppRepositoryImpl(contentResolver = context.contentResolver)
+                val useCase = ImportEventUseCase(repositoryContact)
+
 
                 events.value = useCase() // обновляем список
+                eventRepository.upsertEvents(events.value)
 
                 Log.d("ComposeImport", "Импортировано ${events.value.size} контактов")
             }

@@ -4,7 +4,7 @@ import com.example.domain.models.event.Event
 import com.example.domain.repository.EventRepository
 
 class UpsertEventsUseCase(private val repository: EventRepository) {
-    suspend operator fun invoke(events: List<Event>): Boolean {
+    suspend operator fun invoke(events: List<Event>): List<Boolean> {
         return repository.upsertEvents(events = events)
     }
 }

@@ -7,8 +7,9 @@ import com.example.domain.models.event.Event
 import com.example.domain.repository.EventRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class EventRepositoryImpl(
+class EventRepositoryImpl @Inject constructor(
     private val eventDao: EventDao
 ): EventRepository {
     // Get
@@ -38,13 +39,13 @@ class EventRepositoryImpl(
     override suspend fun upsertEvent(event: Event): Boolean {
         val success = eventDao.upsertEvent(event = event.toData())
 
-        return success != 0
+        return success != 0L
     }
 
-    override suspend fun upsertEvents(events: List<Event>): Boolean {
-        val success = eventDao.upsertEvents(events = events.map { event -> event.toData() })
-
-        return success != 0
+    override suspend fun upsertEvents(events: List<Event>): List<Boolean> {
+        return eventDao.upsertEvents(events = events.map { event -> event.toData() }).map {
+            it != 0L
+        }
     }
 
     // Delete
