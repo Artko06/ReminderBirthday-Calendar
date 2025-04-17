@@ -6,9 +6,11 @@ import com.example.data.local.roomDb.dao.EventDao
 import com.example.data.local.roomDb.dao.SettingsDao
 import com.example.data.repository.ContactAppRepositoryImpl
 import com.example.data.repository.EventRepositoryImpl
+import com.example.data.repository.ExportFileRepositoryImpl
 import com.example.data.repository.SettingsRepositoryImpl
 import com.example.domain.repository.ContactAppRepository
 import com.example.domain.repository.EventRepository
+import com.example.domain.repository.ExportFileRepository
 import com.example.domain.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
@@ -43,6 +45,17 @@ object RepositoryModule {
         return SettingsRepositoryImpl(
             context = context,
             settingsDao = settingsDao
+        )
+    }
+
+    @Provides
+    fun provideExportFileRepository(
+        @ApplicationContext context: Context,
+        eventDao: EventDao
+    ): ExportFileRepository{
+        return ExportFileRepositoryImpl(
+            context = context,
+            eventDao = eventDao
         )
     }
 }

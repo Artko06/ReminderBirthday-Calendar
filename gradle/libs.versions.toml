@@ -13,7 +13,64 @@ material = "1.12.0"
 jetbrainsKotlinJvm = "2.0.21"
 annotationJvm = "1.9.1"
 
+credentialsPlayServicesAuth = "1.5.0"
+googleid = "1.1.1"
+
+firebaseBom = "33.12.0"
+gmsGoogleServices = "4.4.2"
+
+iconsExtended = "1.7.8"
+
+roomDb = "2.7.0"
+
+daggerHiltVersion = "2.55"
+hiltNavigationVersion = "1.2.0"
+
+kotlinStandardLibVersion = "2.1.0"
+coroutinesLibVersion = "1.7.3"
+
+dataStore = "1.1.4"
+
+gson = "2.11.0"
+
+kotlinSerialization = "2.1.20"
+jsonSerialization = "1.8.1"
+csvSerialization = "1.10.0"
+
+jetpackComposePerm = "0.37.2"
+
 [libraries]
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "iconsExtended" }
+
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomDb" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomDb" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomDb" }
+
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "daggerHiltVersion" }
+dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHiltVersion" }
+
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationVersion" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltNavigationVersion" }
+
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlinStandardLibVersion" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesLibVersion" }
+
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
+
+code-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "jsonSerialization" }
+kotlin-csv-jvm = { module = "com.github.doyaaaaaken:kotlin-csv-jvm", version.ref = "csvSerialization" }
+
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "jetpackComposePerm" }
+
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentialsPlayServicesAuth" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -39,3 +96,8 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
+dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltVersion" }
+
+gms-google-services = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServices" }
+
+kotlin-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}

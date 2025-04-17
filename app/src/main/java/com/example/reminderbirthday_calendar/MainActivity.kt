@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import com.example.data.local.util.image.toBitmap
 import com.example.data.repository.ContactAppRepositoryImpl
 import com.example.domain.models.event.Event
 import com.example.domain.repository.EventRepository
+import com.example.domain.repository.ExportFileRepository
 import com.example.domain.useCase.calendar.event.ImportEventUseCase
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -42,16 +44,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject lateinit var eventRepository: EventRepository
+    @Inject lateinit var exportFileRepository: ExportFileRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
 //        val zodiacCalculator: ZodiacCalculator = ZodiacCalculatorImpl(context = this)
-//
+
 //        // Пример получения знака зодиака по дате
 //        val date = LocalDate.of(2006, 1, 3)  // Пример даты
 //        val westernZodiac = zodiacCalculator.getWesternZodiac(date)
@@ -60,7 +64,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ReminderBirthday_CalendarTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ImportContactsScreen(modifier = Modifier.padding(innerPadding), eventRepository)
+                    ImportContactsScreen(modifier = Modifier.padding(innerPadding), eventRepository, exportFileRepository)
                 }
             }
         }
@@ -69,7 +73,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ImportContactsScreen(modifier: Modifier, eventRepository: EventRepository) {
+fun ImportContactsScreen(modifier: Modifier, eventRepository: EventRepository, exportFileRepository: ExportFileRepository) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -90,6 +94,8 @@ fun ImportContactsScreen(modifier: Modifier, eventRepository: EventRepository) {
 
                 events.value = useCase() // обновляем список
                 eventRepository.upsertEvents(events.value)
+                exportFileRepository.exportEventsToJsonToExternalDir()
+                exportFileRepository.exportEventsToCsvToExternalDir()
 
                 Log.d("ComposeImport", "Импортировано ${events.value.size} контактов")
             }
@@ -105,9 +111,12 @@ fun ImportContactsScreen(modifier: Modifier, eventRepository: EventRepository) {
                     EventItem(event = event)
                 }
             }
+
+            Button(onClick = { }) { }
         }
     }
 }
+
 
 @Composable
 fun EventItem(event: Event) {
@@ -121,4 +130,3 @@ fun EventItem(event: Event) {
         Text(text = "${event.nameContact} ${event.surnameContact} (${event.eventType.name}) ${event.originalDate}")
     }
 }
-

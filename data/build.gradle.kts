@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
 
     kotlin("kapt")
+
+    // Kotlin serialization
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -44,19 +47,20 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    val roomDb = "2.7.0"
-    implementation("androidx.room:room-ktx:$roomDb")
-    implementation("androidx.room:room-runtime:$roomDb")
-    kapt("androidx.room:room-compiler:$roomDb")
+    // roomDb
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
 
-    val dataStore = "1.1.4"
-    implementation("androidx.datastore:datastore-preferences:$dataStore")
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 
     //Dagger - Hilt
-    val hiltVersion = "2.55"
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt ("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.android.compiler)
 
-    val gsonVersion = "2.11.0"
-    implementation("com.google.code.gson:gson:$gsonVersion")
+    // Json and csv serialization
+    implementation(libs.code.gson) // Gson
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlin.csv.jvm)
 }

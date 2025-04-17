@@ -3,8 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    id("com.google.dagger.hilt.android")
     kotlin("kapt")
+
+    // Dagger - Hilt
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
@@ -62,24 +64,22 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    val versionIcons = "1.7.8"
-    implementation("androidx.compose.material:material-icons-extended:$versionIcons")
+    // icons extended
+    implementation(libs.androidx.compose.material.icons.extended)
 
-    val roomDb = "2.7.0"
-    implementation("androidx.room:room-ktx:$roomDb")
-    implementation("androidx.room:room-runtime:$roomDb")
-    kapt("androidx.room:room-compiler:$roomDb")
+    // RoomDb
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
 
-    //Dagger - Hilt
-    val hiltVersion = "2.55"
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt ("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    // Dagger - Hilt
+    implementation(libs.dagger.hilt.android)
+    kapt (libs.dagger.hilt.android.compiler)
 
-    val hiltNavigationVersion = "1.2.0"
-    implementation ("androidx.hilt:hilt-navigation-compose:$hiltNavigationVersion")
-    kapt ("androidx.hilt:hilt-compiler:$hiltNavigationVersion")
+    // Dagger - Hilt (navigation)
+    implementation (libs.androidx.hilt.navigation.compose)
+    kapt (libs.androidx.hilt.compiler)
 
-    val jetpackComposePerm = "0.37.2"
-    implementation("com.google.accompanist:accompanist-permissions:$jetpackComposePerm")
-
+    // Jetpack Compose permissions
+    implementation(libs.accompanist.permissions)
 }
