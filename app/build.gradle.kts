@@ -7,6 +7,9 @@ plugins {
 
     // Dagger - Hilt
     alias(libs.plugins.dagger.hilt.android)
+
+    // Google services
+    alias(libs.plugins.gms.google.services)
 }
 
 android {
@@ -82,4 +85,8 @@ dependencies {
 
     // Jetpack Compose permissions
     implementation(libs.accompanist.permissions)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
 }

@@ -63,4 +63,13 @@ dependencies {
     implementation(libs.code.gson) // Gson
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlin.csv.jvm)
+
+    // Credential Manager
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
 }
