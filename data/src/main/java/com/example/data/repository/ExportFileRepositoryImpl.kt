@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ExportFileRepositoryImpl @Inject constructor(
     private val context: Context,
     private val eventDao: EventDao
-): ExportFileRepository {
+) : ExportFileRepository {
     override suspend fun exportEventsToCsvToExternalDir() {
         val externalFile = File(context.getExternalFilesDir(null), "exported_events.csv")
         val events = eventDao.getAllEvents().first()
@@ -20,18 +20,18 @@ class ExportFileRepositoryImpl @Inject constructor(
         val csvBuilder = StringBuilder()
 
         csvBuilder.appendLine(
-                "id," +
-                "eventType," +
-                "nameContact," +
-                "surnameContact," +
-                "originalDate," +
-                "yearMatter," +
-                "nextDate," +
-                "notes," +
-                "image"
+                    "id," +
+                    "eventType," +
+                    "nameContact," +
+                    "surnameContact," +
+                    "originalDate," +
+                    "yearMatter," +
+                    "nextDate," +
+                    "notes," +
+                    "image"
         )
 
-        for(event in events){
+        for (event in events) {
             val base64Image = event.image?.let { Base64.encodeToString(it, Base64.NO_WRAP) } ?: ""
 
             val line = listOf(
@@ -55,7 +55,7 @@ class ExportFileRepositoryImpl @Inject constructor(
     override suspend fun exportEventsToJsonToExternalDir() {
         val externalFile = File(context.getExternalFilesDir(null), "exported_events.json")
         val events = eventDao.getAllEvents().first()
-        val json = Json{prettyPrint = true}.encodeToString(events)
+        val json = Json { prettyPrint = true }.encodeToString(events)
 
         externalFile.writeText(json)
     }

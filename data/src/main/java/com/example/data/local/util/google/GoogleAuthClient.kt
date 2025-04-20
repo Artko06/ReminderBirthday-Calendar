@@ -36,7 +36,7 @@ class GoogleAuthClient(
 
         try {
             val result = buildCredentialRequest()
-            return handleSingIn(result)
+            return handleSignIn(result)
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -53,14 +53,13 @@ class GoogleAuthClient(
         firebaseAuth.signOut()
     }
 
-    private suspend fun handleSingIn(response: GetCredentialResponse): Boolean {
+    private suspend fun handleSignIn(response: GetCredentialResponse): Boolean {
         val credential = response.credential
 
         if (credential is CustomCredential &&
             credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
         ) {
             try {
-
                 val tokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
 
                 println(tag + "name: ${tokenCredential.displayName}")

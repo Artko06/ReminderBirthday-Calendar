@@ -5,15 +5,18 @@ import android.content.Context
 import com.example.data.local.roomDb.dao.EventDao
 import com.example.data.local.roomDb.dao.SettingsDao
 import com.example.data.local.util.google.GoogleAuthClient
+import com.example.data.local.util.google.GoogleDriveClient
 import com.example.data.repository.ContactAppRepositoryImpl
 import com.example.data.repository.EventRepositoryImpl
 import com.example.data.repository.ExportFileRepositoryImpl
 import com.example.data.repository.GoogleClientRepositoryImpl
+import com.example.data.repository.ImportFileRepositoryImpl
 import com.example.data.repository.SettingsRepositoryImpl
 import com.example.domain.repository.ContactAppRepository
 import com.example.domain.repository.EventRepository
 import com.example.domain.repository.ExportFileRepository
 import com.example.domain.repository.GoogleClientRepository
+import com.example.domain.repository.ImportFileRepository
 import com.example.domain.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
@@ -63,7 +66,22 @@ object RepositoryModule {
     }
 
     @Provides
-    fun provideGoogleClientRepository(googleAuthClient: GoogleAuthClient): GoogleClientRepository{
-        return GoogleClientRepositoryImpl(googleAuthClient = googleAuthClient)
+    fun provideImportFileRepository(
+        @ApplicationContext context: Context
+    ): ImportFileRepository{
+        return ImportFileRepositoryImpl(
+            context = context
+        )
+    }
+
+    @Provides
+    fun provideGoogleClientRepository(
+        googleAuthClient: GoogleAuthClient,
+        googleDriveClient: GoogleDriveClient
+    ): GoogleClientRepository{
+        return GoogleClientRepositoryImpl(
+            googleAuthClient = googleAuthClient,
+            googleDriveClient = googleDriveClient
+        )
     }
 }

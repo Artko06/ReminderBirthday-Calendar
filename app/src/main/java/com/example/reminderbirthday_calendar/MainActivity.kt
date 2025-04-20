@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -34,17 +35,17 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.data.local.util.image.toBitmap
-import com.example.data.repository.ContactAppRepositoryImpl
 import com.example.domain.models.event.Event
 import com.example.domain.repository.EventRepository
 import com.example.domain.repository.ExportFileRepository
 import com.example.domain.repository.GoogleClientRepository
-import com.example.domain.useCase.calendar.event.ImportEventUseCase
+import com.example.domain.repository.ImportFileRepository
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -55,6 +56,8 @@ class MainActivity : ComponentActivity() {
     lateinit var eventRepository: EventRepository
     @Inject
     lateinit var exportFileRepository: ExportFileRepository
+    @Inject
+    lateinit var importFileRepository: ImportFileRepository
     @Inject
     lateinit var googleClientRepository: GoogleClientRepository
 
@@ -76,6 +79,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding),
                         eventRepository,
                         exportFileRepository,
+                        importFileRepository,
                         googleClientRepository
                     )
                 }
@@ -90,6 +94,7 @@ fun ImportContactsScreen(
     modifier: Modifier = Modifier,
     eventRepository: EventRepository,
     exportFileRepository: ExportFileRepository,
+    importFileRepository: ImportFileRepository,
     googleClientRepository: GoogleClientRepository
 ) {
     val context = LocalContext.current
@@ -98,7 +103,9 @@ fun ImportContactsScreen(
     var events by remember { mutableStateOf<List<Event>>(emptyList()) }
     var isSignIn by remember { mutableStateOf(googleClientRepository.isSignedIn()) }
     var isLoading by remember { mutableStateOf(false) }
-    var authError by remember { mutableStateOf<String?>(null) }
+    var isUploaded by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    var timeGettingFileFromRemote by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         permissionState.launchPermissionRequest()
@@ -107,8 +114,9 @@ fun ImportContactsScreen(
     LaunchedEffect(permissionState.status) {
         if (permissionState.status.isGranted) {
             scope.launch {
-                val repositoryContact = ContactAppRepositoryImpl(context.contentResolver)
-                events = ImportEventUseCase(repositoryContact)()
+//                val repositoryContact = ContactAppRepositoryImpl(context.contentResolver)
+//                events = ImportEventUseCase(repositoryContact)()
+                events = eventRepository.getAllEvents().first()
                 eventRepository.upsertEvents(events)
                 exportFileRepository.exportEventsToJsonToExternalDir()
                 exportFileRepository.exportEventsToCsvToExternalDir()
@@ -129,14 +137,16 @@ fun ImportContactsScreen(
             GoogleAuthButton(
                 isSignedIn = isSignIn,
                 isLoading = isLoading,
-                error = authError,
+                error = error,
+                isUploaded = isUploaded,
+                timeGettingFileFromRemote = timeGettingFileFromRemote,
                 onSignInClick = {
                     scope.launch {
                         isLoading = true
-                        authError = null
+                        error = null
                         isSignIn = googleClientRepository.signIn()
                         if (!isSignIn) {
-                            authError = "Ошибка входа. Попробуйте еще раз."
+                            error = "Ошибка входа. Попробуйте еще раз."
                         }
                         isLoading = false
                     }
@@ -145,6 +155,21 @@ fun ImportContactsScreen(
                     scope.launch {
                         googleClientRepository.signOut()
                         isSignIn = false
+                        error = null
+                        timeGettingFileFromRemote = null
+                        isUploaded = false
+                    }
+                },
+                onUploadFile = {
+                    scope.launch {
+                        isUploaded = googleClientRepository.uploadEventsToRemote()
+                        error = if (!isUploaded) "Ошибка отправки файла" else null
+                    }
+                },
+                getFromRemote = {
+                    scope.launch {
+                        events = googleClientRepository.getEventsFromRemote()
+                        timeGettingFileFromRemote = googleClientRepository.getTimeFromRemote()
                     }
                 }
             )
@@ -157,8 +182,12 @@ private fun GoogleAuthButton(
     isSignedIn: Boolean,
     isLoading: Boolean,
     error: String?,
+    isUploaded: Boolean,
+    timeGettingFileFromRemote : String?,
     onSignInClick: () -> Unit,
-    onSignOutClick: () -> Unit
+    onSignOutClick: () -> Unit,
+    onUploadFile: () -> Unit,
+    getFromRemote: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         error?.let {
@@ -176,6 +205,11 @@ private fun GoogleAuthButton(
                     Text("Sign Out")
                 }
             }
+            Button(onClick = {onUploadFile()}, modifier = Modifier.fillMaxWidth()) { Text("Upload file to remote") }
+            Button(onClick = {getFromRemote()}, modifier = Modifier.fillMaxWidth()) { Text("Get data from remote") }
+            if(timeGettingFileFromRemote != null)
+                Text("File was getting with date: $timeGettingFileFromRemote")
+            if (isUploaded) Text("Successfully uploaded")
         } else {
             OutlinedButton(
                 onClick = onSignInClick,

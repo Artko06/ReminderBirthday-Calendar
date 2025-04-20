@@ -67,9 +67,13 @@ dependencies {
     // Credential Manager
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
+
+    // Google services
     implementation(libs.googleid)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
+
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.3")
 }
