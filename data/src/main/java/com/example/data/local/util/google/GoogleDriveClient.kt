@@ -26,9 +26,22 @@ class GoogleDriveClient(
                 firebaseAuth.currentUser?.email ?: throw Exception("User not authenticated")
             val dateTime = LocalDateTime.now()
 
+            val day = if(dateTime.dayOfMonth < 10) "0" + dateTime.dayOfMonth.toString()
+                else dateTime.dayOfMonth.toString()
+
+            val month = if(dateTime.month.value < 10) "0" + dateTime.month.value.toString()
+                else dateTime.month.value.toString()
+
+            val year = dateTime.year
+
+            val hour = dateTime.hour
+
+            val minute = if(dateTime.minute < 10) "0" + dateTime.minute.toString()
+                else dateTime.minute.toString()
+
             firestore.collection(userEmail)
-                .document("Bdays - ${dateTime.dayOfMonth}.${dateTime.month.value}.${dateTime.year} " +
-                        "(${dateTime.hour}:${dateTime.minute})")
+                .document("Bdays - $day.$month.$year " +
+                        "($hour:$minute)")
                 .set(
                     mapOf(
                         "time" to FieldValue.serverTimestamp(),
@@ -87,8 +100,24 @@ class GoogleDriveClient(
             val dateTime = query.documents[0].getTimestamp("time").toLocalDateTime()
             if (dateTime == null) return null
 
-            "${dateTime.dayOfMonth}.${dateTime.month.value}.${dateTime.year} " +
-            "(${dateTime.hour}:${dateTime.minute}:${dateTime.second})"
+            val day = if(dateTime.dayOfMonth < 10) "0" + dateTime.dayOfMonth.toString()
+                else dateTime.dayOfMonth.toString()
+
+            val month = if(dateTime.month.value < 10) "0" + dateTime.month.value.toString()
+                else dateTime.month.value.toString()
+
+            val year = dateTime.year
+
+            val hour = dateTime.hour
+
+            val minute = if(dateTime.minute < 10) "0" + dateTime.minute.toString()
+                else dateTime.minute.toString()
+
+            val seconds = if(dateTime.second < 10) "0" + dateTime.minute.toString()
+                else dateTime.second.toString()
+
+            "$day.$month.$year " +
+            "($hour:$minute:$seconds)"
         } catch (e: Exception) {
             e.printStackTrace()
             null

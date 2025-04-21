@@ -6,9 +6,11 @@ import com.example.domain.repository.EventRepository
 import com.example.domain.useCase.calendar.event.DeleteEventUseCase
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -21,6 +23,11 @@ class DeleteEventUseCaseTest {
 
     private val repository = mock<EventRepository>()
     private val useCase = DeleteEventUseCase(repository)
+
+    @AfterEach
+    fun tearDown(){
+        Mockito.reset(repository)
+    }
 
     private val mockEvent = Event(
         id = 42,

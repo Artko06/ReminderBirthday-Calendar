@@ -35,11 +35,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.data.local.util.image.toBitmap
+import com.example.data.repository.ContactAppRepositoryImpl
 import com.example.domain.models.event.Event
 import com.example.domain.repository.EventRepository
 import com.example.domain.repository.ExportFileRepository
 import com.example.domain.repository.GoogleClientRepository
 import com.example.domain.repository.ImportFileRepository
+import com.example.domain.useCase.calendar.event.ImportEventUseCase
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -114,12 +116,14 @@ fun ImportContactsScreen(
     LaunchedEffect(permissionState.status) {
         if (permissionState.status.isGranted) {
             scope.launch {
-//                val repositoryContact = ContactAppRepositoryImpl(context.contentResolver)
-//                events = ImportEventUseCase(repositoryContact)()
+                val repositoryContact = ContactAppRepositoryImpl(context.contentResolver)
+                eventRepository.upsertEvents(ImportEventUseCase(repositoryContact)())
                 events = eventRepository.getAllEvents().first()
                 eventRepository.upsertEvents(events)
                 exportFileRepository.exportEventsToJsonToExternalDir()
                 exportFileRepository.exportEventsToCsvToExternalDir()
+//                events = importFileRepository.importEventsFromCsv()
+//                events = importFileRepository.importEventsFromJson()
             }
         }
     }

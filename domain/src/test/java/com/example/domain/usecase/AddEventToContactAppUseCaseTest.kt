@@ -4,9 +4,11 @@ import com.example.domain.models.event.EventType
 import com.example.domain.repository.ContactAppRepository
 import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -16,6 +18,11 @@ class AddEventToContactAppUseCaseTest {
 
     private val repository = mock<ContactAppRepository>()
     private val useCase = AddEventToContactAppUseCase(repository)
+
+    @AfterEach
+    fun tearDown(){
+        Mockito.reset(repository)
+    }
 
     @Test
     fun `invoke should call repository and return true`() = runTest {

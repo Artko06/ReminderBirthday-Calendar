@@ -7,9 +7,11 @@ import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.time.LocalDate
@@ -18,6 +20,11 @@ class GetEventByContactNameUseCaseTest {
 
     private val repository = mock<EventRepository>()
     private val useCase = GetEventByContactNameUseCase(repository)
+
+    @AfterEach
+    fun tearDown(){
+        Mockito.reset(repository)
+    }
 
     private val mockEvents = listOf(
         Event(

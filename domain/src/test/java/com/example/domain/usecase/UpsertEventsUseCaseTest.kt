@@ -5,9 +5,11 @@ import com.example.domain.models.event.EventType
 import com.example.domain.repository.EventRepository
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -17,6 +19,11 @@ class UpsertEventsUseCaseTest {
 
     private val repository = mock<EventRepository>()
     private val useCase = UpsertEventsUseCase(repository)
+
+    @AfterEach
+    fun tearDown(){
+        Mockito.reset(repository)
+    }
 
     @Test
     fun `invoke should return list of results from repository`() = runTest {

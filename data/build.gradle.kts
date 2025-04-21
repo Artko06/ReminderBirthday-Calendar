@@ -36,6 +36,10 @@ android {
         jvmTarget = "11"
     }
 }
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 
 dependencies {
     implementation(project(":domain"))
@@ -76,4 +80,9 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
 
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.3")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
 }
