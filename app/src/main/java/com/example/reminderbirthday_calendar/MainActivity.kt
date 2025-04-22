@@ -1,6 +1,8 @@
 package com.example.reminderbirthday_calendar
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,13 +44,18 @@ import com.example.domain.repository.ExportFileRepository
 import com.example.domain.repository.GoogleClientRepository
 import com.example.domain.repository.ImportFileRepository
 import com.example.domain.useCase.calendar.event.ImportEventUseCase
+import com.example.reminderbirthday_calendar.notification.model.AlarmEventItem
+import com.example.reminderbirthday_calendar.notification.schedulerInterface.AlarmEventScheduler
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -56,12 +63,18 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var eventRepository: EventRepository
+
     @Inject
     lateinit var exportFileRepository: ExportFileRepository
+
     @Inject
     lateinit var importFileRepository: ImportFileRepository
+
     @Inject
     lateinit var googleClientRepository: GoogleClientRepository
+
+    @Inject
+    lateinit var alarmEventScheduler: AlarmEventScheduler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +95,8 @@ class MainActivity : ComponentActivity() {
                         eventRepository,
                         exportFileRepository,
                         importFileRepository,
-                        googleClientRepository
+                        googleClientRepository,
+                        alarmEventScheduler
                     )
                 }
             }
@@ -97,11 +111,22 @@ fun ImportContactsScreen(
     eventRepository: EventRepository,
     exportFileRepository: ExportFileRepository,
     importFileRepository: ImportFileRepository,
-    googleClientRepository: GoogleClientRepository
+    googleClientRepository: GoogleClientRepository,
+    alarmEventScheduler: AlarmEventScheduler
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val permissionState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
+    val permissionReadState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
+    val permissionNotificationState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    } else {
+        object : PermissionState {
+            @SuppressLint("InlinedApi")
+            override val permission = Manifest.permission.POST_NOTIFICATIONS
+            override val status = PermissionStatus.Granted
+            override fun launchPermissionRequest() {}
+        }
+    }
     var events by remember { mutableStateOf<List<Event>>(emptyList()) }
     var isSignIn by remember { mutableStateOf(googleClientRepository.isSignedIn()) }
     var isLoading by remember { mutableStateOf(false) }
@@ -110,11 +135,26 @@ fun ImportContactsScreen(
     var timeGettingFileFromRemote by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        permissionState.launchPermissionRequest()
+        permissionNotificationState.launchPermissionRequest()
+        permissionReadState.launchPermissionRequest()
     }
 
-    LaunchedEffect(permissionState.status) {
-        if (permissionState.status.isGranted) {
+    LaunchedEffect(Unit) {
+        if (permissionNotificationState.status.isGranted) {
+            val dateTime = LocalDateTime.now().plusSeconds(1)
+            val message = "Notification: Happy birthday to Mr.XXX"
+
+            val event = AlarmEventItem(
+                dateTime = dateTime,
+                message = message
+            )
+
+            alarmEventScheduler.schedule(event)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (permissionReadState.status.isGranted) {
             scope.launch {
                 val repositoryContact = ContactAppRepositoryImpl(context.contentResolver)
                 eventRepository.upsertEvents(ImportEventUseCase(repositoryContact)())
@@ -128,8 +168,12 @@ fun ImportContactsScreen(
         }
     }
 
-    Column(modifier = modifier.fillMaxSize().padding(12.dp)) {
-        if (!permissionState.status.isGranted) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
+        if (!permissionReadState.status.isGranted) {
             Text("Нет доступа к контактам", color = Color.Red)
         } else {
             LazyColumn(modifier = Modifier.weight(1f)) {
@@ -187,7 +231,7 @@ private fun GoogleAuthButton(
     isLoading: Boolean,
     error: String?,
     isUploaded: Boolean,
-    timeGettingFileFromRemote : String?,
+    timeGettingFileFromRemote: String?,
     onSignInClick: () -> Unit,
     onSignOutClick: () -> Unit,
     onUploadFile: () -> Unit,
@@ -209,9 +253,15 @@ private fun GoogleAuthButton(
                     Text("Sign Out")
                 }
             }
-            Button(onClick = {onUploadFile()}, modifier = Modifier.fillMaxWidth()) { Text("Upload file to remote") }
-            Button(onClick = {getFromRemote()}, modifier = Modifier.fillMaxWidth()) { Text("Get data from remote") }
-            if(timeGettingFileFromRemote != null)
+            Button(
+                onClick = { onUploadFile() },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("Upload file to remote") }
+            Button(
+                onClick = { getFromRemote() },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("Get data from remote") }
+            if (timeGettingFileFromRemote != null)
                 Text("File was getting with date: $timeGettingFileFromRemote")
             if (isUploaded) Text("Successfully uploaded")
         } else {
