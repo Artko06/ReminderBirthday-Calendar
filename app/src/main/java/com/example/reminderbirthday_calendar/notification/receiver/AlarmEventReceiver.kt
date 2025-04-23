@@ -5,8 +5,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import com.example.reminderbirthday_calendar.notification.common.*
+import com.example.reminderbirthday_calendar.notification.common.EXTRA_MESSAGE_EVENT_NAME
+import com.example.reminderbirthday_calendar.notification.common.NOTIFICATION_EVENT_CHANNEL_ID
+import com.example.reminderbirthday_calendar.notification.common.NOTIFICATION_EVENT_ID
 
 
 class AlarmEventReceiver: BroadcastReceiver() {
@@ -17,8 +18,8 @@ class AlarmEventReceiver: BroadcastReceiver() {
 
         val notificationManager = context.getSystemService(NotificationManager::class.java) as NotificationManager
         val notificationEvent = NotificationCompat.Builder(context, NOTIFICATION_EVENT_CHANNEL_ID)
-            .setSmallIcon(com.example.reminderbirthday_calendar.R.drawable.ic_stat_birthday)
-            .setColor(ContextCompat.getColor(context, com.example.reminderbirthday_calendar.R.color.blue)) // Установка цвета
+            .setSmallIcon(com.example.reminderbirthday_calendar.R.drawable.ic_stat_birthday_2)
+//            .setColor(ContextCompat.getColor(context, com.example.reminderbirthday_calendar.R.color.blue)) // Set background color
             .setContentTitle("Birthday Reminder")
             .setContentText(message)
             .build()
