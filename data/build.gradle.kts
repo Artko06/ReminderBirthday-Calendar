@@ -64,11 +64,9 @@ dependencies {
     kapt(libs.dagger.hilt.android.compiler)
 
     // Json and csv serialization
-    implementation(libs.code.gson) // Gson
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlin.csv.jvm)
+    implementation("com.github.Artko06:SerializationLibrary:1.0.2")
 
-    // Credential Manager
+// Credential Manager
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
 

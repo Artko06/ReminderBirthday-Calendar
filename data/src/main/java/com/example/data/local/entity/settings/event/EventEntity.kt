@@ -4,13 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.data.local.util.serializer.ByteArraySerializer
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
-import kotlinx.serialization.Serializable
 import java.time.LocalDate
 
-@Serializable
 @Entity(
     tableName = "event",
     indices = [Index(
@@ -28,7 +25,6 @@ data class EventEntity(
     val yearMatter: Boolean,
     val nextDate: String,
     val notes: String? = null,
-    @Serializable(with = ByteArraySerializer::class)
     @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB) // Binary data
     val image: ByteArray? = null
 ) {
