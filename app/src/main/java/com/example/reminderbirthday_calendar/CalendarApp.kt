@@ -3,9 +3,13 @@ package com.example.reminderbirthday_calendar
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import com.example.data.local.util.init.InitDataStore
 import com.example.reminderbirthday_calendar.notification.common.*
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @HiltAndroidApp
@@ -15,6 +19,11 @@ class CalendarApp: Application() {
 
         // DB
         FirebaseApp.initializeApp(this)
+
+        // Preference datastore
+        CoroutineScope(Dispatchers.IO).launch {
+            InitDataStore.initDefaults(context = this@CalendarApp)
+        }
 
         // Notification Channel
         val notificationEventChannel = NotificationChannel(

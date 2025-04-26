@@ -90,6 +90,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
 
+    // Splash screen
+    implementation(libs.androidx.core.splashscreen) // Not release yet
+
 //    // Local unit tests
 //    testImplementation("androidx.test:core:1.6.1")
 //    testImplementation("junit:junit:4.13.2")

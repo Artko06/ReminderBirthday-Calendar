@@ -20,9 +20,13 @@ interface SettingsRepository {
     fun getAllNotificationEvent(): Flow<List<NotificationEvent>>
     suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent)
 
-    //Zodiac
+    // Zodiac
     fun getStatusZodiacWestern(): Flow<Boolean>
     suspend fun setStatusZodiacWestern(activeStatus: Boolean)
     fun getStatusZodiacChinese(): Flow<Boolean>
     suspend fun setStatusZodiacChinese(activeStatus: Boolean)
+
+    // First launch
+    fun getIsFirstLaunch(): Flow<Boolean>
+    suspend fun setIsFirstLaunch(isFirstLaunch: Boolean)
 }

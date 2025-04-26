@@ -72,4 +72,13 @@ class SettingsRepositoryImpl(
     override suspend fun setStatusZodiacChinese(activeStatus: Boolean) {
         PreferencesDataStore.setStatusZodiacChinese(context = context, activeStatus = activeStatus)
     }
+
+    // First launch
+    override fun getIsFirstLaunch(): Flow<Boolean> {
+        return PreferencesDataStore.getIsFirstLaunch(context = context)
+    }
+
+    override suspend fun setIsFirstLaunch(isFirstLaunch: Boolean) {
+        PreferencesDataStore.setIsFirstLaunch(context = context, isFirstLaunch = isFirstLaunch)
+    }
 }

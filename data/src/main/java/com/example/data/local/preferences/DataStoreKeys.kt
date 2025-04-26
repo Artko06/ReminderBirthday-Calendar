@@ -4,6 +4,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 val IS_INITIALIZED_KEY = booleanPreferencesKey("app_initialized")
+val IS_FIRST_LAUNCH_KEY = booleanPreferencesKey("app_first_launch")
 val LANGUAGE_KEY = stringPreferencesKey("app_language")
 val THEME_KEY = stringPreferencesKey("app_theme")
 val ZODIAC_WESTERN_ENABLE_KEY = booleanPreferencesKey("app_enable_zodiac_western")

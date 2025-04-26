@@ -2,15 +2,12 @@ package com.example.data.local.preferences
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
 import com.example.domain.models.settings.LanguageType
 import com.example.domain.models.settings.ThemeType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 object PreferencesDataStore {
-    private val Context.dataStore by preferencesDataStore(name = "settings")
-
     // Languages
     fun getLanguage(context: Context): Flow<LanguageType> {
         return context.dataStore.data.map { prefs ->
@@ -63,5 +60,16 @@ object PreferencesDataStore {
 
     suspend fun setStatusZodiacChinese(context: Context, activeStatus: Boolean){
         context.dataStore.edit { it[ZODIAC_CHINESE_ENABLE_KEY] = activeStatus }
+    }
+
+    // First launch
+    fun getIsFirstLaunch(context: Context): Flow<Boolean>{
+        return context.dataStore.data.map { prefs ->
+            prefs[IS_FIRST_LAUNCH_KEY] ?: false
+        }
+    }
+
+    suspend fun setIsFirstLaunch(context: Context, isFirstLaunch: Boolean) {
+        context.dataStore.edit { it[IS_FIRST_LAUNCH_KEY] = isFirstLaunch }
     }
 }
