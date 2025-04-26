@@ -7,14 +7,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.reminderbirthday_calendar.presentation.event.NavigationEvent
-import com.example.reminderbirthday_calendar.presentation.screens.MainScreen
+import com.example.reminderbirthday_calendar.presentation.navigation.model.Screen
 import com.example.reminderbirthday_calendar.presentation.screens.NotificationPermissionScreen
 import com.example.reminderbirthday_calendar.presentation.viewModel.NavigationViewModel
 
 @Composable
-fun NavigationScreen() {
+fun NavigationScreen(
+    navigationViewModel: NavigationViewModel = hiltViewModel()
+) {
     val navController = rememberNavController()
-    val navigationViewModel: NavigationViewModel = hiltViewModel()
 
     val stateNavigation = navigationViewModel.navigationState.collectAsState().value
 
@@ -35,7 +36,7 @@ fun NavigationScreen() {
             }
 
             composable(route = Screen.MainScreen.route) {
-                MainScreen()
+                BottomNavigationScreen()
             }
         }
     }

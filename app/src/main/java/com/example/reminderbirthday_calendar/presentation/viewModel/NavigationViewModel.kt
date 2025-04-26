@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.useCase.settings.firstLaunch.GetIsFirstLaunchUseCase
 import com.example.domain.useCase.settings.firstLaunch.SetIsFirstLaunchUseCase
 import com.example.reminderbirthday_calendar.presentation.event.NavigationEvent
-import com.example.reminderbirthday_calendar.presentation.navigation.Screen
+import com.example.reminderbirthday_calendar.presentation.navigation.model.Screen
 import com.example.reminderbirthday_calendar.presentation.state.NavigationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

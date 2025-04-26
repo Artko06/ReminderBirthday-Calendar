@@ -1,4 +1,4 @@
-package com.example.reminderbirthday_calendar.presentation.navigation
+package com.example.reminderbirthday_calendar.presentation.navigation.model
 
 sealed class Screen(
     val route: String
