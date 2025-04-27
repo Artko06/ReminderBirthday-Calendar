@@ -29,7 +29,7 @@ hiltNavigationVersion = "1.2.0"
 kotlinStandardLibVersion = "2.1.0"
 coroutinesLibVersion = "1.7.3"
 
-dataStore = "1.1.5"
+dataStore = "1.1.4"
 
 kotlinSerialization = "2.1.20"
 

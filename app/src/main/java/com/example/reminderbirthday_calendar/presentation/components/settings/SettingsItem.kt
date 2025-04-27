@@ -50,7 +50,8 @@ fun SettingsItem(
         Icon(
             imageVector = icon,
             contentDescription = title,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
+            tint = Color.White
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -61,7 +62,8 @@ fun SettingsItem(
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                color = Color.White
             )
 
             Spacer(modifier = Modifier.height(3.dp))

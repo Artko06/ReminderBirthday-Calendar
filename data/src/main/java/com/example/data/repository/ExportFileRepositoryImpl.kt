@@ -12,23 +12,27 @@ class ExportFileRepositoryImpl @Inject constructor(
     private val context: Context,
     private val eventDao: EventDao
 ) : ExportFileRepository {
-    override suspend fun exportEventsToJsonToExternalDir() {
-        try {
+    override suspend fun exportEventsToJsonToExternalDir(): Boolean {
+        return try {
             val events = eventDao.getAllEvents().first().map { it.toEventSerializable() }
 
             Serialization.exportEventsToJsonToExternalDir(context = context, events = events)
+            true
         } catch (e: Exception) {
             e.printStackTrace()
+            false
         }
     }
 
-    override suspend fun exportEventsToCsvToExternalDir() {
-        try {
+    override suspend fun exportEventsToCsvToExternalDir(): Boolean {
+        return try {
             val events = eventDao.getAllEvents().first().map { it.toEventSerializable() }
 
             Serialization.exportEventsToCsvToExternalDir(context = context, events = events)
+            true
         } catch (e: Exception) {
             e.printStackTrace()
+            false
         }
     }
 }

@@ -66,7 +66,7 @@ dependencies {
     // Json and csv serialization
     implementation("com.github.Artko06:SerializationLibrary:1.0.2")
 
-// Credential Manager
+    // Credential Manager
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
 

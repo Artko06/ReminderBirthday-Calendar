@@ -18,6 +18,7 @@ import com.example.reminderbirthday_calendar.presentation.components.main.Bottom
 import com.example.reminderbirthday_calendar.presentation.event.BottomNavigationEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.BottomNavigationItem
 import com.example.reminderbirthday_calendar.presentation.navigation.model.NumberBottomScreen
+import com.example.reminderbirthday_calendar.presentation.screens.EventsScreen
 import com.example.reminderbirthday_calendar.presentation.screens.MainScreen
 import com.example.reminderbirthday_calendar.presentation.screens.SettingsScreen
 import com.example.reminderbirthday_calendar.presentation.viewModel.BottomNavigationViewModel
@@ -61,7 +62,7 @@ fun BottomNavigationScreen(
     ) { paddingValues ->
         when(NumberBottomScreen.entries[state.selectedIndexScreen]){
             NumberBottomScreen.CALENDAR -> MainScreen(modifier = Modifier.padding(paddingValues))
-            NumberBottomScreen.EVENTS -> MainScreen(modifier = Modifier.padding(paddingValues))
+            NumberBottomScreen.EVENTS -> EventsScreen(modifier = Modifier.padding(paddingValues))
             NumberBottomScreen.SETTINGS -> SettingsScreen(modifier = Modifier.padding(paddingValues))
         }
     }
