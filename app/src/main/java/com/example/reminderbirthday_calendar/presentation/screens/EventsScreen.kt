@@ -24,11 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.util.extensionFunc.calculateNextAge
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
 import com.example.reminderbirthday_calendar.presentation.components.evetns.SearchLine
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
-import java.time.Period
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -104,7 +104,7 @@ fun EventsScreen(
                             surname = it.surnameContact ?: "",
                             eventType = it.eventType,
                             date = it.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString(),
-                            age = Period.between(it.originalDate, it.nextDate).years + 1
+                            age = it.originalDate.calculateNextAge()
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -118,7 +118,7 @@ fun EventsScreen(
                             surname = it.surnameContact ?: "",
                             eventType = it.eventType,
                             date = it.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString(),
-                            age = Period.between(it.originalDate, it.nextDate).years + 1
+                            age = it.originalDate.calculateNextAge()
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))

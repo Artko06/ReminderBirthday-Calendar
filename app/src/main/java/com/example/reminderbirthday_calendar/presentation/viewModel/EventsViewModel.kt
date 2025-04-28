@@ -7,6 +7,7 @@ import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.ImportEventFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
+import com.example.domain.util.extensionFunc.sortByClosestDate
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.state.EventsState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,7 +42,7 @@ class EventsViewModel @Inject constructor(
         eventState, searchLine, filterEvents ->
 
         eventState.copy(
-            filterEvents = filterEvents,
+            filterEvents = filterEvents.sortByClosestDate(),
             searchStr = searchLine
         )
     }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = EventsState())
@@ -49,7 +50,7 @@ class EventsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _eventsState.update { it.copy(
-                events = getAllEventUseCase.invoke().first() // From database
+                events = getAllEventUseCase.invoke().first().sortByClosestDate() // From database
             ) }
         }
     }
@@ -63,7 +64,7 @@ class EventsViewModel @Inject constructor(
                     currentEvents.addAll(importEventFromContactsUseCase())
 
                     _eventsState.update { it.copy(
-                        events = currentEvents.toList()
+                        events = currentEvents.toList().sortByClosestDate()
                     )
                     }
 
@@ -89,7 +90,7 @@ class EventsViewModel @Inject constructor(
 
                     _eventsState.update {
                         it.copy(
-                            events = eventsFromDb
+                            events = eventsFromDb.sortByClosestDate()
                         )
                     }
                 }
