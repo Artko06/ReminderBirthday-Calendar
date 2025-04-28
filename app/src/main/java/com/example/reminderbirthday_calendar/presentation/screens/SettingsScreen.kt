@@ -1,8 +1,13 @@
 package com.example.reminderbirthday_calendar.presentation.screens
 
+import android.net.Uri
+import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,17 +20,19 @@ import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.material.icons.outlined.CloudUpload
 import androidx.compose.material.icons.outlined.ColorLens
 import androidx.compose.material.icons.outlined.CrueltyFree
+import androidx.compose.material.icons.outlined.DriveFileMoveRtl
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.MarkEmailRead
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.SaveAs
-import androidx.compose.material.icons.outlined.TableView
 import androidx.compose.material.icons.outlined.UploadFile
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
@@ -34,27 +41,55 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reminderbirthday_calendar.intents.shareIntent.shareFileIntent
+import com.example.reminderbirthday_calendar.presentation.components.settings.RedClearButton
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
+import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.event.ImportExportEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow
+import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.ImportExportViewModel
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    importExportViewModel: ImportExportViewModel = hiltViewModel()
+    importExportViewModel: ImportExportViewModel = hiltViewModel(),
+    eventsViewModel: EventsViewModel = hiltViewModel()
 ){
     val context = LocalContext.current
     val listState = rememberLazyListState()
     var lazyKey = 0
 
+    val eventsState = eventsViewModel.eventState.collectAsState().value
     val importExportEventToast = importExportViewModel.eventToast
+
+    val launcherPickerFile = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { selectedUri: Uri? ->
+        selectedUri?.let { uri ->
+            if (MimeTypeMap.getFileExtensionFromUrl(uri.toString()) == "json")
+                importExportViewModel.onEvent(ImportExportEvent.ImportEventsFromJson(uri = uri))
+
+            else if(MimeTypeMap.getFileExtensionFromUrl(uri.toString()) == "csv")
+                importExportViewModel.onEvent(ImportExportEvent.ImportEventsFromCsv(uri = uri))
+
+            else Toast.makeText(context, "Incorrect extension file", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     LaunchedEffect(Unit) {
         importExportEventToast.collect { sharedEvent ->
             when(sharedEvent){
                 is ImportExportSharedFlow.ShowToast -> {
                     Toast.makeText(context, sharedEvent.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is ImportExportSharedFlow.ShowShareView -> {
+                    context.startActivity(shareFileIntent(typeFile = sharedEvent.typeShareFile, context = context))
+                }
+
+                is ImportExportSharedFlow.UpdateEventsAfterImport -> {
+                    eventsViewModel.onEvent(event = EventsEvent.UpdateEvents(events = sharedEvent.events))
                 }
             }
         }
@@ -167,7 +202,7 @@ fun SettingsScreen(
             SettingsItem(
                 icon = Icons.Outlined.SaveAs,
                 title = "Reimport events",
-                subtitle = "Import events from this phone",
+                subtitle = "Import events from contacts app",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -178,36 +213,50 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.UploadFile,
-                title = "Export events (JSON)",
-                subtitle = "Export events to the external dir",
+                title = "Export events and share (JSON)",
+                subtitle = "Share events with other apps",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
                 onClick = {
-                    importExportViewModel.onEvent(event = ImportExportEvent.EventsToJsonToExternalDirExport)
+                    importExportViewModel.onEvent(event = ImportExportEvent.ExportEventsToJson)
                 }
             )
         }
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.TableView,
-                title = "Export events (CSV)",
-                subtitle = "Export events to the external dir",
+                icon = Icons.Outlined.UploadFile,
+                title = "Export events and share (CSV)",
+                subtitle = "Share events with other apps",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
                 onClick = {
-                    importExportViewModel.onEvent(event = ImportExportEvent.EventsToCsvToExternalDirExport)
+                    importExportViewModel.onEvent(event = ImportExportEvent.ExportEventsToCsv)
                 }
             )
         }
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.CloudUpload,
-                title = "Cloud import events",
-                subtitle = "Import events from the firebase",
+                icon = Icons.Outlined.DriveFileMoveRtl,
+                title = "Import events (JSON or CSV)",
+                subtitle = "Import events from your file system",
+                hasSwitch = false,
+                isSwitchChecked = false,
+                onSwitchChange = {},
+                onClick = {
+                    launcherPickerFile.launch("*/*")
+                }
+            )
+        }
+
+        item(key = lazyKey++) {
+            SettingsItem(
+                icon = Icons.Outlined.CloudDownload,
+                title = "Cloud export events",
+                subtitle = "Export events to the firebase",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -217,9 +266,9 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.CloudDownload,
-                title = "Cloud export events",
-                subtitle = "Export events to the firebase",
+                icon = Icons.Outlined.CloudUpload,
+                title = "Cloud import events",
+                subtitle = "Import events from the firebase",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -256,7 +305,7 @@ fun SettingsScreen(
             SettingsItem(
                 icon = Icons.Outlined.CalendarMonth,
                 title = "Total events",
-                subtitle = "0 events",
+                subtitle = "${eventsState.events.size} events",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -275,6 +324,21 @@ fun SettingsScreen(
                 onClick = {}
             )
         }
+
+        item(key = lazyKey++) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                RedClearButton(
+                    onClear = {
+                        eventsViewModel.onEvent(event = EventsEvent.ClearEvents)
+                    }
+                )
+            }
+        }
+
+
     }
 }
 

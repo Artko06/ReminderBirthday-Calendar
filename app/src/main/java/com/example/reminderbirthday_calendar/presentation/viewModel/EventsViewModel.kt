@@ -2,6 +2,7 @@ package com.example.reminderbirthday_calendar.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.ImportEventFromContactsUseCase
@@ -26,7 +27,8 @@ class EventsViewModel @Inject constructor(
     private val importEventFromContactsUseCase: ImportEventFromContactsUseCase,
     private val getEventByContactNameUseCase: GetEventByContactNameUseCase,
     private val getAllEventUseCase: GetAllEventUseCase,
-    private val upsertEventUseCase: UpsertEventsUseCase
+    private val upsertEventUseCase: UpsertEventsUseCase,
+    private val deleteEventsUseCase: DeleteEventsUseCase,
 ): ViewModel() {
     private val _eventsState = MutableStateFlow(EventsState())
     private val _searchLine = MutableStateFlow("")
@@ -73,9 +75,37 @@ class EventsViewModel @Inject constructor(
                 _searchLine.value = event.newValue
             }
 
+            is EventsEvent.UpdateEvents -> {
+                val gotEvents = event.events
+
+                val gotEventsId0 = gotEvents.map { event ->
+                    event.copy(id = 0)
+                }
+
+                viewModelScope.launch {
+                    upsertEventUseCase(events = gotEventsId0)
+
+                    val eventsFromDb = getAllEventUseCase.invoke().first()
+
+                    _eventsState.update {
+                        it.copy(
+                            events = eventsFromDb
+                        )
+                    }
+                }
+            }
+
+            EventsEvent.ClearEvents -> {
+                _eventsState.update { it.copy(
+                    events = emptyList()
+                ) }
+
+                viewModelScope.launch {
+                    deleteEventsUseCase.invoke(events = getAllEventUseCase.invoke().first())
+                }
+            }
+
 
         }
     }
-
-
 }
