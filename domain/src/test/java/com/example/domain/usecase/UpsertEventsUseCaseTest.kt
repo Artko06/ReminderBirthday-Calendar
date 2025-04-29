@@ -36,7 +36,6 @@ class UpsertEventsUseCaseTest {
                 surnameContact = "Doe",
                 originalDate = LocalDate.of(1990, 1, 1),
                 yearMatter = true,
-                nextDate = LocalDate.of(2025, 1, 1),
                 notes = null,
                 image = null
             ),
@@ -47,7 +46,6 @@ class UpsertEventsUseCaseTest {
                 surnameContact = null,
                 originalDate = LocalDate.of(1980, 12, 31),
                 yearMatter = false,
-                nextDate = LocalDate.of(2025, 12, 31),
                 notes = "Work",
                 image = null
             )

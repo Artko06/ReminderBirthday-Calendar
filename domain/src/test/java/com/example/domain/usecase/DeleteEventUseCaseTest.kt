@@ -36,7 +36,6 @@ class DeleteEventUseCaseTest {
         surnameContact = null,
         originalDate = LocalDate.of(2000, 1, 1),
         yearMatter = true,
-        nextDate = LocalDate.of(2025, 1, 1),
         notes = null,
         image = null
     )

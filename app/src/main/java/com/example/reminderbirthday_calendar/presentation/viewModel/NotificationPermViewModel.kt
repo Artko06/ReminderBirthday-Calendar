@@ -6,6 +6,7 @@ import com.example.domain.useCase.settings.notification.SetStatusNotificationUse
 import com.example.reminderbirthday_calendar.presentation.event.NotificationPermEvent
 import com.example.reminderbirthday_calendar.presentation.state.NotificationPermState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -23,7 +24,7 @@ class NotificationPermViewModel @Inject constructor(
     fun onEvent(event: NotificationPermEvent) {
         when (event) {
             NotificationPermEvent.OnRequestNotificationPermission -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     _notificationState.update { it.copy(
                         requestPermission = true
                     ) }
@@ -35,7 +36,7 @@ class NotificationPermViewModel @Inject constructor(
                     isPermissionGranted = event.isGranted
                 ) }
 
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     setStatusNotificationUseCase(activeStatus = event.isGranted)
                 }
             }

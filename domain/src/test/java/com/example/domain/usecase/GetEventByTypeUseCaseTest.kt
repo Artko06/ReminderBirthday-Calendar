@@ -38,7 +38,6 @@ class GetEventByTypeUseCaseTest {
                 surnameContact = null,
                 originalDate = LocalDate.of(1990, 6, 15),
                 yearMatter = true,
-                nextDate = LocalDate.of(2025, 6, 15),
                 notes = null,
                 image = null
             )

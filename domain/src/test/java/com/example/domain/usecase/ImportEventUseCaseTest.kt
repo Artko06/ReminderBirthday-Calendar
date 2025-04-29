@@ -3,7 +3,7 @@ package com.example.domain.usecase
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
 import com.example.domain.repository.ContactAppRepository
-import com.example.domain.useCase.calendar.event.ImportEventFromContactsUseCase
+import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,7 +19,7 @@ import java.time.LocalDate
 class ImportEventUseCaseTest {
 
     private val repository = mock<ContactAppRepository>()
-    private val useCase = ImportEventFromContactsUseCase(repository)
+    private val useCase = ImportEventsFromContactsUseCase(repository)
 
     @AfterEach
     fun tearDown(){
@@ -37,7 +37,6 @@ class ImportEventUseCaseTest {
                 surnameContact = null,
                 originalDate = LocalDate.of(2000, 5, 10),
                 yearMatter = true,
-                nextDate = LocalDate.of(2025, 5, 10),
                 notes = null,
                 image = null
             ),
@@ -48,7 +47,6 @@ class ImportEventUseCaseTest {
                 surnameContact = "Smith",
                 originalDate = LocalDate.of(1995, 7, 15),
                 yearMatter = false,
-                nextDate = LocalDate.of(2025, 7, 15),
                 notes = "Work anniversary",
                 image = null
             )

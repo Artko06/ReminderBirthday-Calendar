@@ -9,7 +9,7 @@ import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.GetEventByTypeUseCase
-import com.example.domain.useCase.calendar.event.ImportEventFromContactsUseCase
+import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
 import com.example.domain.useCase.exportFile.ExportEventsToCsvToExternalDirUseCase
@@ -56,8 +56,8 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideImportEventFromContactsUseCase(contactAppRepository: ContactAppRepository): ImportEventFromContactsUseCase {
-        return ImportEventFromContactsUseCase(repository = contactAppRepository)
+    fun provideImportEventsFromContactsUseCase(contactAppRepository: ContactAppRepository): ImportEventsFromContactsUseCase {
+        return ImportEventsFromContactsUseCase(repository = contactAppRepository)
     }
 
     @Provides

@@ -10,7 +10,6 @@ fun EventSerializable.toEventEntity() = EventEntity(
     surnameContact = surnameContact,
     originalDate = originalDate,
     yearMatter = yearMatter,
-    nextDate = nextDate,
     notes = notes,
     image = image
 )
@@ -22,7 +21,6 @@ fun EventEntity.toEventSerializable() = EventSerializable(
     surnameContact = surnameContact,
     originalDate = originalDate,
     yearMatter = yearMatter,
-    nextDate = nextDate,
     notes = notes,
     image = image
 )

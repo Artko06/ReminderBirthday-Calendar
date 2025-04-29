@@ -64,7 +64,7 @@ dependencies {
     kapt(libs.dagger.hilt.android.compiler)
 
     // Json and csv serialization
-    implementation("com.github.Artko06:SerializationLibrary:1.0.4")
+    implementation("com.github.Artko06:SerializationLibrary:1.0.5")
 
     // Credential Manager
     implementation(libs.androidx.credentials)
@@ -77,7 +77,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
 
-    implementation("com.google.firebase:firebase-firestore-ktx:25.1.3")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.mockito:mockito-core:4.0.0")

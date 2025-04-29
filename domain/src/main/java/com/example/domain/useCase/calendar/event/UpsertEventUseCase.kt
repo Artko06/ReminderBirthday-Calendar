@@ -15,11 +15,6 @@ class UpsertEventUseCase(private val repository: EventRepository) {
         notes: String?,
         image: ByteArray?
     ): Boolean {
-        val nowYear = LocalDate.now().year
-        val month = originalDate.monthValue
-        val day = originalDate.dayOfMonth
-        val nextDate = LocalDate.of(nowYear, month, day)
-
         return repository.upsertEvent(
             event = Event(
                 id = 0,
@@ -28,7 +23,6 @@ class UpsertEventUseCase(private val repository: EventRepository) {
                 surnameContact = surnameContact,
                 originalDate = originalDate,
                 yearMatter = yearMatter,
-                nextDate = nextDate,
                 notes = notes,
                 image = image
             )

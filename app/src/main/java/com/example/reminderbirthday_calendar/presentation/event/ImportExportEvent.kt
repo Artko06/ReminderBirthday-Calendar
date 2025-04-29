@@ -7,4 +7,5 @@ sealed class ImportExportEvent {
     object ExportEventsToCsv: ImportExportEvent()
     data class ImportEventsFromJson(val uri: Uri): ImportExportEvent()
     data class ImportEventsFromCsv(val uri: Uri): ImportExportEvent()
+    object ImportEventsFromContacts: ImportExportEvent()
 }

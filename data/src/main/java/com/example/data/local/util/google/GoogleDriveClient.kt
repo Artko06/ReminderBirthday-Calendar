@@ -139,7 +139,6 @@ class GoogleDriveClient(
             "surnameContact" to surnameContact,
             "originalDate" to originalDate,
             "yearMatter" to yearMatter,
-            "nextDate" to nextDate,
             "notes" to notes,
             "image" to image?.let { Base64.encodeToString(it, Base64.DEFAULT) },
         )
@@ -153,7 +152,6 @@ class GoogleDriveClient(
             surnameContact = event["surnameContact"] as? String,
             originalDate = event["originalDate"] as String,
             yearMatter = event["yearMatter"] as Boolean,
-            nextDate = event["nextDate"] as String,
             notes = event["notes"] as? String,
             image = (event["image"] as? String)?.let {
                 Base64.decode(it, Base64.DEFAULT)

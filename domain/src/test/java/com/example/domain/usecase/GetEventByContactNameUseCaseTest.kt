@@ -34,7 +34,6 @@ class GetEventByContactNameUseCaseTest {
             surnameContact = "Johnson",
             originalDate = LocalDate.of(1990, 1, 1),
             yearMatter = true,
-            nextDate = LocalDate.of(2025, 1, 1),
             notes = null,
             image = null
         ),
@@ -45,7 +44,6 @@ class GetEventByContactNameUseCaseTest {
             surnameContact = "Smith",
             originalDate = LocalDate.of(1995, 5, 15),
             yearMatter = true,
-            nextDate = LocalDate.of(2025, 5, 15),
             notes = null,
             image = null
         ),
@@ -56,7 +54,6 @@ class GetEventByContactNameUseCaseTest {
             surnameContact = null,
             originalDate = LocalDate.of(2000, 3, 10),
             yearMatter = false,
-            nextDate = LocalDate.of(2025, 3, 10),
             notes = null,
             image = null
         )

@@ -36,9 +36,6 @@ class UpsertEventUseCaseTest {
         val notes = "Friend"
         val image = byteArrayOf(1, 2, 3)
 
-        val nowYear = LocalDate.now().year
-        val expectedNextDate = LocalDate.of(nowYear, 5, 10)
-
         val expectedEvent = Event(
             id = 0,
             eventType = eventType,
@@ -46,7 +43,6 @@ class UpsertEventUseCaseTest {
             surnameContact = surname,
             originalDate = originalDate,
             yearMatter = yearMatter,
-            nextDate = expectedNextDate,
             notes = notes,
             image = image
         )
@@ -74,14 +70,10 @@ class UpsertEventUseCaseTest {
         // given
         val eventType = EventType.OTHER
         val name = "Bob"
-        val surname = null
         val originalDate = LocalDate.of(1985, 8, 20)
         val yearMatter = false
         val notes = null
         val image = null
-
-        val nowYear = LocalDate.now().year
-        val expectedNextDate = LocalDate.of(nowYear, 8, 20)
 
         val expectedEvent = Event(
             id = 0,
@@ -90,7 +82,6 @@ class UpsertEventUseCaseTest {
             surnameContact = null,
             originalDate = originalDate,
             yearMatter = yearMatter,
-            nextDate = expectedNextDate,
             notes = notes,
             image = image
         )

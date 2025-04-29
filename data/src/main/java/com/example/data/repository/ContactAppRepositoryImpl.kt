@@ -274,7 +274,6 @@ class ContactAppRepositoryImpl(
                     parseDate = contact.eventDate.replaceFirst("-", "2025")
                     countYear = false
                 }
-                val nowYear = LocalDate.now().year.toString()
 
                 Event(
                     id = 0,
@@ -282,7 +281,6 @@ class ContactAppRepositoryImpl(
                     nameContact = nameContact,
                     surnameContact = surnameContact,
                     originalDate = LocalDate.parse(parseDate),
-                    nextDate = LocalDate.parse(parseDate.replaceRange(range = 0..3, nowYear)),
                     yearMatter = countYear,
                     image = contact.image,
                     notes = notes

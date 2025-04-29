@@ -5,70 +5,104 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
-import com.example.domain.useCase.calendar.event.ImportEventFromContactsUseCase
+import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
 import com.example.domain.util.extensionFunc.sortByClosestDate
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
+import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.state.EventsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class EventsViewModel @Inject constructor(
-    private val importEventFromContactsUseCase: ImportEventFromContactsUseCase,
+    private val importEventsFromContactsUseCase: ImportEventsFromContactsUseCase,
     private val getEventByContactNameUseCase: GetEventByContactNameUseCase,
     private val getAllEventUseCase: GetAllEventUseCase,
     private val upsertEventUseCase: UpsertEventsUseCase,
-    private val deleteEventsUseCase: DeleteEventsUseCase,
-): ViewModel() {
+    private val deleteEventsUseCase: DeleteEventsUseCase
+) : ViewModel() {
     private val _eventsState = MutableStateFlow(EventsState())
     private val _searchLine = MutableStateFlow("")
     private val _filterEvents = _searchLine.flatMapLatest { searchLine ->
         getEventByContactNameUseCase(strSearch = searchLine)
     }
-        .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = emptyList())
-
-    val eventState = combine(_eventsState, _searchLine, _filterEvents) {
-        eventState, searchLine, filterEvents ->
-
-        eventState.copy(
-            filterEvents = filterEvents.sortByClosestDate(),
-            searchStr = searchLine
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
         )
-    }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = EventsState())
+
+    val eventState =
+        combine(_eventsState, _searchLine, _filterEvents) { eventState, searchLine, filterEvents ->
+
+            eventState.copy(
+                filterEvents = filterEvents.sortByClosestDate(),
+                searchStr = searchLine
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = EventsState()
+        )
+
+    private val _eventsSharedFlow = MutableSharedFlow<EventsSharedFlow>()
+    val eventsSharedFlow = _eventsSharedFlow.asSharedFlow()
 
     init {
-        viewModelScope.launch {
-            _eventsState.update { it.copy(
-                events = getAllEventUseCase.invoke().first().sortByClosestDate() // From database
-            ) }
+        viewModelScope.launch(Dispatchers.IO) {
+            _eventsState.update {
+                it.copy(
+                    events = getAllEventUseCase.invoke().first()
+                        .sortByClosestDate() // From database
+                )
+            }
         }
     }
 
-    fun onEvent(event: EventsEvent){
-        when(event){
+    fun onEvent(event: EventsEvent) {
+        when (event) {
             EventsEvent.ImportEventsFromContacts -> {
-                viewModelScope.launch {
-                    val currentEvents = _eventsState.value.events.toMutableSet()
+                viewModelScope.launch(Dispatchers.IO) {
+                    val importEvents = importEventsFromContactsUseCase.invoke()
 
-                    currentEvents.addAll(importEventFromContactsUseCase())
-
-                    _eventsState.update { it.copy(
-                        events = currentEvents.toList().sortByClosestDate()
-                    )
+                    val importEventsId0 = importEvents.map { event ->
+                        event.copy(id = 0)
                     }
 
-                    upsertEventUseCase(events = currentEvents.toList())
+                    val eventsDbBeforeAdding = getAllEventUseCase.invoke().first()
+
+                    upsertEventUseCase(events = importEventsId0)
+
+                    val eventsDbAfterAdding = getAllEventUseCase.invoke().first()
+
+                    _eventsState.update {
+                        it.copy(
+                            events = eventsDbAfterAdding.sortByClosestDate()
+                        )
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        _eventsSharedFlow.emit(
+                            value = EventsSharedFlow.ShowToast(
+                                message = "${importEvents.size} imported events. " +
+                                        "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
+                        )
+                    }
                 }
             }
 
@@ -77,33 +111,55 @@ class EventsViewModel @Inject constructor(
             }
 
             is EventsEvent.UpdateEvents -> {
-                val gotEvents = event.events
+                viewModelScope.launch(Dispatchers.IO) {
+                    val importEvents = event.events
 
-                val gotEventsId0 = gotEvents.map { event ->
-                    event.copy(id = 0)
-                }
+                    val importEventsId0 = importEvents.map { event ->
+                        event.copy(id = 0)
+                    }
 
-                viewModelScope.launch {
-                    upsertEventUseCase(events = gotEventsId0)
+                    val eventsDbBeforeAdding = getAllEventUseCase.invoke().first()
 
-                    val eventsFromDb = getAllEventUseCase.invoke().first()
+                    upsertEventUseCase(events = importEventsId0)
+
+                    val eventsDbAfterAdding = getAllEventUseCase.invoke().first()
 
                     _eventsState.update {
                         it.copy(
-                            events = eventsFromDb.sortByClosestDate()
+                            events = eventsDbAfterAdding.sortByClosestDate()
+                        )
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        _eventsSharedFlow.emit(
+                            value = EventsSharedFlow.ShowToast(
+                                message = "${importEvents.size} imported events. " +
+                                        "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
                         )
                     }
                 }
             }
 
             EventsEvent.ClearEvents -> {
-                _eventsState.update { it.copy(
-                    events = emptyList()
-                ) }
-
-                viewModelScope.launch {
-                    deleteEventsUseCase.invoke(events = getAllEventUseCase.invoke().first())
+                _eventsState.update {
+                    it.copy(
+                        events = emptyList()
+                    )
                 }
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    val allEventsDb = getAllEventUseCase.invoke().first()
+
+                    deleteEventsUseCase.invoke(events = allEventsDb)
+
+                    withContext(Dispatchers.Main) {
+                        _eventsSharedFlow.emit(
+                            value = EventsSharedFlow.ShowToast("${allEventsDb.size} events deleted")
+                        )
+                    }
+                }
+
+
             }
 
 

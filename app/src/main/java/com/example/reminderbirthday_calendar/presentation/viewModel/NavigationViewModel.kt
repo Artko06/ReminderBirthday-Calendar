@@ -8,6 +8,7 @@ import com.example.reminderbirthday_calendar.presentation.event.NavigationEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.Screen
 import com.example.reminderbirthday_calendar.presentation.state.NavigationState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -24,7 +25,7 @@ class NavigationViewModel @Inject constructor(
     val navigationState = _navigationState.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val isFirstLaunch = getIsFirstLaunchUseCase().first()
 
             if (isFirstLaunch) {
@@ -46,7 +47,7 @@ class NavigationViewModel @Inject constructor(
     fun onEvent(event: NavigationEvent) {
         when(event){
             NavigationEvent.OnChangeIsFirstLaunch -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     setIsFirstLaunchUseCase(isFirstLaunch = false)
                 }
             }

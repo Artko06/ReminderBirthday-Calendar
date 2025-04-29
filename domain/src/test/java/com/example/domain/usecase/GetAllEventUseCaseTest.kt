@@ -35,7 +35,6 @@ class GetAllEventUseCaseTest {
                 surnameContact = null,
                 originalDate = LocalDate.of(2000, 12, 10),
                 yearMatter = true,
-                nextDate = LocalDate.of(2025,12,10),
                 notes = null,
                 image = null
             ),
@@ -46,7 +45,6 @@ class GetAllEventUseCaseTest {
                 surnameContact = null,
                 originalDate = LocalDate.of(2000,1,1),
                 yearMatter = true,
-                nextDate = LocalDate.of(2026,1,1),
                 notes = null,
                 image = null
             )

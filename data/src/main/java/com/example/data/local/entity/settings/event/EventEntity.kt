@@ -11,7 +11,7 @@ import java.time.LocalDate
 @Entity(
     tableName = "event",
     indices = [Index(
-        value = arrayOf("nameContact", "surnameContact", "originalDate"),
+        value = arrayOf("nameContact", "surnameContact", "originalDate", "eventType"),
         unique = true
     )]
 )
@@ -23,7 +23,6 @@ data class EventEntity(
     val surnameContact: String?,
     val originalDate: String,
     val yearMatter: Boolean,
-    val nextDate: String,
     val notes: String? = null,
     @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB) // Binary data
     val image: ByteArray? = null
@@ -40,7 +39,6 @@ data class EventEntity(
         if (nameContact != other.nameContact) return false
         if (surnameContact != other.surnameContact) return false
         if (originalDate != other.originalDate) return false
-        if (nextDate != other.nextDate) return false
         if (notes != other.notes) return false
         if (!image.contentEquals(other.image)) return false
 
@@ -54,7 +52,6 @@ data class EventEntity(
         result = 31 * result + nameContact.hashCode()
         result = 31 * result + (surnameContact?.hashCode() ?: 0)
         result = 31 * result + originalDate.hashCode()
-        result = 31 * result + nextDate.hashCode()
         result = 31 * result + (notes?.hashCode() ?: 0)
         result = 31 * result + (image?.contentHashCode() ?: 0)
         return result
@@ -68,7 +65,6 @@ fun EventEntity.toDomain() = Event(
     surnameContact = surnameContact,
     originalDate = LocalDate.parse(originalDate),
     yearMatter = yearMatter,
-    nextDate = LocalDate.parse(nextDate),
     notes = notes,
     image = image
 )
@@ -80,7 +76,6 @@ fun Event.toData() = EventEntity(
     surnameContact = surnameContact,
     originalDate = originalDate.toString(),
     yearMatter = yearMatter,
-    nextDate = nextDate.toString(),
     notes = notes,
     image = image
 )

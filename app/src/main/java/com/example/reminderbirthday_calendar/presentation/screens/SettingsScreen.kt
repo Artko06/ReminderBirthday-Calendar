@@ -46,6 +46,7 @@ import com.example.reminderbirthday_calendar.presentation.components.settings.Re
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.event.ImportExportEvent
+import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.ImportExportViewModel
@@ -61,7 +62,7 @@ fun SettingsScreen(
     var lazyKey = 0
 
     val eventsState = eventsViewModel.eventState.collectAsState().value
-    val importExportEventToast = importExportViewModel.eventToast
+    val importExportSharedFlow = importExportViewModel.importExportSharedFlow
 
     val launcherPickerFile = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -78,18 +79,30 @@ fun SettingsScreen(
     }
 
     LaunchedEffect(Unit) {
-        importExportEventToast.collect { sharedEvent ->
-            when(sharedEvent){
+        importExportSharedFlow.collect { sharedFlow ->
+            when(sharedFlow){
                 is ImportExportSharedFlow.ShowToast -> {
-                    Toast.makeText(context, sharedEvent.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
                 }
 
                 is ImportExportSharedFlow.ShowShareView -> {
-                    context.startActivity(shareFileIntent(typeFile = sharedEvent.typeShareFile, context = context))
+                    context.startActivity(shareFileIntent(typeFile = sharedFlow.typeShareFile, context = context))
                 }
 
                 is ImportExportSharedFlow.UpdateEventsAfterImport -> {
-                    eventsViewModel.onEvent(event = EventsEvent.UpdateEvents(events = sharedEvent.events))
+                    eventsViewModel.onEvent(event = EventsEvent.UpdateEvents(events = sharedFlow.events))
+                }
+            }
+        }
+    }
+
+    val eventsSharedFlow = eventsViewModel.eventsSharedFlow
+
+    LaunchedEffect(Unit) {
+        eventsSharedFlow.collect { sharedFlow ->
+            when(sharedFlow){
+                is EventsSharedFlow.ShowToast -> {
+                    Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -206,7 +219,7 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.ImportEventsFromContacts) }
             )
         }
 
