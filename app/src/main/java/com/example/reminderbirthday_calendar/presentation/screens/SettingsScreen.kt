@@ -46,22 +46,27 @@ import com.example.reminderbirthday_calendar.presentation.components.settings.Re
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.event.ImportExportEvent
+import com.example.reminderbirthday_calendar.presentation.event.PreferencesEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.ImportExportViewModel
+import com.example.reminderbirthday_calendar.presentation.viewModel.PreferencesViewModel
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
+    preferencesViewModel: PreferencesViewModel = hiltViewModel(),
     importExportViewModel: ImportExportViewModel = hiltViewModel(),
     eventsViewModel: EventsViewModel = hiltViewModel()
-){
+) {
     val context = LocalContext.current
     val listState = rememberLazyListState()
     var lazyKey = 0
 
+    val preferencesState = preferencesViewModel.preferencesState.collectAsState().value
     val eventsState = eventsViewModel.eventState.collectAsState().value
+    val importExportState = importExportViewModel.importExportState.collectAsState().value
     val importExportSharedFlow = importExportViewModel.importExportSharedFlow
 
     val launcherPickerFile = rememberLauncherForActivityResult(
@@ -70,23 +75,26 @@ fun SettingsScreen(
         selectedUri?.let { uri ->
             if (MimeTypeMap.getFileExtensionFromUrl(uri.toString()) == "json")
                 importExportViewModel.onEvent(ImportExportEvent.ImportEventsFromJson(uri = uri))
-
-            else if(MimeTypeMap.getFileExtensionFromUrl(uri.toString()) == "csv")
+            else if (MimeTypeMap.getFileExtensionFromUrl(uri.toString()) == "csv")
                 importExportViewModel.onEvent(ImportExportEvent.ImportEventsFromCsv(uri = uri))
-
             else Toast.makeText(context, "Incorrect extension file", Toast.LENGTH_SHORT).show()
         }
     }
 
     LaunchedEffect(Unit) {
         importExportSharedFlow.collect { sharedFlow ->
-            when(sharedFlow){
+            when (sharedFlow) {
                 is ImportExportSharedFlow.ShowToast -> {
                     Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
                 }
 
                 is ImportExportSharedFlow.ShowShareView -> {
-                    context.startActivity(shareFileIntent(typeFile = sharedFlow.typeShareFile, context = context))
+                    context.startActivity(
+                        shareFileIntent(
+                            typeFile = sharedFlow.typeShareFile,
+                            context = context
+                        )
+                    )
                 }
 
                 is ImportExportSharedFlow.UpdateEventsAfterImport -> {
@@ -100,7 +108,7 @@ fun SettingsScreen(
 
     LaunchedEffect(Unit) {
         eventsSharedFlow.collect { sharedFlow ->
-            when(sharedFlow){
+            when (sharedFlow) {
                 is EventsSharedFlow.ShowToast -> {
                     Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
                 }
@@ -110,10 +118,12 @@ fun SettingsScreen(
 
     LazyColumn(
         state = listState,
-        modifier = Modifier.then(modifier).padding(12.dp),
+        modifier = Modifier
+            .then(modifier)
+            .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        stickyHeader(key = lazyKey++){
+        stickyHeader(key = lazyKey++) {
             Text(
                 text = "Preferences",
                 fontFamily = FontFamily.SansSerif,
@@ -180,9 +190,13 @@ fun SettingsScreen(
                 title = "Western zodiac",
                 subtitle = "Enable zodiac",
                 hasSwitch = true,
-                isSwitchChecked = true,
-                onSwitchChange = {},
-                onClick = {}
+                isSwitchChecked = preferencesState.isEnableWesternZodiac,
+                onSwitchChange = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeWesternZodiacStatus)
+                },
+                onClick = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeWesternZodiacStatus)
+                }
             )
         }
 
@@ -192,9 +206,13 @@ fun SettingsScreen(
                 title = "Chinese zodiac",
                 subtitle = "Enable zodiac",
                 hasSwitch = true,
-                isSwitchChecked = true,
-                onSwitchChange = {},
-                onClick = {}
+                isSwitchChecked = preferencesState.isEnableChineseZodiac,
+                onSwitchChange = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeChineseZodiacStatus)
+                },
+                onClick = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeChineseZodiacStatus)
+                }
             )
         }
 
@@ -267,25 +285,29 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.CloudDownload,
+                icon = Icons.Outlined.CloudUpload,
                 title = "Cloud export events",
                 subtitle = "Export events to the firebase",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = {
+                    importExportViewModel.onEvent(event = ImportExportEvent.UploadEventsToRemote)
+                }
             )
         }
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.CloudUpload,
+                icon = Icons.Outlined.CloudDownload,
                 title = "Cloud import events",
                 subtitle = "Import events from the firebase",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = {
+                    importExportViewModel.onEvent(event = ImportExportEvent.GetEventsFromRemote)
+                }
             )
         }
 
@@ -306,11 +328,11 @@ fun SettingsScreen(
             SettingsItem(
                 icon = Icons.Outlined.MarkEmailRead,
                 title = "Sign-in with google",
-                subtitle = "koxan@gmail.com",
+                subtitle = importExportState.googleAuthEmail ?: "Auth pls \uD83E\uDD7A",
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.GoogleSignInOrOut) }
             )
         }
 
@@ -322,7 +344,13 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = {
+                    Toast.makeText(
+                        context,
+                        "You have ${eventsState.events.size} events",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
         }
 
@@ -334,7 +362,13 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = {
+                    Toast.makeText(
+                        context,
+                        "Version this app is 1.0.0",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
         }
 
@@ -358,6 +392,6 @@ fun SettingsScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun SettingsScreenPreview(){
+fun SettingsScreenPreview() {
     SettingsScreen()
 }

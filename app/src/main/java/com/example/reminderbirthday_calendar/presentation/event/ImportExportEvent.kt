@@ -8,4 +8,8 @@ sealed class ImportExportEvent {
     data class ImportEventsFromJson(val uri: Uri): ImportExportEvent()
     data class ImportEventsFromCsv(val uri: Uri): ImportExportEvent()
     object ImportEventsFromContacts: ImportExportEvent()
+
+    object GoogleSignInOrOut: ImportExportEvent()
+    object UploadEventsToRemote: ImportExportEvent()
+    object GetEventsFromRemote: ImportExportEvent()
 }

@@ -53,6 +53,12 @@ class GoogleAuthClient(
         firebaseAuth.signOut()
     }
 
+    fun emailSignInUser(): String? {
+        return if(isSignedIn()) {
+            firebaseAuth.currentUser?.email
+        } else null
+    }
+
     private suspend fun handleSignIn(response: GetCredentialResponse): Boolean {
         val credential = response.credential
 

@@ -5,6 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.exportFile.ExportEventsToCsvToExternalDirUseCase
 import com.example.domain.useCase.exportFile.ExportEventsToJsonToExternalDirUseCase
+import com.example.domain.useCase.google.GetAuthGoogleEmailUseCase
+import com.example.domain.useCase.google.GetEventsFromRemoteUseCase
+import com.example.domain.useCase.google.GetTimeLastUploadToRemoteUseCase
+import com.example.domain.useCase.google.GoogleIsSignInUseCase
+import com.example.domain.useCase.google.GoogleSignInUseCase
+import com.example.domain.useCase.google.GoogleSignOutUseCase
+import com.example.domain.useCase.google.UploadEventsToRemoteUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.example.reminderbirthday_calendar.intents.shareIntent.TypeShareFile
@@ -31,7 +38,16 @@ class ImportExportViewModel @Inject constructor(
     private val exportEventsToCsvToExternalDirUseCase: ExportEventsToCsvToExternalDirUseCase,
     private val importEventsFromJsonUseCase: ImportEventsFromJsonUseCase,
     private val importEventsFromCsvUseCase: ImportEventsFromCsvUseCase,
-    private val importEventsFromContactsUseCase: ImportEventsFromContactsUseCase
+    private val importEventsFromContactsUseCase: ImportEventsFromContactsUseCase,
+
+    private val googleSignInUseCase: GoogleSignInUseCase,
+    private val googleIsSignInUseCase: GoogleIsSignInUseCase,
+    private val googleSignOutUseCase: GoogleSignOutUseCase,
+    private val getAuthGoogleEmailUseCase: GetAuthGoogleEmailUseCase,
+
+    private val getEventsFromRemoteUseCase: GetEventsFromRemoteUseCase,
+    private val getTimeLastUploadToRemoteUseCase: GetTimeLastUploadToRemoteUseCase,
+    private val uploadEventsToRemoteUseCase: UploadEventsToRemoteUseCase
 ): ViewModel() {
     private val _importExportState = MutableStateFlow(ImportExportState())
     val importExportState = _importExportState.asStateFlow()
@@ -39,6 +55,11 @@ class ImportExportViewModel @Inject constructor(
     private val _importExportSharedFlow = MutableSharedFlow<ImportExportSharedFlow>()
     val importExportSharedFlow = _importExportSharedFlow.asSharedFlow()
 
+    init {
+        _importExportState.update { it.copy(
+            googleAuthEmail = getAuthGoogleEmailUseCase()
+        ) }
+    }
 
     fun onEvent(event: ImportExportEvent){
         when(event){
@@ -138,6 +159,116 @@ class ImportExportViewModel @Inject constructor(
                     }
                 }
             }
+
+            ImportExportEvent.GoogleSignInOrOut -> {
+                if (!googleIsSignInUseCase()){
+                    viewModelScope.launch {
+                        val isSignIn = googleSignInUseCase()
+
+                        if (!isSignIn) {
+                            _importExportSharedFlow.emit(
+                                value = ShowToast(message = "Error sign-in")
+                            )
+                        }
+                        else{
+                            val email = getAuthGoogleEmailUseCase()
+
+                            _importExportState.update { it.copy(
+                                googleAuthEmail = email
+                            ) }
+
+                            _importExportSharedFlow.emit(
+                                value = ShowToast(message = "Successfully sign-in to ${email ?: ""}")
+                            )
+                        }
+                    }
+                } else {
+                    val email = getAuthGoogleEmailUseCase()
+
+                    viewModelScope.launch {
+                        googleSignOutUseCase()
+
+                        _importExportState.update { it.copy(
+                            googleAuthEmail = null
+                        ) }
+
+                        _importExportSharedFlow.emit(
+                            value = ShowToast(message = "Successfully sign-out from ${email ?: ""}")
+                        )
+                    }
+                }
+            }
+
+            ImportExportEvent.GetEventsFromRemote -> {
+                viewModelScope.launch(Dispatchers.Main) {
+                    if (!googleIsSignInUseCase()){
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "You should sigh-in with google"
+                        ))
+                    }
+                }
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    if (!googleIsSignInUseCase()) return@launch
+
+                    if (getTimeLastUploadToRemoteUseCase() == null){
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "You don't have backups on remote storage"
+                        ))
+
+                        return@launch
+                    }
+
+                    val importedRemoteEvents = getEventsFromRemoteUseCase()
+                    val backupTime = getTimeLastUploadToRemoteUseCase()
+
+                    withContext(Dispatchers.Main) {
+                        if (importedRemoteEvents.isEmpty()){
+                            _importExportSharedFlow.emit(value = ShowToast(
+                                message = "0 imported events"
+                            ))
+                        } else{
+
+                            _importExportSharedFlow.emit(value = ShowToast(
+                                message = "Time this backup is $backupTime"
+                            ))
+
+                            _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedRemoteEvents))
+                        }
+                    }
+                }
+            }
+
+            ImportExportEvent.UploadEventsToRemote -> {
+                viewModelScope.launch(Dispatchers.Main) {
+                    if (!googleIsSignInUseCase()){
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "You should sigh-in with google"
+                        ))
+                    }
+                }
+                if (!googleIsSignInUseCase()) return
+
+                val email = getAuthGoogleEmailUseCase()
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    val statusUpload = uploadEventsToRemoteUseCase.invoke()
+
+                    withContext(Dispatchers.Main) {
+                        if(statusUpload){
+                            _importExportSharedFlow.emit(value = ShowToast(
+                                message = "Successfully upload from ${email ?: ""}"
+                            ))
+                        } else{
+                            _importExportSharedFlow.emit(value = ShowToast(
+                                message = "Fail upload from ${email ?: ""}}"
+                            ))
+                        }
+                    }
+                }
+            }
+
+
         }
     }
 }

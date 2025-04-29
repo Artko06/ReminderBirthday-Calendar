@@ -6,6 +6,7 @@ interface GoogleClientRepository {
     suspend fun signIn(): Boolean
     suspend fun signOut()
     fun isSignedIn(): Boolean
+    fun emailSignInUser(): String?
     suspend fun uploadEventsToRemote(): Boolean
     suspend fun getEventsFromRemote(): List<Event>
     suspend fun getTimeFromRemote(): String?

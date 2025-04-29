@@ -23,6 +23,10 @@ class GoogleClientRepositoryImpl @Inject constructor(
         return googleAuthClient.isSignedIn()
     }
 
+    override fun emailSignInUser(): String? {
+        return googleAuthClient.emailSignInUser()
+    }
+
     override suspend fun uploadEventsToRemote(): Boolean {
         if (!googleAuthClient.isSignedIn()) {
             println("User not signed in")
