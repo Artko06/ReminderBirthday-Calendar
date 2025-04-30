@@ -1,5 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.viewModel
 
+import android.content.Context
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.useCase.calendar.zodiac.status.GetStatusChineseZodiacUseCase
@@ -9,6 +11,7 @@ import com.example.domain.useCase.calendar.zodiac.status.SetStatusWesternZodiacU
 import com.example.reminderbirthday_calendar.presentation.event.PreferencesEvent
 import com.example.reminderbirthday_calendar.presentation.state.PreferencesState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +26,8 @@ class PreferencesViewModel @Inject constructor(
     private val setStatusChineseZodiacUseCase: SetStatusChineseZodiacUseCase,
 
     private val getStatusWesternZodiacUseCase: GetStatusWesternZodiacUseCase,
-    private val setStatusWesternZodiacUseCase: SetStatusWesternZodiacUseCase
+    private val setStatusWesternZodiacUseCase: SetStatusWesternZodiacUseCase,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _preferencesState = MutableStateFlow(PreferencesState())
     val preferencesState = _preferencesState.asStateFlow()
@@ -61,6 +65,21 @@ class PreferencesViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     setStatusWesternZodiacUseCase(activeStatus = _preferencesState.value.isEnableWesternZodiac)
                 }
+            }
+
+            PreferencesEvent.ShowSettingsNotificationDialog -> {
+                val isGrantedNotification = NotificationManagerCompat.from(appContext).areNotificationsEnabled()
+
+               _preferencesState.update { it.copy(
+                   isEnableStatusNotification = isGrantedNotification,
+                   isShowSettingsNotificationDialog = true
+               ) }
+            }
+
+            PreferencesEvent.CloseSettingsNotificationDialog -> {
+                _preferencesState.update { it.copy(
+                    isShowSettingsNotificationDialog = false
+                ) }
             }
         }
     }

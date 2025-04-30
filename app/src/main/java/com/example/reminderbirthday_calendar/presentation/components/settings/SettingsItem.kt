@@ -36,7 +36,7 @@ fun SettingsItem(
     hasSwitch: Boolean = false,
     isSwitchChecked: Boolean = false,
     onSwitchChange: ((Boolean) -> Unit)? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ){
     Row(
         modifier = Modifier

@@ -5,4 +5,5 @@ data class ImportExportState(
     val statusExportCsv: Boolean? = null,
 
     val googleAuthEmail: String? = null,
+    val isShowReadContactPermDialog: Boolean = false
 )

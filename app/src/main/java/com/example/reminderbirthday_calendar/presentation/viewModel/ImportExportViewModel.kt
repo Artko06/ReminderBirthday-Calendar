@@ -1,7 +1,12 @@
 package com.example.reminderbirthday_calendar.presentation.viewModel
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.exportFile.ExportEventsToCsvToExternalDirUseCase
 import com.example.domain.useCase.exportFile.ExportEventsToJsonToExternalDirUseCase
@@ -22,14 +27,15 @@ import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExpor
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow.UpdateEventsAfterImport
 import com.example.reminderbirthday_calendar.presentation.state.ImportExportState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,7 +53,10 @@ class ImportExportViewModel @Inject constructor(
 
     private val getEventsFromRemoteUseCase: GetEventsFromRemoteUseCase,
     private val getTimeLastUploadToRemoteUseCase: GetTimeLastUploadToRemoteUseCase,
-    private val uploadEventsToRemoteUseCase: UploadEventsToRemoteUseCase
+    private val uploadEventsToRemoteUseCase: UploadEventsToRemoteUseCase,
+
+    private val getAllEventUseCase: GetAllEventUseCase,
+    @ApplicationContext private val appContext: Context
 ): ViewModel() {
     private val _importExportState = MutableStateFlow(ImportExportState())
     val importExportState = _importExportState.asStateFlow()
@@ -116,14 +125,13 @@ class ImportExportViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     val importedEvents = importEventsFromCsvUseCase.invoke(strUri = event.uri.toString())
 
-                    withContext(Dispatchers.Main) {
-                        if (importedEvents.isEmpty()) {
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                message = "0 imported events"
-                            ))
-                        } else {
-                            _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
-                        }
+                    if (importedEvents.isEmpty()) {
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "0 imported events"
+                        )
+                        )
+                    } else {
+                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
                     }
                 }
             }
@@ -132,30 +140,39 @@ class ImportExportViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     val importedEvents = importEventsFromJsonUseCase.invoke(strUri = event.uri.toString())
 
-                    withContext(Dispatchers.Main) {
-                        if (importedEvents.isEmpty()) {
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                message = "0 imported events"
-                            ))
-                        } else {
-                            _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
-                        }
+                    if (importedEvents.isEmpty()) {
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "0 imported events"
+                        )
+                        )
+                    } else {
+                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
                     }
                 }
             }
 
             ImportExportEvent.ImportEventsFromContacts -> {
+                var permissionReadState =
+                    ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
+                            PackageManager.PERMISSION_GRANTED
+
+                if (!permissionReadState){
+                    _importExportState.update { it.copy(
+                        isShowReadContactPermDialog = true
+                    ) }
+                    return
+                }
+
                 viewModelScope.launch(Dispatchers.IO) {
                     val importedEvents = importEventsFromContactsUseCase.invoke()
 
-                    withContext(Dispatchers.Main) {
-                        if (importedEvents.isEmpty()){
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                message = "0 imported events"
-                            ))
-                        } else{
-                            _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
-                        }
+                    if (importedEvents.isEmpty()){
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "0 imported events"
+                        )
+                        )
+                    } else{
+                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
                     }
                 }
             }
@@ -200,11 +217,12 @@ class ImportExportViewModel @Inject constructor(
             }
 
             ImportExportEvent.GetEventsFromRemote -> {
-                viewModelScope.launch(Dispatchers.Main) {
+                viewModelScope.launch(Dispatchers.IO) {
                     if (!googleIsSignInUseCase()){
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "You should sigh-in with google"
-                        ))
+                        )
+                        )
                     }
                 }
 
@@ -214,7 +232,8 @@ class ImportExportViewModel @Inject constructor(
                     if (getTimeLastUploadToRemoteUseCase() == null){
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "You don't have backups on remote storage"
-                        ))
+                        )
+                        )
 
                         return@launch
                     }
@@ -222,29 +241,30 @@ class ImportExportViewModel @Inject constructor(
                     val importedRemoteEvents = getEventsFromRemoteUseCase()
                     val backupTime = getTimeLastUploadToRemoteUseCase()
 
-                    withContext(Dispatchers.Main) {
-                        if (importedRemoteEvents.isEmpty()){
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                message = "0 imported events"
-                            ))
-                        } else{
+                    if (importedRemoteEvents.isEmpty()){
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "0 imported events"
+                        )
+                        )
+                    } else{
 
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                message = "Time this backup is $backupTime"
-                            ))
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "Time this backup is $backupTime"
+                        )
+                        )
 
-                            _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedRemoteEvents))
-                        }
+                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedRemoteEvents))
                     }
                 }
             }
 
             ImportExportEvent.UploadEventsToRemote -> {
-                viewModelScope.launch(Dispatchers.Main) {
+                viewModelScope.launch(Dispatchers.IO) {
                     if (!googleIsSignInUseCase()){
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "You should sigh-in with google"
-                        ))
+                        )
+                        )
                     }
                 }
                 if (!googleIsSignInUseCase()) return
@@ -252,20 +272,40 @@ class ImportExportViewModel @Inject constructor(
                 val email = getAuthGoogleEmailUseCase()
 
                 viewModelScope.launch(Dispatchers.IO) {
+                    if (getAllEventUseCase.invoke().first().isEmpty()){
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "You have 0 events!"
+                        )
+                        )
+                        return@launch
+                    }
+
                     val statusUpload = uploadEventsToRemoteUseCase.invoke()
 
-                    withContext(Dispatchers.Main) {
-                        if(statusUpload){
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                message = "Successfully upload from ${email ?: ""}"
-                            ))
-                        } else{
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                message = "Fail upload from ${email ?: ""}}"
-                            ))
-                        }
+                    if(statusUpload){
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "Successfully upload from ${email ?: ""}"
+                        )
+                        )
+                    } else{
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            message = "Fail upload from ${email ?: ""}}"
+                        )
+                        )
                     }
                 }
+            }
+
+            ImportExportEvent.ShowReadContactPermDialog -> {
+                _importExportState.update { it.copy(
+                    isShowReadContactPermDialog = true
+                ) }
+            }
+
+            ImportExportEvent.CloseReadContactPermDialog -> {
+                _importExportState.update { it.copy(
+                    isShowReadContactPermDialog = false
+                ) }
             }
 
 

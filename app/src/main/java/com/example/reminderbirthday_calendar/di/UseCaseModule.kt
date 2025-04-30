@@ -6,6 +6,7 @@ import com.example.domain.repository.ExportFileRepository
 import com.example.domain.repository.GoogleClientRepository
 import com.example.domain.repository.ImportFileRepository
 import com.example.domain.repository.SettingsRepository
+import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
 import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
@@ -130,6 +131,12 @@ object UseCaseModule {
     @Singleton
     fun provideDeleteEventsUseCase(eventRepository: EventRepository): DeleteEventsUseCase{
         return DeleteEventsUseCase(repository = eventRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteAllEventsUseCase(eventRepository: EventRepository): DeleteAllEventsUseCase{
+        return DeleteAllEventsUseCase(repository = eventRepository)
     }
 
     @Provides

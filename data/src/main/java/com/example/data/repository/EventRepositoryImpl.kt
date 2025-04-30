@@ -55,9 +55,11 @@ class EventRepositoryImpl @Inject constructor(
         return success != 0
     }
 
-    override suspend fun deleteEvents(events: List<Event>): Boolean {
-        val success = eventDao.deleteEvents(events = events.map { event -> event.toData() })
+    override suspend fun deleteEvents(events: List<Event>): Int {
+        return eventDao.deleteEvents(events = events.map { event -> event.toData() })
+    }
 
-        return success != 0
+    override suspend fun deleteAllEvents(): Int {
+        return eventDao.deleteAllEvents()
     }
 }

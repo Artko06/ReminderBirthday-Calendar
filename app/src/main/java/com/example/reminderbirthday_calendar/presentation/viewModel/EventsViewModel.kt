@@ -1,8 +1,12 @@
 package com.example.reminderbirthday_calendar.presentation.viewModel
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
+import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
@@ -10,8 +14,10 @@ import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
 import com.example.domain.util.extensionFunc.sortByClosestDate
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
+import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow.ShowToast
 import com.example.reminderbirthday_calendar.presentation.state.EventsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +30,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,7 +39,8 @@ class EventsViewModel @Inject constructor(
     private val getEventByContactNameUseCase: GetEventByContactNameUseCase,
     private val getAllEventUseCase: GetAllEventUseCase,
     private val upsertEventUseCase: UpsertEventsUseCase,
-    private val deleteEventsUseCase: DeleteEventsUseCase
+    private val deleteAllEventsUseCase: DeleteAllEventsUseCase,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _eventsState = MutableStateFlow(EventsState())
     private val _searchLine = MutableStateFlow("")
@@ -77,6 +83,17 @@ class EventsViewModel @Inject constructor(
     fun onEvent(event: EventsEvent) {
         when (event) {
             EventsEvent.ImportEventsFromContacts -> {
+                val permissionReadState =
+                    ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
+                            PackageManager.PERMISSION_GRANTED
+
+                if (!permissionReadState){
+                    _eventsState.update { it.copy(
+                        isShowReadContactPermDialog = true
+                    ) }
+                    return
+                }
+
                 viewModelScope.launch(Dispatchers.IO) {
                     val importEvents = importEventsFromContactsUseCase.invoke()
 
@@ -96,13 +113,11 @@ class EventsViewModel @Inject constructor(
                         )
                     }
 
-                    withContext(Dispatchers.Main) {
-                        _eventsSharedFlow.emit(
-                            value = EventsSharedFlow.ShowToast(
-                                message = "${importEvents.size} imported events. " +
-                                        "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
-                        )
-                    }
+                    _eventsSharedFlow.emit(
+                        value = ShowToast(
+                            message = "${importEvents.size} imported events. " +
+                                    "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
+                    )
                 }
             }
 
@@ -130,13 +145,11 @@ class EventsViewModel @Inject constructor(
                         )
                     }
 
-                    withContext(Dispatchers.Main) {
-                        _eventsSharedFlow.emit(
-                            value = EventsSharedFlow.ShowToast(
-                                message = "${importEvents.size} imported events. " +
-                                        "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
-                        )
-                    }
+                    _eventsSharedFlow.emit(
+                        value = ShowToast(
+                            message = "${importEvents.size} imported events. " +
+                                    "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
+                    )
                 }
             }
 
@@ -148,18 +161,36 @@ class EventsViewModel @Inject constructor(
                 }
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    val allEventsDb = getAllEventUseCase.invoke().first()
+                    val deleted = deleteAllEventsUseCase()
 
-                    deleteEventsUseCase.invoke(events = allEventsDb)
-
-                    withContext(Dispatchers.Main) {
-                        _eventsSharedFlow.emit(
-                            value = EventsSharedFlow.ShowToast("${allEventsDb.size} events deleted")
-                        )
-                    }
+                    _eventsSharedFlow.emit(
+                        value = ShowToast("$deleted events deleted")
+                    )
                 }
+            }
 
+            EventsEvent.ShowDeleteAllEventsDialog -> {
+                _eventsState.update { it.copy(
+                    isShowAllEventsDeleteDialog = true
+                ) }
+            }
 
+            EventsEvent.CloseDeleteAllEventsDialog -> {
+                _eventsState.update { it.copy(
+                    isShowAllEventsDeleteDialog = false
+                ) }
+            }
+
+            EventsEvent.ShowReadContactPermDialog -> {
+                _eventsState.update { it.copy(
+                    isShowReadContactPermDialog = true
+                ) }
+            }
+
+            EventsEvent.CloseReadContactPermDialog -> {
+                _eventsState.update { it.copy(
+                    isShowReadContactPermDialog = false
+                ) }
             }
 
 

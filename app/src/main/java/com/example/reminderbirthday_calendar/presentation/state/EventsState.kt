@@ -5,5 +5,8 @@ import com.example.domain.models.event.Event
 data class EventsState(
     val events: List<Event> = emptyList<Event>(),
     val filterEvents: List<Event> = emptyList<Event>(),
-    val searchStr: String = ""
+    val searchStr: String = "",
+
+    val isShowAllEventsDeleteDialog: Boolean = false,
+    val isShowReadContactPermDialog: Boolean = false
 )

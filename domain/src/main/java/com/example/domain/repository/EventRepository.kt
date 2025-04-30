@@ -15,5 +15,6 @@ interface EventRepository {
 
     // Delete
     suspend fun deleteEvent(event: Event): Boolean
-    suspend fun deleteEvents(events: List<Event>): Boolean
+    suspend fun deleteEvents(events: List<Event>): Int
+    suspend fun deleteAllEvents(): Int
 }

@@ -3,7 +3,7 @@ package com.example.domain.models.event
 import java.time.LocalDate
 
 data class Event(
-    val id: Int,
+    val id: Long,
     val eventType: EventType = EventType.BIRTHDAY,
     val nameContact: String,
     val surnameContact: String? = null,
@@ -31,7 +31,7 @@ data class Event(
     }
 
     override fun hashCode(): Int {
-        var result = id
+        var result = id.hashCode()
         result = 31 * result + yearMatter.hashCode()
         result = 31 * result + eventType.hashCode()
         result = 31 * result + nameContact.hashCode()

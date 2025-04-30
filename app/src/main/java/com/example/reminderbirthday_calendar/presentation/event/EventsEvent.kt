@@ -7,4 +7,10 @@ sealed class EventsEvent {
     data class UpdateSearchLine(val newValue: String): EventsEvent()
     data class UpdateEvents(val events: List<Event>): EventsEvent()
     object ClearEvents: EventsEvent()
+
+    object ShowDeleteAllEventsDialog: EventsEvent()
+    object CloseDeleteAllEventsDialog: EventsEvent()
+
+    object ShowReadContactPermDialog: EventsEvent()
+    object CloseReadContactPermDialog: EventsEvent()
 }

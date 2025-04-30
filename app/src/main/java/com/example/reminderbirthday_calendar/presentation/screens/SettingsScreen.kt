@@ -41,10 +41,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
+import com.example.reminderbirthday_calendar.intents.settingsNotification.settingsNotificationIntent
 import com.example.reminderbirthday_calendar.intents.shareIntent.shareFileIntent
+import com.example.reminderbirthday_calendar.presentation.components.settings.NotificationPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.settings.RedClearButton
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
-import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
+import com.example.reminderbirthday_calendar.presentation.components.settings.dialogWindow.DeleteAllEventsDialog
+import com.example.reminderbirthday_calendar.presentation.components.settings.dialogWindow.ReadContactsPermissionDialog
+import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ClearEvents
+import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.CloseDeleteAllEventsDialog
+import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ShowDeleteAllEventsDialog
+import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.UpdateEvents
 import com.example.reminderbirthday_calendar.presentation.event.ImportExportEvent
 import com.example.reminderbirthday_calendar.presentation.event.PreferencesEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
@@ -52,6 +60,7 @@ import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExpor
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.ImportExportViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.PreferencesViewModel
+
 
 @Composable
 fun SettingsScreen(
@@ -61,13 +70,13 @@ fun SettingsScreen(
     eventsViewModel: EventsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+
     val listState = rememberLazyListState()
     var lazyKey = 0
 
     val preferencesState = preferencesViewModel.preferencesState.collectAsState().value
     val eventsState = eventsViewModel.eventState.collectAsState().value
     val importExportState = importExportViewModel.importExportState.collectAsState().value
-    val importExportSharedFlow = importExportViewModel.importExportSharedFlow
 
     val launcherPickerFile = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -80,6 +89,8 @@ fun SettingsScreen(
             else Toast.makeText(context, "Incorrect extension file", Toast.LENGTH_SHORT).show()
         }
     }
+
+    val importExportSharedFlow = importExportViewModel.importExportSharedFlow
 
     LaunchedEffect(Unit) {
         importExportSharedFlow.collect { sharedFlow ->
@@ -98,7 +109,7 @@ fun SettingsScreen(
                 }
 
                 is ImportExportSharedFlow.UpdateEventsAfterImport -> {
-                    eventsViewModel.onEvent(event = EventsEvent.UpdateEvents(events = sharedFlow.events))
+                    eventsViewModel.onEvent(event = UpdateEvents(events = sharedFlow.events))
                 }
             }
         }
@@ -114,6 +125,40 @@ fun SettingsScreen(
                 }
             }
         }
+    }
+
+    if (preferencesState.isShowSettingsNotificationDialog){
+        NotificationPermissionDialog(
+            onConfirmButton = {
+                context.startActivity(settingsNotificationIntent(context = context))
+            },
+            onDismiss = {
+                preferencesViewModel.onEvent(event = PreferencesEvent.CloseSettingsNotificationDialog)
+            },
+            statusNotification = preferencesState.isEnableStatusNotification
+        )
+    }
+
+    if (eventsState.isShowAllEventsDeleteDialog){
+        DeleteAllEventsDialog(
+            onConfirmButton = {
+                eventsViewModel.onEvent(event = ClearEvents)
+            },
+            onDismiss = {
+                eventsViewModel.onEvent(event = CloseDeleteAllEventsDialog)
+            }
+        )
+    }
+
+    if(importExportState.isShowReadContactPermDialog){
+        ReadContactsPermissionDialog(
+            onConfirmButton = {
+                context.startActivity(settingsAppDetailsIntent(context = context))
+            },
+            onDismiss = {
+                importExportViewModel.onEvent(event = ImportExportEvent.CloseReadContactPermDialog)
+            }
+        )
     }
 
     LazyColumn(
@@ -141,10 +186,12 @@ fun SettingsScreen(
                 icon = Icons.Outlined.NotificationsActive,
                 title = "Notification",
                 subtitle = "Receive birthday reminders",
-                hasSwitch = true,
+                hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ShowSettingsNotificationDialog)
+                },
             )
         }
 
@@ -379,7 +426,7 @@ fun SettingsScreen(
             ) {
                 RedClearButton(
                     onClear = {
-                        eventsViewModel.onEvent(event = EventsEvent.ClearEvents)
+                        eventsViewModel.onEvent(event = ShowDeleteAllEventsDialog)
                     }
                 )
             }

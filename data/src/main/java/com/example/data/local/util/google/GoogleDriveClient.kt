@@ -146,7 +146,7 @@ class GoogleDriveClient(
 
     private fun firestoreMapToEventEntity(event: Map<String, Any?>): EventEntity {
         return EventEntity(
-            id = (event["id"] as Long).toInt(),
+            id = (event["id"] as Long),
             eventType = event["eventType"] as String,
             nameContact = event["nameContact"] as String,
             surnameContact = event["surnameContact"] as? String,

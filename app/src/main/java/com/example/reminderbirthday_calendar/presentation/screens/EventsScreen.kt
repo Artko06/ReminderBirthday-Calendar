@@ -1,5 +1,6 @@
 package com.example.reminderbirthday_calendar.presentation.screens
 
+import android.Manifest
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,12 +32,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.util.extensionFunc.calculateNextAge
+import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
 import com.example.reminderbirthday_calendar.presentation.components.evetns.SearchLine
+import com.example.reminderbirthday_calendar.presentation.components.settings.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import java.time.format.DateTimeFormatter
+
 
 @Composable
 fun EventsScreen(
@@ -50,6 +56,14 @@ fun EventsScreen(
 
     val eventsSharedFlow = eventsViewModel.eventsSharedFlow
 
+    @OptIn(ExperimentalPermissionsApi::class)
+    val permissionReadState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
+
+    LaunchedEffect(Unit) {
+        @OptIn(ExperimentalPermissionsApi::class)
+        permissionReadState.launchPermissionRequest()
+    }
+
     LaunchedEffect(Unit) {
         eventsSharedFlow.collect { sharedFlow ->
             when(sharedFlow){
@@ -58,6 +72,17 @@ fun EventsScreen(
                 }
             }
         }
+    }
+
+    if(eventState.isShowReadContactPermDialog){
+        ReadContactsPermissionDialog(
+            onConfirmButton = {
+                context.startActivity(settingsAppDetailsIntent(context = context))
+            },
+            onDismiss = {
+                eventsViewModel.onEvent(event = EventsEvent.CloseReadContactPermDialog)
+            }
+        )
     }
 
     Column(

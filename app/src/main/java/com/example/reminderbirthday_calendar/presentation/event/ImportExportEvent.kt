@@ -12,4 +12,7 @@ sealed class ImportExportEvent {
     object GoogleSignInOrOut: ImportExportEvent()
     object UploadEventsToRemote: ImportExportEvent()
     object GetEventsFromRemote: ImportExportEvent()
+
+    object ShowReadContactPermDialog: ImportExportEvent()
+    object CloseReadContactPermDialog: ImportExportEvent()
 }

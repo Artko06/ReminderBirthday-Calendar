@@ -40,9 +40,7 @@ fun NotificationPermissionScreen(
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            viewModel.onEvent(event = NotificationPermEvent.OnChangeNotificationPermission(isGranted))
-        }
+        onResult = {}
     )
 
     LaunchedEffect(notificationPermState.requestPermission) {
