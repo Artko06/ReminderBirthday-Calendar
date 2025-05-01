@@ -31,6 +31,12 @@ import com.example.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.example.domain.useCase.settings.firstLaunch.GetIsFirstLaunchUseCase
 import com.example.domain.useCase.settings.firstLaunch.SetIsFirstLaunchUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowAnniversaryEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowBirthdayEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowAnniversaryEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowBirthdayEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowOtherEventUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.SetStatusViewDaysLeftUseCase
 import dagger.Module
@@ -203,5 +209,41 @@ object UseCaseModule {
     @Singleton
     fun provideUploadEventsToRemoteUseCase(googleClientRepository: GoogleClientRepository): UploadEventsToRemoteUseCase{
         return UploadEventsToRemoteUseCase(repository = googleClientRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetStatusShowAnniversaryEventUseCase(settingsRepository: SettingsRepository): GetStatusShowAnniversaryEventUseCase{
+        return GetStatusShowAnniversaryEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetStatusShowBirthdayEventUseCase(settingsRepository: SettingsRepository): GetStatusShowBirthdayEventUseCase{
+        return GetStatusShowBirthdayEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetStatusShowOtherEventUseCase(settingsRepository: SettingsRepository): GetStatusShowOtherEventUseCase{
+        return GetStatusShowOtherEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetStatusShowAnniversaryEventUseCase(settingsRepository: SettingsRepository): SetStatusShowAnniversaryEventUseCase{
+        return SetStatusShowAnniversaryEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetStatusShowBirthdayEventUseCase(settingsRepository: SettingsRepository): SetStatusShowBirthdayEventUseCase{
+        return SetStatusShowBirthdayEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetStatusShowOtherEventUseCase(settingsRepository: SettingsRepository): SetStatusShowOtherEventUseCase{
+        return SetStatusShowOtherEventUseCase(repository = settingsRepository)
     }
 }

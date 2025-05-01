@@ -39,6 +39,7 @@ import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsA
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.evetns.DaysLeftButton
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
+import com.example.reminderbirthday_calendar.presentation.components.evetns.MonthYearText
 import com.example.reminderbirthday_calendar.presentation.components.evetns.SearchLine
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
@@ -166,40 +167,32 @@ fun EventsScreen(
                 }
             }
         } else {
-            LazyColumn(
-                state = stateLazyColumn
-            ) {
-                if (eventState.searchStr.isEmpty()) {
-                    items(
-                        items = eventState.events
-                    ) {
-                        EventItem(
-                            name = it.nameContact,
-                            surname = it.surnameContact ?: "",
-                            eventType = it.eventType,
-                            date = it.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString(),
-                            age = it.originalDate.calculateNextAge(),
-                            isViewDaysLeft = eventState.isViewDaysLeft,
-                            daysLeft = it.originalDate.calculateDaysLeft()
-                        )
+            val events = if (eventState.searchStr.isEmpty()) eventState.events else eventState.filterEvents
 
-                        Spacer(modifier = Modifier.height(12.dp))
+            val groupedEvents = events.groupBy { it.originalDate.monthValue }
+
+            LazyColumn(state = stateLazyColumn) {
+                groupedEvents.forEach { (monthNumber, eventsInMonth) ->
+                    item {
+                        MonthYearText(
+                            numberMonth = monthNumber,
+                            numberYear = eventsInMonth[0].originalDate.year +
+                                    eventsInMonth[0].originalDate.calculateNextAge()
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
                     }
-                } else {
-                    items(
-                        items = eventState.filterEvents
-                    ) {
-                        EventItem(
-                            name = it.nameContact,
-                            surname = it.surnameContact ?: "",
-                            eventType = it.eventType,
-                            date = it.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString(),
-                            age = it.originalDate.calculateNextAge(),
-                            isViewDaysLeft = eventState.isViewDaysLeft,
-                            daysLeft = it.originalDate.calculateDaysLeft()
-                        )
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                    items(eventsInMonth) { event ->
+                        EventItem(
+                            name = event.nameContact,
+                            surname = event.surnameContact ?: "",
+                            eventType = event.eventType,
+                            date = event.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                            age = event.originalDate.calculateNextAge(),
+                            isViewDaysLeft = eventState.isViewDaysLeft,
+                            daysLeft = event.originalDate.calculateDaysLeft()
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
                     }
                 }
             }

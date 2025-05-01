@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import com.example.data.local.preferences.IS_FIRST_LAUNCH_KEY
 import com.example.data.local.preferences.IS_INITIALIZED_KEY
+import com.example.data.local.preferences.IS_SHOW_ANNIVERSARY_EVENT_KEY
+import com.example.data.local.preferences.IS_SHOW_BIRTHDAY_EVENT_KEY
+import com.example.data.local.preferences.IS_SHOW_OTHER_EVENT_KEY
 import com.example.data.local.preferences.LANGUAGE_KEY
 import com.example.data.local.preferences.THEME_KEY
 import com.example.data.local.preferences.VIEW_DAYS_LEFT_ENABLE_KEY
@@ -24,6 +27,9 @@ object InitDataStore {
                 prefs[ZODIAC_WESTERN_ENABLE_KEY] = true
                 prefs[ZODIAC_CHINESE_ENABLE_KEY] = true
                 prefs[IS_FIRST_LAUNCH_KEY] = true
+                prefs[IS_SHOW_BIRTHDAY_EVENT_KEY] = true
+                prefs[IS_SHOW_ANNIVERSARY_EVENT_KEY] = true
+                prefs[IS_SHOW_OTHER_EVENT_KEY] = true
 
                 prefs[IS_INITIALIZED_KEY] = true
             }

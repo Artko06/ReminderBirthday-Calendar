@@ -18,6 +18,14 @@ interface SettingsRepository {
     fun getStatusViewDaysLeft(): Flow<Boolean>
     suspend fun setStatusViewDaysLeft(activeStatus: Boolean)
 
+    // Show type event
+    fun getStatusShowBirthdayEvent(): Flow<Boolean>
+    suspend fun setStatusShowBirthdayEvent(activeStatus: Boolean)
+    fun getStatusShowAnniversaryEvent(): Flow<Boolean>
+    suspend fun setStatusShowAnniversaryEvent(activeStatus: Boolean)
+    fun getStatusShowOtherEvent(): Flow<Boolean>
+    suspend fun setStatusShowOtherEvent(activeStatus: Boolean)
+
     // Notification
     fun getAllNotificationEvent(): Flow<List<NotificationEvent>>
     suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent)

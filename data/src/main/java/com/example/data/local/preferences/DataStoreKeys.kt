@@ -10,3 +10,7 @@ val THEME_KEY = stringPreferencesKey("app_theme")
 val ZODIAC_WESTERN_ENABLE_KEY = booleanPreferencesKey("app_enable_zodiac_western")
 val ZODIAC_CHINESE_ENABLE_KEY = booleanPreferencesKey("app_enable_zodiac_chinese")
 val VIEW_DAYS_LEFT_ENABLE_KEY = booleanPreferencesKey("app_enable_view_days_left")
+
+val IS_SHOW_BIRTHDAY_EVENT_KEY = booleanPreferencesKey("app_show_birthday_event")
+val IS_SHOW_ANNIVERSARY_EVENT_KEY = booleanPreferencesKey("app_show_anniversary_event")
+val IS_SHOW_OTHER_EVENT_KEY = booleanPreferencesKey("app_show_other_event")

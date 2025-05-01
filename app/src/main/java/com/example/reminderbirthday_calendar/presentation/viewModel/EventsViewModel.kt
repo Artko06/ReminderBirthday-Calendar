@@ -6,11 +6,15 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.event.EventType
 import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowAnniversaryEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowBirthdayEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEventUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.SetStatusViewDaysLeftUseCase
 import com.example.domain.util.extensionFunc.sortByClosestDate
@@ -44,6 +48,10 @@ class EventsViewModel @Inject constructor(
     private val deleteAllEventsUseCase: DeleteAllEventsUseCase,
     private val getStatusViewDaysLeftUseCase: GetStatusViewDaysLeftUseCase,
     private val setStatusViewDaysLeftUseCase: SetStatusViewDaysLeftUseCase,
+
+    private val getStatusShowAnniversaryEventUseCase: GetStatusShowAnniversaryEventUseCase,
+    private val getStatusShowBirthdayEventUseCase: GetStatusShowBirthdayEventUseCase,
+    private val getStatusShowOtherEventUseCase: GetStatusShowOtherEventUseCase,
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _eventsState = MutableStateFlow(EventsState())
@@ -60,8 +68,18 @@ class EventsViewModel @Inject constructor(
     val eventState =
         combine(_eventsState, _searchLine, _filterEvents) { eventState, searchLine, filterEvents ->
 
+            val typeVisibilityMap = mapOf(
+                EventType.BIRTHDAY to getStatusShowBirthdayEventUseCase.invoke().first(),
+                EventType.ANNIVERSARY to getStatusShowAnniversaryEventUseCase.invoke().first(),
+                EventType.OTHER to getStatusShowOtherEventUseCase.invoke().first()
+            )
+
+            val visibleAllEvents = eventState.events.filter { typeVisibilityMap[it.eventType] == true }
+            val visibleFilterEvents = filterEvents.filter { typeVisibilityMap[it.eventType] == true }
+
             eventState.copy(
-                filterEvents = filterEvents.sortByClosestDate(),
+                events = visibleAllEvents.sortByClosestDate(),
+                filterEvents = visibleFilterEvents.sortByClosestDate(),
                 searchStr = searchLine
             )
         }.stateIn(

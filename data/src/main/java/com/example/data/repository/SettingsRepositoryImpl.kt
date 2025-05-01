@@ -44,6 +44,31 @@ class SettingsRepositoryImpl(
         PreferencesDataStore.setStatusViewDaysLeft(context = context, activeStatus = activeStatus)
     }
 
+    // Show type events
+    override fun getStatusShowBirthdayEvent(): Flow<Boolean> {
+        return PreferencesDataStore.getStatusShowBirthdayEvent(context = context)
+    }
+
+    override suspend fun setStatusShowBirthdayEvent(activeStatus: Boolean) {
+        PreferencesDataStore.setStatusShowBirthdayEvent(context = context, activeStatus = activeStatus)
+    }
+
+    override fun getStatusShowAnniversaryEvent(): Flow<Boolean> {
+        return PreferencesDataStore.getStatusShowAnniversaryEvent(context = context)
+    }
+
+    override suspend fun setStatusShowAnniversaryEvent(activeStatus: Boolean) {
+        PreferencesDataStore.setStatusShowAnniversaryEvent(context = context, activeStatus = activeStatus)
+    }
+
+    override fun getStatusShowOtherEvent(): Flow<Boolean> {
+        return PreferencesDataStore.getStatusShowOtherEvent(context = context)
+    }
+
+    override suspend fun setStatusShowOtherEvent(activeStatus: Boolean) {
+        PreferencesDataStore.setStatusShowOtherEvent(context = context, activeStatus = activeStatus)
+    }
+
     // Notification
     override fun getAllNotificationEvent(): Flow<List<NotificationEvent>> {
         return settingsDao.getAllNotificationEvent().map { events ->

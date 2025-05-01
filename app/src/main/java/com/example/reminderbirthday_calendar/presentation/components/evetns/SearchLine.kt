@@ -38,7 +38,7 @@ fun SearchLine(
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .padding(start = 12.dp, end = 6.dp)
-                    .size(26.dp)
+                    .size(22.dp)
             )
         },
         trailingIcon = {
@@ -46,7 +46,7 @@ fun SearchLine(
                 onClick = {onValueChange("")},
                 modifier = Modifier
                     .padding(end = 8.dp)
-                    .size(22.dp)
+                    .size(18.dp)
             ){
                 Icon(
                     imageVector = Icons.Filled.Clear,
@@ -59,7 +59,7 @@ fun SearchLine(
             Text(
                 text = placeholder,
                 fontWeight = FontWeight.Medium,
-                fontSize = 16.sp
+                fontSize = 14.sp
             )
         },
         modifier = Modifier

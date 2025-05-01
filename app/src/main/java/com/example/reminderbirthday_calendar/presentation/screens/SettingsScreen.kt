@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Cake
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.material.icons.outlined.CloudUpload
@@ -44,11 +45,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
 import com.example.reminderbirthday_calendar.intents.settingsNotification.settingsNotificationIntent
 import com.example.reminderbirthday_calendar.intents.shareIntent.shareFileIntent
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteAllEventsDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.SortEventTypeDialog
 import com.example.reminderbirthday_calendar.presentation.components.settings.NotificationPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.settings.RedClearButton
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
-import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteAllEventsDialog
-import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ClearEvents
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.CloseDeleteAllEventsDialog
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ShowDeleteAllEventsDialog
@@ -127,7 +129,7 @@ fun SettingsScreen(
         }
     }
 
-    if (preferencesState.isShowSettingsNotificationDialog){
+    if (preferencesState.isShowSettingsNotificationDialog) {
         NotificationPermissionDialog(
             onConfirmButton = {
                 context.startActivity(settingsNotificationIntent(context = context))
@@ -139,7 +141,7 @@ fun SettingsScreen(
         )
     }
 
-    if (eventsState.isShowAllEventsDeleteDialog){
+    if (eventsState.isShowAllEventsDeleteDialog) {
         DeleteAllEventsDialog(
             onConfirmButton = {
                 eventsViewModel.onEvent(event = ClearEvents)
@@ -150,7 +152,7 @@ fun SettingsScreen(
         )
     }
 
-    if(importExportState.isShowReadContactPermDialog){
+    if (importExportState.isShowReadContactPermDialog) {
         ReadContactsPermissionDialog(
             onConfirmButton = {
                 context.startActivity(settingsAppDetailsIntent(context = context))
@@ -158,6 +160,26 @@ fun SettingsScreen(
             onDismiss = {
                 importExportViewModel.onEvent(event = ImportExportEvent.CloseReadContactPermDialog)
             }
+        )
+    }
+
+    if (preferencesState.isShowStatusTypeEventsDialog) {
+        SortEventTypeDialog(
+            onDismiss = {
+                preferencesViewModel.onEvent(event = PreferencesEvent.CloseStatusTypeEventDialog)
+            },
+            changeStatusShowAnniversary = {
+                preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusShowAnniversaryEvent)
+            },
+            changeStatusShowBirthday = {
+                preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusShowBirthdayEvent)
+            },
+            changeStatusShowOther = {
+                preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusShowOtherEvent)
+            },
+            statusShowBirthday = preferencesState.isEnableShowBirthdayEvent,
+            statusShowAnniversary = preferencesState.isEnableShowAnniversaryEvent,
+            statusShowOther = preferencesState.isEnableShowOtherEvent
         )
     }
 
@@ -227,7 +249,19 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = { preferencesViewModel.onEvent(event = PreferencesEvent.ShowStatusTypeEventDialog) }
+            )
+        }
+
+        item(key = lazyKey++) {
+            SettingsItem(
+                icon = Icons.Outlined.Cake,
+                title = "Type event",
+                subtitle = "Select types of events",
+                hasSwitch = false,
+                isSwitchChecked = false,
+                onSwitchChange = {},
+                onClick = { preferencesViewModel.onEvent(event = PreferencesEvent.ShowStatusTypeEventDialog) }
             )
         }
 

@@ -31,39 +31,70 @@ object PreferencesDataStore {
     }
 
     // View days left
-    fun getStatusViewDaysLeft(context: Context): Flow<Boolean>{
+    fun getStatusViewDaysLeft(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { prefs ->
             prefs[VIEW_DAYS_LEFT_ENABLE_KEY] ?: false
         }
     }
 
-    suspend fun setStatusViewDaysLeft(context: Context, activeStatus: Boolean){
+    suspend fun setStatusViewDaysLeft(context: Context, activeStatus: Boolean) {
         context.dataStore.edit { it[VIEW_DAYS_LEFT_ENABLE_KEY] = activeStatus }
     }
 
+    // Show type event
+    fun getStatusShowBirthdayEvent(context: Context): Flow<Boolean> {
+        return context.dataStore.data.map { prefs ->
+            prefs[IS_SHOW_BIRTHDAY_EVENT_KEY] ?: false
+        }
+    }
+
+    suspend fun setStatusShowBirthdayEvent(context: Context, activeStatus: Boolean) {
+        context.dataStore.edit { it[IS_SHOW_BIRTHDAY_EVENT_KEY] = activeStatus }
+    }
+
+    fun getStatusShowAnniversaryEvent(context: Context): Flow<Boolean> {
+        return context.dataStore.data.map { prefs ->
+            prefs[IS_SHOW_ANNIVERSARY_EVENT_KEY] ?: false
+        }
+    }
+
+    suspend fun setStatusShowAnniversaryEvent(context: Context, activeStatus: Boolean) {
+        context.dataStore.edit { it[IS_SHOW_ANNIVERSARY_EVENT_KEY] = activeStatus }
+    }
+
+    fun getStatusShowOtherEvent(context: Context): Flow<Boolean> {
+        return context.dataStore.data.map { prefs ->
+            prefs[IS_SHOW_OTHER_EVENT_KEY] ?: false
+        }
+    }
+
+    suspend fun setStatusShowOtherEvent(context: Context, activeStatus: Boolean) {
+        context.dataStore.edit { it[IS_SHOW_OTHER_EVENT_KEY] = activeStatus }
+    }
+
     // Zodiac
-    fun getStatusZodiacWestern(context: Context): Flow<Boolean>{
+    fun getStatusZodiacWestern(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { prefs ->
             prefs[ZODIAC_WESTERN_ENABLE_KEY] ?: false
         }
     }
 
-    suspend fun setStatusZodiacWestern(context: Context, activeStatus: Boolean){
+    suspend fun setStatusZodiacWestern(context: Context, activeStatus: Boolean) {
         context.dataStore.edit { it[ZODIAC_WESTERN_ENABLE_KEY] = activeStatus }
     }
 
-    fun getStatusZodiacChinese(context: Context): Flow<Boolean>{
+    fun getStatusZodiacChinese(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { prefs ->
             prefs[ZODIAC_CHINESE_ENABLE_KEY] ?: false
         }
     }
 
-    suspend fun setStatusZodiacChinese(context: Context, activeStatus: Boolean){
+    suspend fun setStatusZodiacChinese(context: Context, activeStatus: Boolean) {
         context.dataStore.edit { it[ZODIAC_CHINESE_ENABLE_KEY] = activeStatus }
     }
 
     // First launch
-    fun getIsFirstLaunch(context: Context): Flow<Boolean>{
+    fun getIsFirstLaunch(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { prefs ->
             prefs[IS_FIRST_LAUNCH_KEY] ?: false
         }
