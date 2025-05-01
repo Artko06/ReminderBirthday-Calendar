@@ -13,4 +13,6 @@ sealed class EventsEvent {
 
     object ShowReadContactPermDialog: EventsEvent()
     object CloseReadContactPermDialog: EventsEvent()
+
+    object ChangeStatusViewDaysLeft: EventsEvent()
 }

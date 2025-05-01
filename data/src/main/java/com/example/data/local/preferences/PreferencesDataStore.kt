@@ -30,15 +30,15 @@ object PreferencesDataStore {
         context.dataStore.edit { it[THEME_KEY] = theme.name }
     }
 
-    // Notification
-    fun getStatusNotification(context: Context): Flow<Boolean>{
+    // View days left
+    fun getStatusViewDaysLeft(context: Context): Flow<Boolean>{
         return context.dataStore.data.map { prefs ->
-            prefs[NOTIFICATION_ENABLE_KEY] ?: false
+            prefs[VIEW_DAYS_LEFT_ENABLE_KEY] ?: false
         }
     }
 
-    suspend fun setStatusNotification(context: Context, activeStatus: Boolean){
-        context.dataStore.edit { it[NOTIFICATION_ENABLE_KEY] = activeStatus }
+    suspend fun setStatusViewDaysLeft(context: Context, activeStatus: Boolean){
+        context.dataStore.edit { it[VIEW_DAYS_LEFT_ENABLE_KEY] = activeStatus }
     }
 
     // Zodiac

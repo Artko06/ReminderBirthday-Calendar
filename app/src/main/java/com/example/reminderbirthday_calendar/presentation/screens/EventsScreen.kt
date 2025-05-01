@@ -3,10 +3,12 @@ package com.example.reminderbirthday_calendar.presentation.screens
 import android.Manifest
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,11 +33,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.util.extensionFunc.calculateDaysLeft
 import com.example.domain.util.extensionFunc.calculateNextAge
 import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
+import com.example.reminderbirthday_calendar.presentation.components.evetns.DaysLeftButton
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
 import com.example.reminderbirthday_calendar.presentation.components.evetns.SearchLine
-import com.example.reminderbirthday_calendar.presentation.components.settings.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
@@ -97,7 +101,19 @@ fun EventsScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterEnd
+        ){
+            DaysLeftButton(
+                onClick = { eventsViewModel.onEvent(event = EventsEvent.ChangeStatusViewDaysLeft) },
+                isActive = eventState.isViewDaysLeft
+            )
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
 
         if (eventState.events.isEmpty()) {
             Column(
@@ -162,7 +178,9 @@ fun EventsScreen(
                             surname = it.surnameContact ?: "",
                             eventType = it.eventType,
                             date = it.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString(),
-                            age = it.originalDate.calculateNextAge()
+                            age = it.originalDate.calculateNextAge(),
+                            isViewDaysLeft = eventState.isViewDaysLeft,
+                            daysLeft = it.originalDate.calculateDaysLeft()
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -176,7 +194,9 @@ fun EventsScreen(
                             surname = it.surnameContact ?: "",
                             eventType = it.eventType,
                             date = it.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString(),
-                            age = it.originalDate.calculateNextAge()
+                            age = it.originalDate.calculateNextAge(),
+                            isViewDaysLeft = eventState.isViewDaysLeft,
+                            daysLeft = it.originalDate.calculateDaysLeft()
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))

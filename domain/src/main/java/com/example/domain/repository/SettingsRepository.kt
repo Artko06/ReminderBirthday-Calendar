@@ -14,9 +14,11 @@ interface SettingsRepository {
     fun getTheme(): Flow<ThemeType>
     suspend fun setTheme(theme: ThemeType)
 
+    // View days left
+    fun getStatusViewDaysLeft(): Flow<Boolean>
+    suspend fun setStatusViewDaysLeft(activeStatus: Boolean)
+
     // Notification
-    fun getStatusNotification(): Flow<Boolean>
-    suspend fun setStatusNotification(activeStatus: Boolean)
     fun getAllNotificationEvent(): Flow<List<NotificationEvent>>
     suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent)
 

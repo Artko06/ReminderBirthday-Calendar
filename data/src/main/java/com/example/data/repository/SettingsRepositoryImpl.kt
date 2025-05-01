@@ -35,15 +35,16 @@ class SettingsRepositoryImpl(
         PreferencesDataStore.setTheme(context = context, theme = theme)
     }
 
+    // View days left
+    override fun getStatusViewDaysLeft(): Flow<Boolean> {
+        return PreferencesDataStore.getStatusViewDaysLeft(context = context)
+    }
+
+    override suspend fun setStatusViewDaysLeft(activeStatus: Boolean) {
+        PreferencesDataStore.setStatusViewDaysLeft(context = context, activeStatus = activeStatus)
+    }
+
     // Notification
-    override fun getStatusNotification(): Flow<Boolean> {
-        return PreferencesDataStore.getStatusNotification(context = context)
-    }
-
-    override suspend fun setStatusNotification(activeStatus: Boolean) {
-        PreferencesDataStore.setStatusNotification(context = context, activeStatus = activeStatus)
-    }
-
     override fun getAllNotificationEvent(): Flow<List<NotificationEvent>> {
         return settingsDao.getAllNotificationEvent().map { events ->
             events.map { event ->

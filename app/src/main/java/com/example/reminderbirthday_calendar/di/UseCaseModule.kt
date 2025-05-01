@@ -31,8 +31,8 @@ import com.example.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.example.domain.useCase.settings.firstLaunch.GetIsFirstLaunchUseCase
 import com.example.domain.useCase.settings.firstLaunch.SetIsFirstLaunchUseCase
-import com.example.domain.useCase.settings.notification.GetStatusNotificationUseCase
-import com.example.domain.useCase.settings.notification.SetStatusNotificationUseCase
+import com.example.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
+import com.example.domain.useCase.settings.viewDaysLeft.SetStatusViewDaysLeftUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,14 +57,14 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetStatusNotificationUseCase(settingsRepository: SettingsRepository): GetStatusNotificationUseCase {
-        return GetStatusNotificationUseCase(repository = settingsRepository)
+    fun provideGetStatusNotificationUseCase(settingsRepository: SettingsRepository): GetStatusViewDaysLeftUseCase {
+        return GetStatusViewDaysLeftUseCase(repository = settingsRepository)
     }
 
     @Provides
     @Singleton
-    fun provideSetStatusNotificationUseCase(settingsRepository: SettingsRepository): SetStatusNotificationUseCase {
-        return SetStatusNotificationUseCase(repository = settingsRepository)
+    fun provideSetStatusNotificationUseCase(settingsRepository: SettingsRepository): SetStatusViewDaysLeftUseCase {
+        return SetStatusViewDaysLeftUseCase(repository = settingsRepository)
     }
 
     @Provides

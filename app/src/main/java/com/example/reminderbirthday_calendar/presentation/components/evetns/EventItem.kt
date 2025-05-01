@@ -23,8 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +39,9 @@ fun EventItem(
     surname: String,
     date: String,
     eventType: EventType,
-    age: Int
+    age: Int,
+    isViewDaysLeft: Boolean,
+    daysLeft: Int
 ) {
     Box(
         modifier = Modifier
@@ -90,20 +95,13 @@ fun EventItem(
                 }
             }
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Turns",
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    fontSize = 18.sp,
-                    color = Color.Gray
-                )
-                Row {
+            if (isViewDaysLeft){
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
-                        text = age.toString(),
+                        text = daysLeft.toString(),
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
                         fontSize = 18.sp,
@@ -111,13 +109,64 @@ fun EventItem(
                     )
 
                     Text(
-                        text = " years",
-                        fontWeight = FontWeight.Light,
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold
+                                )
+                            ) {
+                                append("days")
+                            }
+
+                            append(" left")
+                        },
+                        textAlign = TextAlign.Center,
                         fontSize = 18.sp,
                         color = Color.Gray
                     )
                 }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Turns",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        fontSize = 18.sp,
+                        color = Color.Gray
+                    )
+                    
+                    Row {
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontWeight = FontWeight.Bold,
+
+                                        )
+                                ) {
+                                    append(age.toString())
+                                }
+
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontWeight = FontWeight.Light
+                                    )
+                                ) {
+                                    append(" years")
+                                }
+                            },
+                            textAlign = TextAlign.Center,
+                            fontSize = 18.sp,
+                            color = Color.Gray
+                        )
+                    }
+                }
             }
+
+
         }
     }
 }
@@ -130,6 +179,8 @@ fun EventItemPreview() {
         surname = "Кохан",
         date = "03.01.2006",
         eventType = EventType.BIRTHDAY,
-        age = 20
+        age = 20,
+        isViewDaysLeft = true,
+        daysLeft = 365
     )
 }

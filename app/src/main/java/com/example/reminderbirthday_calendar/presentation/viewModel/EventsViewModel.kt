@@ -11,6 +11,8 @@ import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
+import com.example.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
+import com.example.domain.useCase.settings.viewDaysLeft.SetStatusViewDaysLeftUseCase
 import com.example.domain.util.extensionFunc.sortByClosestDate
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
@@ -40,6 +42,8 @@ class EventsViewModel @Inject constructor(
     private val getAllEventUseCase: GetAllEventUseCase,
     private val upsertEventUseCase: UpsertEventsUseCase,
     private val deleteAllEventsUseCase: DeleteAllEventsUseCase,
+    private val getStatusViewDaysLeftUseCase: GetStatusViewDaysLeftUseCase,
+    private val setStatusViewDaysLeftUseCase: SetStatusViewDaysLeftUseCase,
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _eventsState = MutableStateFlow(EventsState())
@@ -74,7 +78,8 @@ class EventsViewModel @Inject constructor(
             _eventsState.update {
                 it.copy(
                     events = getAllEventUseCase.invoke().first()
-                        .sortByClosestDate() // From database
+                        .sortByClosestDate(), // From database
+                    isViewDaysLeft = getStatusViewDaysLeftUseCase.invoke().first() // From DataStore
                 )
             }
         }
@@ -193,7 +198,15 @@ class EventsViewModel @Inject constructor(
                 ) }
             }
 
+            EventsEvent.ChangeStatusViewDaysLeft -> {
+                _eventsState.update { it.copy(
+                    isViewDaysLeft = !it.isViewDaysLeft
+                ) }
 
+                viewModelScope.launch(Dispatchers.IO) {
+                    setStatusViewDaysLeftUseCase(activeStatus = _eventsState.value.isViewDaysLeft)
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.reminderbirthday_calendar.presentation.components.settings.dialogWindow
+package com.example.reminderbirthday_calendar.presentation.components.dialogWindow
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

@@ -6,6 +6,7 @@ data class EventsState(
     val events: List<Event> = emptyList<Event>(),
     val filterEvents: List<Event> = emptyList<Event>(),
     val searchStr: String = "",
+    val isViewDaysLeft: Boolean = false,
 
     val isShowAllEventsDeleteDialog: Boolean = false,
     val isShowReadContactPermDialog: Boolean = false
