@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
 import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
@@ -65,28 +66,65 @@ class EventsViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    val eventState =
-        combine(_eventsState, _searchLine, _filterEvents) { eventState, searchLine, filterEvents ->
-
-            val typeVisibilityMap = mapOf(
-                EventType.BIRTHDAY to getStatusShowBirthdayEventUseCase.invoke().first(),
-                EventType.ANNIVERSARY to getStatusShowAnniversaryEventUseCase.invoke().first(),
-                EventType.OTHER to getStatusShowOtherEventUseCase.invoke().first()
-            )
-
-            val visibleAllEvents = eventState.events.filter { typeVisibilityMap[it.eventType] == true }
-            val visibleFilterEvents = filterEvents.filter { typeVisibilityMap[it.eventType] == true }
-
-            eventState.copy(
-                events = visibleAllEvents.sortByClosestDate(),
-                filterEvents = visibleFilterEvents.sortByClosestDate(),
-                searchStr = searchLine
-            )
-        }.stateIn(
+    private val _birthdayVisible = getStatusShowBirthdayEventUseCase()
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = EventsState()
+            initialValue = true
         )
+
+    private val _anniversaryVisible = getStatusShowAnniversaryEventUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = true
+        )
+
+    private val _otherVisible = getStatusShowOtherEventUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = true
+        )
+
+    val eventState = combine(
+        listOf(
+            _eventsState,
+            _searchLine,
+            _filterEvents,
+            _birthdayVisible,
+            _anniversaryVisible,
+            _otherVisible
+        )
+    ) { values ->
+
+        val eventState = values[0] as EventsState
+        val searchLine = values[1] as String
+        val filterEvents = values[2] as List<Event>
+        val birthdayVisible = values[3] as Boolean
+        val anniversaryVisible = values[4] as Boolean
+        val otherVisible = values[5] as Boolean
+
+        val typeVisibilityMap = mapOf(
+            EventType.BIRTHDAY to birthdayVisible,
+            EventType.ANNIVERSARY to anniversaryVisible,
+            EventType.OTHER to otherVisible
+        )
+
+        val visibleAllEvents = eventState.events.filter { typeVisibilityMap[it.eventType] == true }
+        val visibleFilterEvents = filterEvents.filter { typeVisibilityMap[it.eventType] == true }
+
+        eventState.copy(
+            events = visibleAllEvents.sortByClosestDate(),
+            filterEvents = visibleFilterEvents.sortByClosestDate(),
+            searchStr = searchLine
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = EventsState()
+    )
+
 
     private val _eventsSharedFlow = MutableSharedFlow<EventsSharedFlow>()
     val eventsSharedFlow = _eventsSharedFlow.asSharedFlow()

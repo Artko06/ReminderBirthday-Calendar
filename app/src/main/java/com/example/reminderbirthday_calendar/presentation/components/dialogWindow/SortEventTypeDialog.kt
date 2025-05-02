@@ -1,6 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.components.dialogWindow
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SortEventTypeDialog(
@@ -30,7 +37,9 @@ fun SortEventTypeDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = "Select types") },
         text = {
-            Column {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -39,7 +48,24 @@ fun SortEventTypeDialog(
                 ) {
                     Checkbox(checked = statusShowBirthday, onCheckedChange = { changeStatusShowBirthday() })
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Show Birthday event")
+                    Text(
+                        text = buildAnnotatedString {
+                            append("Show ")
+
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Italic,
+                                    fontSize = 16.sp
+                                )
+                            ) {
+                                append("Birthday")
+                            }
+
+                            append(" event")
+                        },
+                        fontSize = 14.sp
+                    )
                 }
                 Row(
                     modifier = Modifier
@@ -49,7 +75,24 @@ fun SortEventTypeDialog(
                 ) {
                     Checkbox(checked = statusShowAnniversary, onCheckedChange = { changeStatusShowAnniversary() })
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Show Anniversary event")
+                    Text(
+                        text = buildAnnotatedString {
+                            append("Show ")
+
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Italic,
+                                    fontSize = 16.sp
+                                )
+                            ) {
+                                append("Anniversary")
+                            }
+
+                            append(" event")
+                        },
+                        fontSize = 14.sp
+                    )
                 }
                 Row(
                     modifier = Modifier
@@ -59,7 +102,24 @@ fun SortEventTypeDialog(
                 ) {
                     Checkbox(checked = statusShowOther, onCheckedChange = { changeStatusShowOther() })
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Show Other event")
+                    Text(
+                        text = buildAnnotatedString {
+                            append("Show ")
+
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Italic,
+                                    fontSize = 16.sp
+                                )
+                            ) {
+                                append("Other")
+                            }
+
+                            append(" event")
+                        },
+                        fontSize = 14.sp
+                    )
                 }
             }
         },

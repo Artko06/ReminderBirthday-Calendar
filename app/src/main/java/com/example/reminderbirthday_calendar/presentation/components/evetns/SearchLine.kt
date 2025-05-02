@@ -31,6 +31,7 @@ fun SearchLine(
     TextField(
         value = value,
         onValueChange = onValueChange,
+        singleLine = true,
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.PersonSearch,

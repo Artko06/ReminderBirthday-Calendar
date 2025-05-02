@@ -249,7 +249,7 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = { preferencesViewModel.onEvent(event = PreferencesEvent.ShowStatusTypeEventDialog) }
+                onClick = {}
             )
         }
 
