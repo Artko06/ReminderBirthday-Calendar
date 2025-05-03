@@ -113,7 +113,7 @@ class GoogleDriveClient(
             val minute = if(dateTime.minute < 10) "0" + dateTime.minute.toString()
                 else dateTime.minute.toString()
 
-            val seconds = if(dateTime.second < 10) "0" + dateTime.minute.toString()
+            val seconds = if(dateTime.second < 10) "0" + dateTime.second.toString()
                 else dateTime.second.toString()
 
             "$day.$month.$year " +
