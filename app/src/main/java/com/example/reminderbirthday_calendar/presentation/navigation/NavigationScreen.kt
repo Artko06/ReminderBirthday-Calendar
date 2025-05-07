@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.reminderbirthday_calendar.presentation.event.NavigationEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.Screen
+import com.example.reminderbirthday_calendar.presentation.screens.AddEventScreen
 import com.example.reminderbirthday_calendar.presentation.screens.NotificationPermissionScreen
 import com.example.reminderbirthday_calendar.presentation.viewModel.NavigationViewModel
 
@@ -36,8 +37,21 @@ fun NavigationScreen(
             }
 
             composable(route = Screen.MainScreen.route) {
-                BottomNavigationScreen()
+                BottomNavigationScreen(
+                    onNavigateToAddEventScreen = {
+                        navController.navigate(Screen.AddEventScreen.route)
+                    }
+                )
             }
+
+            composable(route = Screen.AddEventScreen.route) {
+                AddEventScreen(
+                    onBackFromAddEventScreen = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
         }
     }
 

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.0-rc04"
+agp = "8.10.0"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -37,6 +37,8 @@ jetpackComposePerm = "0.37.2"
 
 splashScreen = "1.0.1"
 
+coilCompose = "2.1.0"
+
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "iconsExtended" }
 
@@ -64,7 +66,9 @@ googleid = { module = "com.google.android.libraries.identity.googleid:googleid",
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 
-androidx-core-splashscreen = {module = "androidx.core:core-splashscreen", version.ref = "splashScreen"}
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
+
+coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -48,7 +48,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import java.time.format.DateTimeFormatter
 
-
 @Composable
 fun EventsScreen(
     modifier: Modifier = Modifier,
@@ -173,7 +172,9 @@ fun EventsScreen(
 
             LazyColumn(state = stateLazyColumn) {
                 groupedEvents.forEach { (monthNumber, eventsInMonth) ->
-                    item {
+                    item(
+                        key = "MonthYearText_$monthNumber"
+                    ) {
                         MonthYearText(
                             numberMonth = monthNumber,
                             numberYear = eventsInMonth[0].originalDate.year +
@@ -182,12 +183,16 @@ fun EventsScreen(
                         Spacer(modifier = Modifier.height(6.dp))
                     }
 
-                    items(eventsInMonth) { event ->
+                    items(
+                        items = eventsInMonth,
+                        key = { it.id.toString() + it.nameContact + it.surnameContact }
+                    ) { event ->
                         EventItem(
                             name = event.nameContact,
                             surname = event.surnameContact ?: "",
                             eventType = event.eventType,
                             date = event.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                            yearMatter = event.yearMatter,
                             age = event.originalDate.calculateNextAge(),
                             isViewDaysLeft = eventState.isViewDaysLeft,
                             daysLeft = event.originalDate.calculateDaysLeft()

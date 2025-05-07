@@ -93,6 +93,9 @@ dependencies {
     // Splash screen
     implementation(libs.androidx.core.splashscreen) // Not release yet
 
+    // For pick photos from gallery
+    implementation(libs.coil.kt.compose)
+
 //    // Local unit tests
 //    testImplementation("androidx.test:core:1.6.1")
 //    testImplementation("junit:junit:4.13.2")

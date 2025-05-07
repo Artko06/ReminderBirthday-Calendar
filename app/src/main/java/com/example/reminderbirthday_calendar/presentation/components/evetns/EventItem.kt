@@ -38,6 +38,7 @@ fun EventItem(
     name: String,
     surname: String,
     date: String,
+    yearMatter: Boolean,
     eventType: EventType,
     age: Int,
     isViewDaysLeft: Boolean,
@@ -85,11 +86,11 @@ fun EventItem(
 
                 Row {
                     Text(
-                        text = date + " — ${
+                        text = (if (yearMatter) date else date.replaceRange(6, 10, "????")) + " — ${
                             eventType.name.lowercase().replaceFirstChar { it.uppercase() }
                         }",
                         fontWeight = FontWeight.Light,
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         color = Color.LightGray
                     )
                 }
@@ -147,7 +148,7 @@ fun EventItem(
 
                                         )
                                 ) {
-                                    append(age.toString())
+                                    append( if(yearMatter) age.toString() else "?" )
                                 }
 
                                 withStyle(
@@ -178,6 +179,7 @@ fun EventItemPreview() {
         name = "Артём",
         surname = "Кохан",
         date = "03.01.2006",
+        yearMatter = false,
         eventType = EventType.BIRTHDAY,
         age = 20,
         isViewDaysLeft = true,

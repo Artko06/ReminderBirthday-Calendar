@@ -57,6 +57,13 @@ class EventsViewModel @Inject constructor(
 ) : ViewModel() {
     private val _eventsState = MutableStateFlow(EventsState())
     private val _searchLine = MutableStateFlow("")
+    private val _allEventsDatabase = getAllEventUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
+
     private val _filterEvents = _searchLine.flatMapLatest { searchLine ->
         getEventByContactNameUseCase(strSearch = searchLine)
     }
@@ -90,6 +97,7 @@ class EventsViewModel @Inject constructor(
     val eventState = combine(
         listOf(
             _eventsState,
+            _allEventsDatabase,
             _searchLine,
             _filterEvents,
             _birthdayVisible,
@@ -99,11 +107,12 @@ class EventsViewModel @Inject constructor(
     ) { values ->
 
         val eventState = values[0] as EventsState
-        val searchLine = values[1] as String
-        val filterEvents = values[2] as List<Event>
-        val birthdayVisible = values[3] as Boolean
-        val anniversaryVisible = values[4] as Boolean
-        val otherVisible = values[5] as Boolean
+        val allEvents = values[1] as List<Event>
+        val searchLine = values[2] as String
+        val filterEvents = values[3] as List<Event>
+        val birthdayVisible = values[4] as Boolean
+        val anniversaryVisible = values[5] as Boolean
+        val otherVisible = values[6] as Boolean
 
         val typeVisibilityMap = mapOf(
             EventType.BIRTHDAY to birthdayVisible,
@@ -111,7 +120,7 @@ class EventsViewModel @Inject constructor(
             EventType.OTHER to otherVisible
         )
 
-        val visibleAllEvents = eventState.events.filter { typeVisibilityMap[it.eventType] == true }
+        val visibleAllEvents = allEvents.filter { typeVisibilityMap[it.eventType] == true }
         val visibleFilterEvents = filterEvents.filter { typeVisibilityMap[it.eventType] == true }
 
         eventState.copy(

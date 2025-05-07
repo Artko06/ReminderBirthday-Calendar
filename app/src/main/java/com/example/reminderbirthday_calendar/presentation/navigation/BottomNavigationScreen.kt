@@ -2,12 +2,15 @@ package com.example.reminderbirthday_calendar.presentation.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Cake
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -25,9 +28,10 @@ import com.example.reminderbirthday_calendar.presentation.viewModel.BottomNaviga
 
 @Composable
 fun BottomNavigationScreen(
-    viewModel: BottomNavigationViewModel = hiltViewModel()
+    onNavigateToAddEventScreen: () -> Unit,
+    navigationViewModel: BottomNavigationViewModel = hiltViewModel()
 ){
-    val state = viewModel.bottomNavigationState.collectAsState().value
+    val state = navigationViewModel.bottomNavigationState.collectAsState().value
 
     val bottomItems = listOf<BottomNavigationItem>(
         BottomNavigationItem(
@@ -54,9 +58,23 @@ fun BottomNavigationScreen(
                     items = bottomItems,
                     selectedNavItem = state.selectedIndexScreen,
                     onSelectNavItem = { newIndex ->
-                        viewModel.onEvent(event = BottomNavigationEvent.OnSelectScreen(newIndex))
+                        navigationViewModel.onEvent(event = BottomNavigationEvent.OnSelectScreen(newIndex))
                     }
                 )
+            }
+        },
+        floatingActionButton = {
+            if (NumberBottomScreen.entries[state.selectedIndexScreen] == NumberBottomScreen.EVENTS){
+                FloatingActionButton(
+                    onClick = {
+                        onNavigateToAddEventScreen()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
+                        contentDescription = "Add events"
+                    )
+                }
             }
         }
     ) { paddingValues ->
