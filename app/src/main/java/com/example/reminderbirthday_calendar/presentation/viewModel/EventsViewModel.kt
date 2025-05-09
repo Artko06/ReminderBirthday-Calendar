@@ -13,6 +13,8 @@ import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
+import com.example.domain.useCase.settings.notification.CancelNotifyAllEventUseCase
+import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowAnniversaryEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowBirthdayEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEventUseCase
@@ -53,6 +55,9 @@ class EventsViewModel @Inject constructor(
     private val getStatusShowAnniversaryEventUseCase: GetStatusShowAnniversaryEventUseCase,
     private val getStatusShowBirthdayEventUseCase: GetStatusShowBirthdayEventUseCase,
     private val getStatusShowOtherEventUseCase: GetStatusShowOtherEventUseCase,
+
+    private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
+    private val cancelNotifyAllEventUseCase: CancelNotifyAllEventUseCase,
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _eventsState = MutableStateFlow(EventsState())
@@ -183,6 +188,8 @@ class EventsViewModel @Inject constructor(
                         )
                     }
 
+                    scheduleAllEventsUseCase()
+
                     _eventsSharedFlow.emit(
                         value = ShowToast(
                             message = "${importEvents.size} imported events. " +
@@ -209,6 +216,8 @@ class EventsViewModel @Inject constructor(
 
                     val eventsDbAfterAdding = getAllEventUseCase.invoke().first()
 
+                    scheduleAllEventsUseCase()
+
                     _eventsState.update {
                         it.copy(
                             events = eventsDbAfterAdding.sortByClosestDate()
@@ -231,6 +240,7 @@ class EventsViewModel @Inject constructor(
                 }
 
                 viewModelScope.launch(Dispatchers.IO) {
+                    cancelNotifyAllEventUseCase()
                     val deleted = deleteAllEventsUseCase()
 
                     _eventsSharedFlow.emit(

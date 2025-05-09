@@ -1,5 +1,6 @@
 package com.example.reminderbirthday_calendar.di
 
+import com.example.domain.repository.AlarmEventScheduler
 import com.example.domain.repository.ContactAppRepository
 import com.example.domain.repository.EventRepository
 import com.example.domain.repository.ExportFileRepository
@@ -31,6 +32,9 @@ import com.example.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.example.domain.useCase.settings.firstLaunch.GetIsFirstLaunchUseCase
 import com.example.domain.useCase.settings.firstLaunch.SetIsFirstLaunchUseCase
+import com.example.domain.useCase.settings.notification.CancelNotifyAllEventUseCase
+import com.example.domain.useCase.settings.notification.ScheduleAlarmItemUseCase
+import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowAnniversaryEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowBirthdayEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEventUseCase
@@ -245,5 +249,39 @@ object UseCaseModule {
     @Singleton
     fun provideSetStatusShowOtherEventUseCase(settingsRepository: SettingsRepository): SetStatusShowOtherEventUseCase{
         return SetStatusShowOtherEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideScheduleAllEventsUseCase(
+        alarmEventScheduler: AlarmEventScheduler,
+        eventRepository: EventRepository
+    ): ScheduleAllEventsUseCase{
+        return ScheduleAllEventsUseCase(
+            alarmRepository = alarmEventScheduler,
+            eventRepository = eventRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideCancelNotifyAllEventUseCase(
+        alarmEventScheduler: AlarmEventScheduler,
+        eventRepository: EventRepository
+    ): CancelNotifyAllEventUseCase{
+        return CancelNotifyAllEventUseCase(
+            alarmRepository = alarmEventScheduler,
+            eventRepository = eventRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideScheduleAlarmItemUseCase(
+        alarmEventScheduler: AlarmEventScheduler
+    ): ScheduleAlarmItemUseCase{
+        return ScheduleAlarmItemUseCase(
+            scheduler = alarmEventScheduler
+        )
     }
 }

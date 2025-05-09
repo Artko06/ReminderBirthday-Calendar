@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.event.EventType
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
+import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow
 import com.example.reminderbirthday_calendar.presentation.state.AddEventState
@@ -23,7 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEventViewModel @Inject constructor(
-    private val upsertEventUseCase: UpsertEventUseCase
+    private val upsertEventUseCase: UpsertEventUseCase,
+    private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase
 ) : ViewModel() {
     private val _addEventState = MutableStateFlow(AddEventState())
 
@@ -140,6 +142,7 @@ class AddEventViewModel @Inject constructor(
                     )
 
                     if (isSuccess) {
+                        scheduleAllEventsUseCase()
                         _addEventSharedFlow.emit(
                             value = AddEventSharedFlow.ShowToast(
                                 message = "Successfully added " +

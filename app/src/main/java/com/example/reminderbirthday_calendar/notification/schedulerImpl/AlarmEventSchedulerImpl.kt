@@ -4,10 +4,10 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_MESSAGE_EVENT_NAME
-import com.example.reminderbirthday_calendar.notification.model.AlarmEventItem
+import com.example.domain.models.notification.AlarmEventItem
+import com.example.domain.repository.AlarmEventScheduler
+import com.example.reminderbirthday_calendar.notification.common.*
 import com.example.reminderbirthday_calendar.notification.receiver.AlarmEventReceiver
-import com.example.reminderbirthday_calendar.notification.schedulerInterface.AlarmEventScheduler
 import java.time.ZoneId
 
 class AlarmEventSchedulerImpl(
@@ -19,6 +19,12 @@ class AlarmEventSchedulerImpl(
     override fun schedule(item: AlarmEventItem) {
         val intent = Intent(context, AlarmEventReceiver::class.java).apply {
             putExtra(EXTRA_MESSAGE_EVENT_NAME, item.message)
+            putExtra(EXTRA_ID_EVENT, item.id)
+            putExtra(EXTRA_NUMBER_NOTIFICATION, item.numberNotification)
+            putExtra(EXTRA_HOUR_NOTIFICATION, item.dateTime.hour)
+            putExtra(EXTRA_MINUTE_NOTIFICATION, item.dateTime.minute)
+            putExtra(EXTRA_DAY_NOTIFICATION, item.dateTime.dayOfMonth)
+            putExtra(EXTRA_MONTH_NOTIFICATION, item.dateTime.monthValue)
         }
 
         alarmManager?.setExactAndAllowWhileIdle(
