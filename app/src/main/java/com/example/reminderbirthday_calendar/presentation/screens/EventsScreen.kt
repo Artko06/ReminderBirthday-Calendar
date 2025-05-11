@@ -203,7 +203,8 @@ fun EventsScreen(
                             yearMatter = event.yearMatter,
                             age = event.originalDate.calculateNextAge(),
                             isViewDaysLeft = eventState.isViewDaysLeft,
-                            daysLeft = event.originalDate.calculateDaysLeft()
+                            daysLeft = event.originalDate.calculateDaysLeft(),
+                            image = event.image
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }

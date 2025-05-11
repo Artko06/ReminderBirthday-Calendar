@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.domain.models.event.EventType
 
 @Composable
@@ -42,7 +45,8 @@ fun EventItem(
     eventType: EventType,
     age: Int,
     isViewDaysLeft: Boolean,
-    daysLeft: Int
+    daysLeft: Int,
+    image: ByteArray?,
 ) {
     Box(
         modifier = Modifier
@@ -64,12 +68,27 @@ fun EventItem(
                 .padding(14.dp)
         ) {
 
-            Icon(
-                imageVector = Icons.Filled.AccountCircle,
-                contentDescription = "Profile",
-                modifier = Modifier.size(48.dp),
-                tint = Color.White
-            )
+            if(image != null){
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(48.dp))
+                ){
+                    AsyncImage(
+                        model = image,
+                        contentDescription = "User image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            } else {
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = "Profile",
+                    modifier = Modifier.size(48.dp),
+                    tint = Color.White
+                )
+            }
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -183,6 +202,7 @@ fun EventItemPreview() {
         eventType = EventType.BIRTHDAY,
         age = 20,
         isViewDaysLeft = true,
-        daysLeft = 365
+        daysLeft = 365,
+        image = null
     )
 }
