@@ -52,7 +52,7 @@ class AlarmEventReceiver: BroadcastReceiver() {
         if (hourNotification == -1) return
         val minuteNotification = intent.getIntExtra(EXTRA_MINUTE_NOTIFICATION, -1)
         if (minuteNotification == -1) return
-        println("Hello from BroadcastReceiver")
+        println("Hello from BroadcastReceiver $dayNotification.$monthNotification($hourNotification:$minuteNotification) - $message")
 
         val notificationManager = context.getSystemService(NotificationManager::class.java) as NotificationManager
         val notificationEvent = NotificationCompat.Builder(context, NOTIFICATION_EVENT_CHANNEL_ID)

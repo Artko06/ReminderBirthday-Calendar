@@ -8,7 +8,7 @@ class ScheduleAlarmItemUseCase(
     private val scheduler: AlarmEventScheduler
 ) {
     operator fun invoke(item: AlarmEventItem) {
-        return scheduler.schedule(item = item)
+        scheduler.schedule(item = item)
     }
 
     operator fun invoke(
@@ -24,6 +24,6 @@ class ScheduleAlarmItemUseCase(
             message = message
         )
 
-        return scheduler.schedule(item = alarmItem)
+        scheduler.schedule(item = alarmItem)
     }
 }

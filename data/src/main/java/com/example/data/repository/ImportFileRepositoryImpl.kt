@@ -3,10 +3,10 @@ package com.example.data.repository
 import android.content.Context
 import androidx.core.net.toUri
 import com.example.data.local.entity.settings.event.toDomain
+import com.example.data.local.util.serialization.Deserialization
 import com.example.data.local.util.serialization.toEventEntity
 import com.example.domain.models.event.Event
 import com.example.domain.repository.ImportFileRepository
-import com.example.serializationmodule.deserialization.Deserialization
 import javax.inject.Inject
 
 

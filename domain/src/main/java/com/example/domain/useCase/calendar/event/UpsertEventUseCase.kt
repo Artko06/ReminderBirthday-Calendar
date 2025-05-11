@@ -2,12 +2,14 @@ package com.example.domain.useCase.calendar.event
 
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
+import com.example.domain.models.event.SortTypeEvent
 import com.example.domain.repository.EventRepository
 import java.time.LocalDate
 
 class UpsertEventUseCase(private val repository: EventRepository) {
     suspend operator fun invoke(
         eventType: EventType,
+        sortTypeEvent: SortTypeEvent,
         nameContact: String,
         surnameContact: String?,
         originalDate: LocalDate,
@@ -19,6 +21,7 @@ class UpsertEventUseCase(private val repository: EventRepository) {
             event = Event(
                 id = 0,
                 eventType = eventType,
+                sortTypeEvent = sortTypeEvent,
                 nameContact = nameContact,
                 surnameContact = surnameContact,
                 originalDate = originalDate,

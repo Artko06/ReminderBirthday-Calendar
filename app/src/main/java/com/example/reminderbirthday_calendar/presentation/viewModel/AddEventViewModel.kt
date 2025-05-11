@@ -7,6 +7,7 @@ import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow
+import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow.ShowToast
 import com.example.reminderbirthday_calendar.presentation.state.AddEventState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -133,6 +134,7 @@ class AddEventViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     val isSuccess = upsertEventUseCase.invoke(
                         eventType = _addEventState.value.eventType,
+                        sortTypeEvent = _addEventState.value.sortType,
                         nameContact = _addEventState.value.valueName,
                         surnameContact = _addEventState.value.valueSurname,
                         originalDate = _addEventState.value.date!!,
@@ -144,19 +146,27 @@ class AddEventViewModel @Inject constructor(
                     if (isSuccess) {
                         scheduleAllEventsUseCase()
                         _addEventSharedFlow.emit(
-                            value = AddEventSharedFlow.ShowToast(
+                            value = ShowToast(
                                 message = "Successfully added " +
                                     EventType.BIRTHDAY.name.lowercase() + " event"
                             )
                         )
                     } else {
                         _addEventSharedFlow.emit(
-                            value = AddEventSharedFlow.ShowToast(
+                            value = ShowToast(
                                 message = "Error added " +
                                     EventType.BIRTHDAY.name.lowercase() + " event"
                             )
                         )
                     }
+                }
+            }
+
+            is AddEvent.ChangeSortType -> {
+                _addEventState.update {
+                    it.copy(
+                        sortType = event.sortType
+                    )
                 }
             }
 

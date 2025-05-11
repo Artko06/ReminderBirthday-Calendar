@@ -28,7 +28,10 @@ interface SettingsRepository {
 
     // Notification
     fun getAllNotificationEvent(): Flow<List<NotificationEvent>>
-    suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent)
+    suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent): Boolean
+    suspend fun upsertNotificationEvents(notificationEvents: List<NotificationEvent>): List<Boolean>
+    suspend fun deleteNotificationEvent(notificationEvent: NotificationEvent): Boolean
+    suspend fun deleteAllNotificationEvent(): Int
 
     // Zodiac
     fun getStatusZodiacWestern(): Flow<Boolean>

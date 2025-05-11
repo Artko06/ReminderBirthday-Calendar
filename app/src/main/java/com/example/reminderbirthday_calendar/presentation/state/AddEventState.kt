@@ -1,12 +1,14 @@
 package com.example.reminderbirthday_calendar.presentation.state
 
 import com.example.domain.models.event.EventType
+import com.example.domain.models.event.SortTypeEvent
 import java.time.LocalDate
 
 data class AddEventState (
     val isShowDatePicker: Boolean = false,
 
     val pickedPhoto: ByteArray? = null,
+    val sortType: SortTypeEvent = SortTypeEvent.FAMILY,
     val eventType: EventType = EventType.BIRTHDAY,
     val valueName: String = "",
     val valueSurname: String = "",

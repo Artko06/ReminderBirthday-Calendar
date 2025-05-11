@@ -12,6 +12,7 @@ import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.GetEventByTypeUseCase
+import com.example.domain.useCase.calendar.event.GetEventsBySortTypeUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
@@ -33,8 +34,13 @@ import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.example.domain.useCase.settings.firstLaunch.GetIsFirstLaunchUseCase
 import com.example.domain.useCase.settings.firstLaunch.SetIsFirstLaunchUseCase
 import com.example.domain.useCase.settings.notification.CancelNotifyAllEventUseCase
+import com.example.domain.useCase.settings.notification.DeleteAllNotificationEventUseCase
+import com.example.domain.useCase.settings.notification.DeleteNotificationEventUseCase
+import com.example.domain.useCase.settings.notification.GetAllNotificationEventUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAlarmItemUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
+import com.example.domain.useCase.settings.notification.UpsertAllNotificationEventsUseCase
+import com.example.domain.useCase.settings.notification.UpsertNotificationEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowAnniversaryEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowBirthdayEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEventUseCase
@@ -111,6 +117,12 @@ object UseCaseModule {
     @Singleton
     fun provideGetAllEventUseCase(eventRepository: EventRepository): GetAllEventUseCase {
         return GetAllEventUseCase(repository = eventRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetEventsBySortTypeUseCase(eventRepository: EventRepository): GetEventsBySortTypeUseCase{
+        return GetEventsBySortTypeUseCase(repository = eventRepository)
     }
 
     @Provides
@@ -255,11 +267,13 @@ object UseCaseModule {
     @Singleton
     fun provideScheduleAllEventsUseCase(
         alarmEventScheduler: AlarmEventScheduler,
-        eventRepository: EventRepository
+        eventRepository: EventRepository,
+        settingsRepository: SettingsRepository
     ): ScheduleAllEventsUseCase{
         return ScheduleAllEventsUseCase(
             alarmRepository = alarmEventScheduler,
-            eventRepository = eventRepository
+            eventRepository = eventRepository,
+            settingsRepository = settingsRepository
         )
     }
 
@@ -267,11 +281,13 @@ object UseCaseModule {
     @Singleton
     fun provideCancelNotifyAllEventUseCase(
         alarmEventScheduler: AlarmEventScheduler,
-        eventRepository: EventRepository
+        eventRepository: EventRepository,
+        settingsRepository: SettingsRepository
     ): CancelNotifyAllEventUseCase{
         return CancelNotifyAllEventUseCase(
             alarmRepository = alarmEventScheduler,
-            eventRepository = eventRepository
+            eventRepository = eventRepository,
+            settingsRepository = settingsRepository
         )
     }
 
@@ -283,5 +299,35 @@ object UseCaseModule {
         return ScheduleAlarmItemUseCase(
             scheduler = alarmEventScheduler
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAllNotificationEventUseCase(settingsRepository: SettingsRepository): GetAllNotificationEventUseCase{
+        return GetAllNotificationEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpsertNotificationEventUseCase(settingsRepository: SettingsRepository): UpsertNotificationEventUseCase{
+        return UpsertNotificationEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpsertAllNotificationEventsUseCase(settingsRepository: SettingsRepository): UpsertAllNotificationEventsUseCase{
+        return UpsertAllNotificationEventsUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteNotificationEventUseCase(settingsRepository: SettingsRepository): DeleteNotificationEventUseCase{
+        return DeleteNotificationEventUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteAllNotificationEventUseCase(settingsRepository: SettingsRepository): DeleteAllNotificationEventUseCase{
+        return DeleteAllNotificationEventUseCase(repository = settingsRepository)
     }
 }

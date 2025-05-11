@@ -15,8 +15,7 @@ import kotlinx.coroutines.flow.map
 class SettingsRepositoryImpl(
     private val context: Context,
     private val settingsDao: SettingsDao
-): SettingsRepository
-{
+) : SettingsRepository {
     // Language
     override fun getLanguage(): Flow<LanguageType> {
         return PreferencesDataStore.getLanguage(context = context)
@@ -50,7 +49,10 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun setStatusShowBirthdayEvent(activeStatus: Boolean) {
-        PreferencesDataStore.setStatusShowBirthdayEvent(context = context, activeStatus = activeStatus)
+        PreferencesDataStore.setStatusShowBirthdayEvent(
+            context = context,
+            activeStatus = activeStatus
+        )
     }
 
     override fun getStatusShowAnniversaryEvent(): Flow<Boolean> {
@@ -58,7 +60,10 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun setStatusShowAnniversaryEvent(activeStatus: Boolean) {
-        PreferencesDataStore.setStatusShowAnniversaryEvent(context = context, activeStatus = activeStatus)
+        PreferencesDataStore.setStatusShowAnniversaryEvent(
+            context = context,
+            activeStatus = activeStatus
+        )
     }
 
     override fun getStatusShowOtherEvent(): Flow<Boolean> {
@@ -78,8 +83,26 @@ class SettingsRepositoryImpl(
         }
     }
 
-    override suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent) {
-        settingsDao.upsertNotificationEvent(notificationEvent = notificationEvent.toData())
+    override suspend fun upsertNotificationEvent(notificationEvent: NotificationEvent): Boolean {
+        val status = settingsDao.upsertNotificationEvent(notificationEvent = notificationEvent.toData())
+
+        return status != 0L
+    }
+
+    override suspend fun upsertNotificationEvents(notificationEvents: List<NotificationEvent>): List<Boolean> {
+        return settingsDao.upsertNotificationEvents(notificationEvents = notificationEvents.map { it.toData() }).map {
+            it != 0L
+        }
+    }
+
+    override suspend fun deleteNotificationEvent(notificationEvent: NotificationEvent): Boolean {
+        val status = settingsDao.deleteNotificationEvent(notificationEvent = notificationEvent.toData())
+
+        return status != 0
+    }
+
+    override suspend fun deleteAllNotificationEvent(): Int {
+        return settingsDao.deleteAllNotificationEvent()
     }
 
     // Zodiac

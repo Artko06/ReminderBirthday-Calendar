@@ -53,6 +53,7 @@ import coil.compose.AsyncImage
 import com.example.data.local.util.image.compressImageWithResize
 import com.example.data.local.util.image.toByteArray
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorEventType
+import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorSortEventTypeForAdd
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.TextEntry
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.CustomDatePickerDialog
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
@@ -217,7 +218,15 @@ fun AddEventScreen(
                     .padding(horizontal = 10.dp),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            SelectorSortEventTypeForAdd(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                onClick = { sortType ->
+                    addEventViewModel.onEvent(event = AddEvent.ChangeSortType(sortType))
+                },
+                selectedSortType = addEventState.sortType
+            )
 
             TextButton(
                 onClick = {

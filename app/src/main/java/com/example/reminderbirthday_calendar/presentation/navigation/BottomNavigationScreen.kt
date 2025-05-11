@@ -29,6 +29,7 @@ import com.example.reminderbirthday_calendar.presentation.viewModel.BottomNaviga
 @Composable
 fun BottomNavigationScreen(
     onNavigateToAddEventScreen: () -> Unit,
+    onNavigateToTimeReminderScreen: () -> Unit,
     navigationViewModel: BottomNavigationViewModel = hiltViewModel()
 ){
     val state = navigationViewModel.bottomNavigationState.collectAsState().value
@@ -81,7 +82,10 @@ fun BottomNavigationScreen(
         when(NumberBottomScreen.entries[state.selectedIndexScreen]){
             NumberBottomScreen.CALENDAR -> MainScreen(modifier = Modifier.padding(paddingValues))
             NumberBottomScreen.EVENTS -> EventsScreen(modifier = Modifier.padding(paddingValues))
-            NumberBottomScreen.SETTINGS -> SettingsScreen(modifier = Modifier.padding(paddingValues))
+            NumberBottomScreen.SETTINGS -> SettingsScreen(
+                onNavigateToTimeReminderScreen = onNavigateToTimeReminderScreen,
+                modifier = Modifier.padding(paddingValues)
+            )
         }
     }
 }

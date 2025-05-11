@@ -1,6 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.event
 
 import com.example.domain.models.event.Event
+import com.example.domain.models.event.SortTypeEvent
 
 sealed class EventsEvent {
     object ImportEventsFromContacts: EventsEvent()
@@ -15,4 +16,6 @@ sealed class EventsEvent {
     object CloseReadContactPermDialog: EventsEvent()
 
     object ChangeStatusViewDaysLeft: EventsEvent()
+
+    data class SelectSortType(val sortType: SortTypeEvent?): EventsEvent()
 }

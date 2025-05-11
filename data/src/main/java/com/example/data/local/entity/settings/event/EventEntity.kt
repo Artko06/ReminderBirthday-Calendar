@@ -6,6 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
+import com.example.domain.models.event.SortTypeEvent
 import java.time.LocalDate
 
 @Entity(
@@ -19,6 +20,7 @@ data class EventEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val eventType: String,
+    val sortType: String,
     val nameContact: String,
     val surnameContact: String?,
     val originalDate: String,
@@ -36,6 +38,7 @@ data class EventEntity(
         if (id != other.id) return false
         if (yearMatter != other.yearMatter) return false
         if (eventType != other.eventType) return false
+        if (sortType != other.sortType) return false
         if (nameContact != other.nameContact) return false
         if (surnameContact != other.surnameContact) return false
         if (originalDate != other.originalDate) return false
@@ -49,6 +52,7 @@ data class EventEntity(
         var result = id.hashCode()
         result = 31 * result + yearMatter.hashCode()
         result = 31 * result + eventType.hashCode()
+        result = 31 * result + sortType.hashCode()
         result = 31 * result + nameContact.hashCode()
         result = 31 * result + (surnameContact?.hashCode() ?: 0)
         result = 31 * result + originalDate.hashCode()
@@ -61,6 +65,7 @@ data class EventEntity(
 fun EventEntity.toDomain() = Event(
     id = id,
     eventType = enumValueOf<EventType>(eventType),
+    sortTypeEvent = enumValueOf<SortTypeEvent>(sortType),
     nameContact = nameContact,
     surnameContact = surnameContact,
     originalDate = LocalDate.parse(originalDate),
@@ -72,6 +77,7 @@ fun EventEntity.toDomain() = Event(
 fun Event.toData() = EventEntity(
     id = id,
     eventType = eventType.name,
+    sortType = sortTypeEvent.name,
     nameContact = nameContact,
     surnameContact = surnameContact,
     originalDate = originalDate.toString(),

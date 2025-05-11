@@ -41,6 +41,7 @@ import com.example.reminderbirthday_calendar.presentation.components.evetns.Days
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
 import com.example.reminderbirthday_calendar.presentation.components.evetns.MonthYearText
 import com.example.reminderbirthday_calendar.presentation.components.evetns.SearchLine
+import com.example.reminderbirthday_calendar.presentation.components.evetns.SelectorSortEventType
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
@@ -102,6 +103,13 @@ fun EventsScreen(
         )
 
         Spacer(modifier = Modifier.height(12.dp))
+
+        SelectorSortEventType(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { sortType ->
+                eventsViewModel.onEvent(event = EventsEvent.SelectSortType(sortType)) },
+            selectedSortType = eventState.sortTypeEvent
+        )
 
         Box(
             modifier = Modifier.fillMaxWidth(),

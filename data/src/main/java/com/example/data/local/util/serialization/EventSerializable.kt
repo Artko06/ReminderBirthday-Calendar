@@ -1,15 +1,13 @@
-package com.example.domain.models.event
+package com.example.data.local.util.serialization
 
-import java.time.LocalDate
-
-data class Event(
+data class EventSerializable(
     val id: Long,
-    val eventType: EventType = EventType.BIRTHDAY,
-    val sortTypeEvent: SortTypeEvent = SortTypeEvent.RELATIVE,
+    val eventType: String,
+    val sortTypeEvent: String,
     val nameContact: String,
-    val surnameContact: String? = null,
-    val originalDate: LocalDate,
-    val yearMatter : Boolean,
+    val surnameContact: String?,
+    val originalDate: String,
+    val yearMatter: Boolean,
     val notes: String? = null,
     val image: ByteArray? = null
 ) {
@@ -17,7 +15,7 @@ data class Event(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Event
+        other as EventSerializable
 
         if (id != other.id) return false
         if (yearMatter != other.yearMatter) return false

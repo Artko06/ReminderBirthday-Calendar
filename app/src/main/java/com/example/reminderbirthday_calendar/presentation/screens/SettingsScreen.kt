@@ -66,6 +66,7 @@ import com.example.reminderbirthday_calendar.presentation.viewModel.PreferencesV
 
 @Composable
 fun SettingsScreen(
+    onNavigateToTimeReminderScreen: () -> Unit,
     modifier: Modifier = Modifier,
     preferencesViewModel: PreferencesViewModel = hiltViewModel(),
     importExportViewModel: ImportExportViewModel = hiltViewModel(),
@@ -225,7 +226,7 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = { onNavigateToTimeReminderScreen() }
             )
         }
 
@@ -474,5 +475,7 @@ fun SettingsScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen()
+    SettingsScreen(
+        onNavigateToTimeReminderScreen = {}
+    )
 }

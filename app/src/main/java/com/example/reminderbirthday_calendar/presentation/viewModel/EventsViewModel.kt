@@ -128,9 +128,16 @@ class EventsViewModel @Inject constructor(
         val visibleAllEvents = allEvents.filter { typeVisibilityMap[it.eventType] == true }
         val visibleFilterEvents = filterEvents.filter { typeVisibilityMap[it.eventType] == true }
 
+        val sortAllEvents = if (eventState.sortTypeEvent != null) {
+            visibleAllEvents.filter { it.sortTypeEvent == eventState.sortTypeEvent }
+        } else visibleAllEvents
+        val sortFilterEvents = if (eventState.sortTypeEvent != null){
+            visibleFilterEvents.filter { it.sortTypeEvent == eventState.sortTypeEvent }
+        } else visibleFilterEvents
+
         eventState.copy(
-            events = visibleAllEvents.sortByClosestDate(),
-            filterEvents = visibleFilterEvents.sortByClosestDate(),
+            events = sortAllEvents.sortByClosestDate(),
+            filterEvents = sortFilterEvents.sortByClosestDate(),
             searchStr = searchLine
         )
     }.stateIn(
@@ -282,6 +289,14 @@ class EventsViewModel @Inject constructor(
                     setStatusViewDaysLeftUseCase(activeStatus = _eventsState.value.isViewDaysLeft)
                 }
             }
+
+            is EventsEvent.SelectSortType -> {
+                _eventsState.update { it.copy(
+                    sortTypeEvent = event.sortType
+                ) }
+            }
+
+
         }
     }
 }

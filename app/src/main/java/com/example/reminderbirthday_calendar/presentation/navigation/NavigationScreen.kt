@@ -10,6 +10,7 @@ import com.example.reminderbirthday_calendar.presentation.event.NavigationEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.Screen
 import com.example.reminderbirthday_calendar.presentation.screens.AddEventScreen
 import com.example.reminderbirthday_calendar.presentation.screens.NotificationPermissionScreen
+import com.example.reminderbirthday_calendar.presentation.screens.TimeReminderScreen
 import com.example.reminderbirthday_calendar.presentation.viewModel.NavigationViewModel
 
 @Composable
@@ -40,6 +41,9 @@ fun NavigationScreen(
                 BottomNavigationScreen(
                     onNavigateToAddEventScreen = {
                         navController.navigate(Screen.AddEventScreen.route)
+                    },
+                    onNavigateToTimeReminderScreen = {
+                        navController.navigate(Screen.TimeReminderScreen.route)
                     }
                 )
             }
@@ -47,6 +51,14 @@ fun NavigationScreen(
             composable(route = Screen.AddEventScreen.route) {
                 AddEventScreen(
                     onBackFromAddEventScreen = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(route = Screen.TimeReminderScreen.route) {
+                TimeReminderScreen(
+                    onBackFromTimeReminderScreen = {
                         navController.popBackStack()
                     }
                 )

@@ -135,6 +135,7 @@ class GoogleDriveClient(
         return mapOf(
             "id" to id,
             "eventType" to eventType,
+            "sortTypeEvent" to sortType,
             "nameContact" to nameContact,
             "surnameContact" to surnameContact,
             "originalDate" to originalDate,
@@ -148,6 +149,7 @@ class GoogleDriveClient(
         return EventEntity(
             id = (event["id"] as Long),
             eventType = event["eventType"] as String,
+            sortType = event["sortTypeEvent"] as String,
             nameContact = event["nameContact"] as String,
             surnameContact = event["surnameContact"] as? String,
             originalDate = event["originalDate"] as String,

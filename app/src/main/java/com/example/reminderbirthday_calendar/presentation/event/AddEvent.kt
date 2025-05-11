@@ -1,6 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.event
 
 import com.example.domain.models.event.EventType
+import com.example.domain.models.event.SortTypeEvent
 import java.time.LocalDate
 
 sealed class AddEvent {
@@ -25,6 +26,7 @@ sealed class AddEvent {
     }
 
     data class ChangeEventType(val eventType: EventType): AddEvent()
+    data class ChangeSortType(val sortType: SortTypeEvent): AddEvent()
     data class ChangeValueName(val name: String): AddEvent()
     data class ChangeValueSurname(val surname: String): AddEvent()
     data class ChangeDate(val date: LocalDate): AddEvent()

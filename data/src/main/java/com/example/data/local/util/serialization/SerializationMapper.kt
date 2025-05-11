@@ -1,11 +1,11 @@
 package com.example.data.local.util.serialization
 
 import com.example.data.local.entity.settings.event.EventEntity
-import com.example.serializationmodule.model.EventSerializable
 
 fun EventSerializable.toEventEntity() = EventEntity(
     id = id,
     eventType = eventType,
+    sortType = sortTypeEvent,
     nameContact = nameContact,
     surnameContact = surnameContact,
     originalDate = originalDate,
@@ -17,6 +17,7 @@ fun EventSerializable.toEventEntity() = EventEntity(
 fun EventEntity.toEventSerializable() = EventSerializable(
     id = id,
     eventType = eventType,
+    sortTypeEvent = sortType,
     nameContact = nameContact,
     surnameContact = surnameContact,
     originalDate = originalDate,
