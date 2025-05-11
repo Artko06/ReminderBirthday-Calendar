@@ -22,6 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.event.SortTypeEvent
+import com.example.reminderbirthday_calendar.ui.theme.blueAzure
+import com.example.reminderbirthday_calendar.ui.theme.darkGreen
+import com.example.reminderbirthday_calendar.ui.theme.darkPurple
+import com.example.reminderbirthday_calendar.ui.theme.darkRed
+import com.example.reminderbirthday_calendar.ui.theme.yellow
 
 @Composable
 fun SelectorSortEventType(
@@ -70,10 +75,11 @@ fun SortTypeButton(
     OutlinedButton(
         onClick = { onClick(sortTypeEvent) },
         border = BorderStroke(
-            1.dp, if (isSelected) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onBackground
+            width = 1.dp,
+            color = if (isSelected) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.onBackground
         ),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -81,17 +87,26 @@ fun SortTypeButton(
             Icon(
                 imageVector = Icons.Outlined.StarRate,
                 contentDescription = null,
-                tint = if (isSelected) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.onBackground
+                tint = when(sortTypeEvent){
+                    SortTypeEvent.FAMILY -> darkRed
+                    SortTypeEvent.RELATIVE -> yellow
+                    SortTypeEvent.FRIEND -> blueAzure
+                    SortTypeEvent.COLLEAGUE -> darkGreen
+                    SortTypeEvent.OTHER -> darkPurple
+                    null -> {
+                        if (isSelected) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onBackground
+                    }
+                }
             )
 
             Text(
                 text = text,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 8.dp),
                 color = if (isSelected) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(start = 8.dp)
+                else MaterialTheme.colorScheme.onBackground
             )
         }
     }

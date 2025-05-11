@@ -199,6 +199,7 @@ fun EventsScreen(
                             name = event.nameContact,
                             surname = event.surnameContact ?: "",
                             eventType = event.eventType,
+                            sortTypeEvent = event.sortTypeEvent,
                             date = event.originalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                             yearMatter = event.yearMatter,
                             age = event.originalDate.calculateNextAge(),

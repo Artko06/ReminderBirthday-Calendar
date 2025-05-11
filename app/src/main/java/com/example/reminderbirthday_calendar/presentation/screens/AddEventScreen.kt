@@ -85,13 +85,20 @@ fun AddEventScreen(
         onResult = { uri ->
             if (uri == null) return@rememberLauncherForActivityResult
 
-            val typeFile = context.contentResolver.getType(uri)
-            println("MimeType file: $typeFile")
+            val byteArray: ByteArray?
 
-            val byteArray = uri.toByteArray(context)?.compressImageWithResize(
-                format = if (typeFile?.contains("png") == true ) Bitmap.CompressFormat.PNG
-                else Bitmap.CompressFormat.JPEG
-            )
+            try {
+                val typeFile = context.contentResolver.getType(uri)
+                println("MimeType file: $typeFile")
+
+                byteArray = uri.toByteArray(context)?.compressImageWithResize(
+                    format = if (typeFile?.contains("png") == true ) Bitmap.CompressFormat.PNG
+                    else Bitmap.CompressFormat.JPEG
+                )
+            } catch (e: Exception){
+                e.printStackTrace()
+                return@rememberLauncherForActivityResult
+            }
 
             addEventViewModel.onEvent(event = AddEvent.OnPickPhoto(byteArray))
         }

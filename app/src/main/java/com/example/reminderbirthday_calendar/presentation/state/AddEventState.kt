@@ -26,7 +26,9 @@ data class AddEventState (
 
         if (isShowDatePicker != other.isShowDatePicker) return false
         if (yearMatter != other.yearMatter) return false
+        if (isEnableAddEventButton != other.isEnableAddEventButton) return false
         if (!pickedPhoto.contentEquals(other.pickedPhoto)) return false
+        if (sortType != other.sortType) return false
         if (eventType != other.eventType) return false
         if (valueName != other.valueName) return false
         if (valueSurname != other.valueSurname) return false
@@ -39,7 +41,9 @@ data class AddEventState (
     override fun hashCode(): Int {
         var result = isShowDatePicker.hashCode()
         result = 31 * result + yearMatter.hashCode()
+        result = 31 * result + isEnableAddEventButton.hashCode()
         result = 31 * result + (pickedPhoto?.contentHashCode() ?: 0)
+        result = 31 * result + sortType.hashCode()
         result = 31 * result + eventType.hashCode()
         result = 31 * result + valueName.hashCode()
         result = 31 * result + valueSurname.hashCode()

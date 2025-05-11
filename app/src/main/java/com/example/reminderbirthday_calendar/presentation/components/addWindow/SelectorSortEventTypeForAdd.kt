@@ -10,9 +10,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.StarRate
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +22,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.event.SortTypeEvent
+import com.example.reminderbirthday_calendar.ui.theme.backgroundBlueAzure
+import com.example.reminderbirthday_calendar.ui.theme.backgroundDarkGreen
+import com.example.reminderbirthday_calendar.ui.theme.backgroundDarkPurple
+import com.example.reminderbirthday_calendar.ui.theme.backgroundDarkRed
+import com.example.reminderbirthday_calendar.ui.theme.backgroundYellow
+import com.example.reminderbirthday_calendar.ui.theme.blueAzure
+import com.example.reminderbirthday_calendar.ui.theme.darkGreen
+import com.example.reminderbirthday_calendar.ui.theme.darkPurple
+import com.example.reminderbirthday_calendar.ui.theme.darkRed
+import com.example.reminderbirthday_calendar.ui.theme.yellow
 
 @Composable
 fun SelectorSortEventTypeForAdd(
@@ -56,30 +66,58 @@ fun SortTypeButton(
     sortTypeEvent: SortTypeEvent,
     onClick: (SortTypeEvent) -> Unit
 ){
-    OutlinedButton(
+    Button(
         onClick = { onClick(sortTypeEvent) },
         border = BorderStroke(
-            1.dp, if (isSelected) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onBackground
+            1.5.dp, if (isSelected) {
+                when(sortTypeEvent){
+                    SortTypeEvent.FAMILY -> darkRed
+                    SortTypeEvent.RELATIVE -> yellow
+                    SortTypeEvent.FRIEND -> blueAzure
+                    SortTypeEvent.COLLEAGUE -> darkGreen
+                    SortTypeEvent.OTHER -> darkPurple
+                }
+            }
+            else {
+                when(sortTypeEvent){
+                    SortTypeEvent.FAMILY -> backgroundDarkRed
+                    SortTypeEvent.RELATIVE -> backgroundYellow
+                    SortTypeEvent.FRIEND -> backgroundBlueAzure
+                    SortTypeEvent.COLLEAGUE -> backgroundDarkGreen
+                    SortTypeEvent.OTHER -> backgroundDarkPurple
+                }
+            }
         ),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = when(sortTypeEvent){
+                SortTypeEvent.FAMILY -> backgroundDarkRed
+                SortTypeEvent.RELATIVE -> backgroundYellow
+                SortTypeEvent.FRIEND -> backgroundBlueAzure
+                SortTypeEvent.COLLEAGUE -> backgroundDarkGreen
+                SortTypeEvent.OTHER -> backgroundDarkPurple
+            },
+            contentColor = when(sortTypeEvent){
+                SortTypeEvent.FAMILY -> darkRed
+                SortTypeEvent.RELATIVE -> yellow
+                SortTypeEvent.FRIEND -> blueAzure
+                SortTypeEvent.COLLEAGUE -> darkGreen
+                SortTypeEvent.OTHER -> darkPurple
+            }
+        ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Outlined.StarRate,
-                contentDescription = null,
-                tint = if (isSelected) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.onBackground
+                contentDescription = null
             )
 
             Text(
                 text = text,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -91,6 +129,6 @@ fun SortTypeButton(
 fun SelectorSortEventTypePreview(){
     SelectorSortEventTypeForAdd(
         onClick = {},
-        selectedSortType = SortTypeEvent.FAMILY
+        selectedSortType = SortTypeEvent.RELATIVE
     )
 }

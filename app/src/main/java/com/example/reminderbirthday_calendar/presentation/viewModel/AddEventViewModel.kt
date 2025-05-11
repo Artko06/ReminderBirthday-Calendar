@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -29,29 +30,32 @@ class AddEventViewModel @Inject constructor(
     private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase
 ) : ViewModel() {
     private val _addEventState = MutableStateFlow(AddEventState())
-
-    val addEventState = _addEventState.asStateFlow()
+    private val _isAddButtonEnabled = _addEventState.asStateFlow()
         .map { state ->
-            if (state.valueName.trim().isEmpty()) {
-                state.copy(isEnableAddEventButton = false)
-            }
-            else if(state.date == null){
-                state.copy(isEnableAddEventButton = false)
-            }
-            else if(state.date.year > LocalDate.now().year){
-                state.copy(isEnableAddEventButton = false)
-            }
-            else if (state.date.year == LocalDate.now().year && state.date.dayOfYear > LocalDate.now().dayOfYear){
-                state.copy(isEnableAddEventButton = false)
-            }
-            else {
-                state.copy(isEnableAddEventButton = true)
-            }
-        }.stateIn(
+            state.valueName.trim().isNotEmpty()
+                    && state.date != null
+                    && state.date.year <= LocalDate.now().year
+                    && (state.date.year < LocalDate.now().year ||
+                    state.date.dayOfYear <= LocalDate.now().dayOfYear)
+        }
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = AddEventState()
+            initialValue = false
         )
+
+    val addEventState = combine(
+        _addEventState,
+        _isAddButtonEnabled
+    ) { addEventState, isAddButtonEnabled ->
+        addEventState.copy(
+            isEnableAddEventButton = isAddButtonEnabled
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = AddEventState()
+    )
 
     private val _addEventSharedFlow = MutableSharedFlow<AddEventSharedFlow>()
     val addEventSharedFlow = _addEventSharedFlow.asSharedFlow()

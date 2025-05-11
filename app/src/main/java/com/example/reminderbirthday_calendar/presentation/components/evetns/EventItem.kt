@@ -35,6 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.event.EventType
+import com.example.domain.models.event.SortTypeEvent
+import com.example.reminderbirthday_calendar.ui.theme.blueAzure
+import com.example.reminderbirthday_calendar.ui.theme.darkGreen
+import com.example.reminderbirthday_calendar.ui.theme.darkPurple
+import com.example.reminderbirthday_calendar.ui.theme.darkRed
+import com.example.reminderbirthday_calendar.ui.theme.yellow
 
 @Composable
 fun EventItem(
@@ -43,6 +49,7 @@ fun EventItem(
     date: String,
     yearMatter: Boolean,
     eventType: EventType,
+    sortTypeEvent: SortTypeEvent,
     age: Int,
     isViewDaysLeft: Boolean,
     daysLeft: Int,
@@ -59,7 +66,16 @@ fun EventItem(
             modifier = Modifier
                 .width(4.dp)
                 .fillMaxHeight()
-                .background(Color.Yellow, shape = RoundedCornerShape(24.dp))
+                .background(
+                    color = when(sortTypeEvent){
+                        SortTypeEvent.FAMILY -> darkRed
+                        SortTypeEvent.RELATIVE -> yellow
+                        SortTypeEvent.FRIEND -> blueAzure
+                        SortTypeEvent.COLLEAGUE -> darkGreen
+                        SortTypeEvent.OTHER -> darkPurple
+                    },
+                    shape = RoundedCornerShape(24.dp)
+                )
         )
 
         Row(
@@ -200,6 +216,7 @@ fun EventItemPreview() {
         date = "03.01.2006",
         yearMatter = false,
         eventType = EventType.BIRTHDAY,
+        sortTypeEvent = SortTypeEvent.RELATIVE,
         age = 20,
         isViewDaysLeft = true,
         daysLeft = 365,
