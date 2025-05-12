@@ -81,14 +81,14 @@ fun EventItem(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(14.dp)
+                .padding(horizontal = 14.dp, vertical = 12.dp)
         ) {
 
             if(image != null){
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(48.dp))
+                        .size(46.dp)
+                        .clip(RoundedCornerShape(46.dp))
                 ){
                     AsyncImage(
                         model = image,
@@ -101,7 +101,7 @@ fun EventItem(
                 Icon(
                     imageVector = Icons.Filled.AccountCircle,
                     contentDescription = "Profile",
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier.size(46.dp),
                     tint = Color.White
                 )
             }
@@ -110,12 +110,13 @@ fun EventItem(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(3.dp)
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(
                     text = "$name $surname",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
+                    lineHeight = 21.sp,
                     color = Color.White
                 )
 
@@ -125,7 +126,8 @@ fun EventItem(
                             eventType.name.lowercase().replaceFirstChar { it.uppercase() }
                         }",
                         fontWeight = FontWeight.Light,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
+                        lineHeight = 13.sp,
                         color = Color.LightGray
                     )
                 }
@@ -133,14 +135,14 @@ fun EventItem(
 
             if (isViewDaysLeft){
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    verticalArrangement = Arrangement.spacedBy(1.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = daysLeft.toString(),
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         color = Color.Gray
                     )
 
@@ -157,20 +159,21 @@ fun EventItem(
                             append(" left")
                         },
                         textAlign = TextAlign.Center,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
+                        lineHeight = 17.sp,
                         color = Color.Gray
                     )
                 }
             } else {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    verticalArrangement = Arrangement.spacedBy(1.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = "Turns",
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         color = Color.Gray
                     )
                     
@@ -195,7 +198,8 @@ fun EventItem(
                                 }
                             },
                             textAlign = TextAlign.Center,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
+                            lineHeight = 17.sp,
                             color = Color.Gray
                         )
                     }

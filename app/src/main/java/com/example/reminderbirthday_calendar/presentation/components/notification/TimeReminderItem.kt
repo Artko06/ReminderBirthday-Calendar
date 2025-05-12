@@ -40,7 +40,7 @@ fun TimeReminderItem(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = "${notificationEvent.daysBeforeEvent} days before " +
+                text = "${notificationEvent.daysBeforeEvent.let { if (it == 1) "$it day before" else "$it days before"}} " +
                         "at ${notificationEvent.hour}:${notificationEvent.minute.let { if (it < 10) "0${it}" else it }}",
                 fontWeight = FontWeight.Light,
                 fontSize = 12.sp

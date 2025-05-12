@@ -43,7 +43,7 @@ fun DaysLeftButton(
 
             Text(
                 text = "View days left",
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (isActive) MaterialTheme.colorScheme.primary
                 else MaterialTheme.colorScheme.onBackground,

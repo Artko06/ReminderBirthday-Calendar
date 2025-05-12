@@ -43,7 +43,7 @@ fun MonthYearText(
             Text(
                 text = (Month.fromNumber(numberMonth)?.name + " – " + numberYear.toString()),
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold
             )
