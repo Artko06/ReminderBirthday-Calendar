@@ -165,13 +165,18 @@ class EventsViewModel @Inject constructor(
     fun onEvent(event: EventsEvent) {
         when (event) {
             EventsEvent.ImportEventsFromContacts -> {
+                _eventsState.update { it.copy(
+                    isLoadingImportEvents = true
+                ) }
+
                 val permissionReadState =
                     ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
                             PackageManager.PERMISSION_GRANTED
 
                 if (!permissionReadState){
                     _eventsState.update { it.copy(
-                        isShowReadContactPermDialog = true
+                        isShowReadContactPermDialog = true,
+                        isLoadingImportEvents = false
                     ) }
                     return
                 }
@@ -202,6 +207,10 @@ class EventsViewModel @Inject constructor(
                             message = "${importEvents.size} imported events. " +
                                     "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
                     )
+
+                    _eventsState.update { it.copy(
+                        isLoadingImportEvents = false
+                    ) }
                 }
             }
 

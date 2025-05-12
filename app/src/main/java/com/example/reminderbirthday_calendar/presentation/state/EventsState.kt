@@ -11,5 +11,7 @@ data class EventsState(
     val isViewDaysLeft: Boolean = false,
 
     val isShowAllEventsDeleteDialog: Boolean = false,
-    val isShowReadContactPermDialog: Boolean = false
+    val isShowReadContactPermDialog: Boolean = false,
+
+    val isLoadingImportEvents: Boolean = false
 )

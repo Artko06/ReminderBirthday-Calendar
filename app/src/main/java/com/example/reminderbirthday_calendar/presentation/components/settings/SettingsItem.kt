@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.outlined.NotificationsActive
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -37,6 +38,7 @@ fun SettingsItem(
     isSwitchChecked: Boolean = false,
     onSwitchChange: ((Boolean) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
+    isLoadingStatus: Boolean = false
 ){
     Row(
         modifier = Modifier
@@ -47,12 +49,18 @@ fun SettingsItem(
             .padding(horizontal = 18.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = title,
-            modifier = Modifier.size(32.dp),
-            tint = Color.White
-        )
+        if (isLoadingStatus){
+            CircularProgressIndicator(
+                modifier = Modifier.size(32.dp)
+            )
+        } else {
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                modifier = Modifier.size(32.dp),
+                tint = Color.White
+            )
+        }
 
         Spacer(modifier = Modifier.width(16.dp))
 

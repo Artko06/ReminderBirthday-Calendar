@@ -319,7 +319,8 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.ImportEventsFromContacts) }
+                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.ImportEventsFromContacts) },
+                isLoadingStatus = importExportState.isLoadingReimportEvent
             )
         }
 
@@ -333,7 +334,8 @@ fun SettingsScreen(
                 onSwitchChange = {},
                 onClick = {
                     importExportViewModel.onEvent(event = ImportExportEvent.ExportEventsToJson)
-                }
+                },
+                isLoadingStatus = importExportState.isLoadingExportJson
             )
         }
 
@@ -347,7 +349,8 @@ fun SettingsScreen(
                 onSwitchChange = {},
                 onClick = {
                     importExportViewModel.onEvent(event = ImportExportEvent.ExportEventsToCsv)
-                }
+                },
+                isLoadingStatus = importExportState.isLoadingExportCsv
             )
         }
 
@@ -361,7 +364,8 @@ fun SettingsScreen(
                 onSwitchChange = {},
                 onClick = {
                     launcherPickerFile.launch("*/*")
-                }
+                },
+                isLoadingStatus = importExportState.isLoadingImportCsv || importExportState.isLoadingImportJson
             )
         }
 
@@ -375,7 +379,8 @@ fun SettingsScreen(
                 onSwitchChange = {},
                 onClick = {
                     importExportViewModel.onEvent(event = ImportExportEvent.UploadEventsToRemote)
-                }
+                },
+                isLoadingStatus = importExportState.isLoadingRemoteExport
             )
         }
 
@@ -389,7 +394,8 @@ fun SettingsScreen(
                 onSwitchChange = {},
                 onClick = {
                     importExportViewModel.onEvent(event = ImportExportEvent.GetEventsFromRemote)
-                }
+                },
+                isLoadingStatus = importExportState.isLoadingRemoteImport
             )
         }
 
@@ -414,7 +420,8 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.GoogleSignInOrOut) }
+                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.GoogleSignInOrOut) },
+                isLoadingStatus = importExportState.isLoadingSignInWithGoogle
             )
         }
 

@@ -73,7 +73,11 @@ class ImportExportViewModel @Inject constructor(
     fun onEvent(event: ImportExportEvent){
         when(event){
             ImportExportEvent.ExportEventsToJson -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
+                    _importExportState.update { it.copy(
+                        isLoadingExportJson = true
+                    ) }
+
                     _importExportState.update { it.copy(
                         statusExportJson = exportEventsToJsonToExternalDirUseCase()
                     ) }
@@ -90,6 +94,10 @@ class ImportExportViewModel @Inject constructor(
                             )
                     )
 
+                    _importExportState.update { it.copy(
+                        isLoadingExportJson = false
+                    ) }
+
                     if (_importExportState.value.statusExportJson == true){
                         _importExportSharedFlow.emit(value = ShowShareView(typeShareFile = TypeShareFile.JSON))
                     }
@@ -97,7 +105,11 @@ class ImportExportViewModel @Inject constructor(
             }
 
             ImportExportEvent.ExportEventsToCsv -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
+                    _importExportState.update { it.copy(
+                        isLoadingExportCsv = true
+                    ) }
+
                     _importExportState.update {
                         it.copy(
                             statusExportCsv = exportEventsToCsvToExternalDirUseCase()
@@ -115,6 +127,10 @@ class ImportExportViewModel @Inject constructor(
                             )
                     )
 
+                    _importExportState.update { it.copy(
+                        isLoadingExportCsv = false
+                    ) }
+
                     if (_importExportState.value.statusExportCsv == true){
                         _importExportSharedFlow.emit(value = ShowShareView(typeShareFile = TypeShareFile.CSV))
                     }
@@ -123,7 +139,15 @@ class ImportExportViewModel @Inject constructor(
 
             is ImportExportEvent.ImportEventsFromCsv -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    _importExportState.update { it.copy(
+                        isLoadingImportCsv = true
+                    ) }
+
                     val importedEvents = importEventsFromCsvUseCase.invoke(strUri = event.uri.toString())
+
+                    _importExportState.update { it.copy(
+                        isLoadingImportCsv = false
+                    ) }
 
                     if (importedEvents.isEmpty()) {
                         _importExportSharedFlow.emit(value = ShowToast(
@@ -138,7 +162,15 @@ class ImportExportViewModel @Inject constructor(
 
             is ImportExportEvent.ImportEventsFromJson -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    _importExportState.update { it.copy(
+                        isLoadingImportJson = true
+                    ) }
+
                     val importedEvents = importEventsFromJsonUseCase.invoke(strUri = event.uri.toString())
+
+                    _importExportState.update { it.copy(
+                        isLoadingImportJson = false
+                    ) }
 
                     if (importedEvents.isEmpty()) {
                         _importExportSharedFlow.emit(value = ShowToast(
@@ -152,13 +184,18 @@ class ImportExportViewModel @Inject constructor(
             }
 
             ImportExportEvent.ImportEventsFromContacts -> {
+                _importExportState.update { it.copy(
+                    isLoadingReimportEvent = true
+                ) }
+
                 var permissionReadState =
                     ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
                             PackageManager.PERMISSION_GRANTED
 
                 if (!permissionReadState){
                     _importExportState.update { it.copy(
-                        isShowReadContactPermDialog = true
+                        isShowReadContactPermDialog = true,
+                        isLoadingReimportEvent = false
                     ) }
                     return
                 }
@@ -167,22 +204,35 @@ class ImportExportViewModel @Inject constructor(
                     val importedEvents = importEventsFromContactsUseCase.invoke()
 
                     if (importedEvents.isEmpty()){
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            message = "0 imported events"
-                        )
-                        )
+                        _importExportState.update { it.copy(
+                            isLoadingReimportEvent = false
+                        ) }
+
+                        _importExportSharedFlow.emit(value = ShowToast(message = "0 imported events"))
                     } else{
+                        _importExportState.update { it.copy(
+                            isLoadingReimportEvent = false
+                        ) }
+
                         _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
                     }
                 }
             }
 
             ImportExportEvent.GoogleSignInOrOut -> {
+                _importExportState.update { it.copy(
+                    isLoadingSignInWithGoogle = true
+                ) }
+
                 if (!googleIsSignInUseCase()){
                     viewModelScope.launch {
                         val isSignIn = googleSignInUseCase()
 
                         if (!isSignIn) {
+                            _importExportState.update { it.copy(
+                                isLoadingSignInWithGoogle = false
+                            ) }
+
                             _importExportSharedFlow.emit(
                                 value = ShowToast(message = "Error sign-in")
                             )
@@ -191,7 +241,8 @@ class ImportExportViewModel @Inject constructor(
                             val email = getAuthGoogleEmailUseCase()
 
                             _importExportState.update { it.copy(
-                                googleAuthEmail = email
+                                googleAuthEmail = email,
+                                isLoadingSignInWithGoogle = false
                             ) }
 
                             _importExportSharedFlow.emit(
@@ -206,7 +257,8 @@ class ImportExportViewModel @Inject constructor(
                         googleSignOutUseCase()
 
                         _importExportState.update { it.copy(
-                            googleAuthEmail = null
+                            googleAuthEmail = null,
+                            isLoadingSignInWithGoogle = false
                         ) }
 
                         _importExportSharedFlow.emit(
@@ -217,8 +269,16 @@ class ImportExportViewModel @Inject constructor(
             }
 
             ImportExportEvent.GetEventsFromRemote -> {
+                _importExportState.update { it.copy(
+                    isLoadingRemoteImport = true
+                ) }
+
                 viewModelScope.launch(Dispatchers.IO) {
                     if (!googleIsSignInUseCase()){
+                        _importExportState.update { it.copy(
+                            isLoadingRemoteImport = false
+                        ) }
+
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "You should sigh-in with google"
                         )
@@ -227,9 +287,19 @@ class ImportExportViewModel @Inject constructor(
                 }
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    if (!googleIsSignInUseCase()) return@launch
+                    if (!googleIsSignInUseCase()) {
+                        _importExportState.update { it.copy(
+                            isLoadingRemoteImport = false
+                        ) }
+
+                        return@launch
+                    }
 
                     if (getTimeLastUploadToRemoteUseCase() == null){
+                        _importExportState.update { it.copy(
+                            isLoadingRemoteImport = false
+                        ) }
+
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "You don't have backups on remote storage"
                         )
@@ -242,11 +312,18 @@ class ImportExportViewModel @Inject constructor(
                     val backupTime = getTimeLastUploadToRemoteUseCase()
 
                     if (importedRemoteEvents.isEmpty()){
+                        _importExportState.update { it.copy(
+                            isLoadingRemoteImport = false
+                        ) }
+
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "0 imported events"
                         )
                         )
                     } else{
+                        _importExportState.update { it.copy(
+                            isLoadingRemoteImport = false
+                        ) }
 
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "Time this backup is $backupTime"
@@ -259,8 +336,16 @@ class ImportExportViewModel @Inject constructor(
             }
 
             ImportExportEvent.UploadEventsToRemote -> {
+                _importExportState.update { it.copy(
+                    isLoadingRemoteExport = true
+                ) }
+
                 viewModelScope.launch(Dispatchers.IO) {
                     if (!googleIsSignInUseCase()){
+                        _importExportState.update { it.copy(
+                            isLoadingRemoteExport = false
+                        ) }
+
                         _importExportSharedFlow.emit(value = ShowToast(
                             message = "You should sigh-in with google"
                         )
@@ -273,14 +358,21 @@ class ImportExportViewModel @Inject constructor(
 
                 viewModelScope.launch(Dispatchers.IO) {
                     if (getAllEventUseCase.invoke().first().isEmpty()){
+                        _importExportState.update { it.copy(
+                            isLoadingRemoteExport = false
+                        ) }
+
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "You have 0 events!"
-                        )
-                        )
+                            message = "You have 0 events!"))
+
                         return@launch
                     }
 
                     val statusUpload = uploadEventsToRemoteUseCase.invoke()
+
+                    _importExportState.update { it.copy(
+                        isLoadingRemoteExport = false
+                    ) }
 
                     if(statusUpload){
                         _importExportSharedFlow.emit(value = ShowToast(

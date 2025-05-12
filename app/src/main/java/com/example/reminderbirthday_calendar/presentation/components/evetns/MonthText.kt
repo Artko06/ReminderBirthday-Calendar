@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,14 +21,15 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun MonthYearText(
+    modifier: Modifier = Modifier,
     numberMonth: Int,
     numberYear: Int
 ){
     Box(
         modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(12.dp))
-            .padding(horizontal = 12.dp, vertical = 4.dp),
-        contentAlignment = Alignment.Center
+            .then(modifier)
+            .background(color = MaterialTheme.colorScheme.background)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ImportContacts
 import androidx.compose.material.icons.filled.SentimentVeryDissatisfied
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -129,16 +130,22 @@ fun EventsScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = Icons.Filled.SentimentVeryDissatisfied,
-                    contentDescription = "No events icon",
-                    modifier = Modifier.size(100.dp)
-                )
+                if (eventState.isLoadingImportEvents){
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(100.dp)
+                    )
+                } else{
+                    Icon(
+                        imageVector = Icons.Filled.SentimentVeryDissatisfied,
+                        contentDescription = "No events icon",
+                        modifier = Modifier.size(100.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(36.dp))
 
                 Text(
-                    text = "Список событий пуст",
+                    text = "Event list is empty",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center
@@ -147,7 +154,7 @@ fun EventsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Импортируйте события или добавьте вручную",
+                    text = "Import events from contacts, file or add manually",
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center

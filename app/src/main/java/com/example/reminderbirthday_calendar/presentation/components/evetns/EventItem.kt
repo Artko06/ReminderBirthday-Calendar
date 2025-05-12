@@ -213,13 +213,13 @@ fun EventItem(
 @Composable
 fun EventItemPreview() {
     EventItem(
-        name = "Артём",
-        surname = "Кохан",
-        date = "03.01.2006",
-        yearMatter = false,
+        name = "Elon",
+        surname = "Musk",
+        date = "28.06.1971",
+        yearMatter = true,
         eventType = EventType.BIRTHDAY,
         sortTypeEvent = SortTypeEvent.RELATIVE,
-        age = 20,
+        age = 54,
         isViewDaysLeft = true,
         daysLeft = 365,
         image = null
