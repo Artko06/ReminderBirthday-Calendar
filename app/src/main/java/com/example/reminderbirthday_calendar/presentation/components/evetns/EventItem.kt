@@ -120,17 +120,15 @@ fun EventItem(
                     color = Color.White
                 )
 
-                Row {
-                    Text(
-                        text = (if (yearMatter) date else date.replaceRange(6, 10, "????")) + " — ${
-                            eventType.name.lowercase().replaceFirstChar { it.uppercase() }
-                        }",
-                        fontWeight = FontWeight.Light,
-                        fontSize = 12.sp,
-                        lineHeight = 13.sp,
-                        color = Color.LightGray
-                    )
-                }
+                Text(
+                    text = (if (yearMatter) date else date.replaceRange(6, 10, "????")) + " — ${
+                        eventType.name.lowercase().replaceFirstChar { it.uppercase() }
+                    }",
+                    fontWeight = FontWeight.Light,
+                    fontSize = 12.sp,
+                    lineHeight = 13.sp,
+                    color = Color.LightGray
+                )
             }
 
             if (isViewDaysLeft){

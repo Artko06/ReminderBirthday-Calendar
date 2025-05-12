@@ -1,5 +1,6 @@
 package com.example.reminderbirthday_calendar.presentation.event
 
+import com.example.domain.models.event.ContactInfo
 import com.example.domain.models.event.EventType
 import com.example.domain.models.event.SortTypeEvent
 import java.time.LocalDate
@@ -7,6 +8,10 @@ import java.time.LocalDate
 sealed class AddEvent {
     object ShowDatePickerDialog: AddEvent()
     object CloseDatePickerDialog: AddEvent()
+
+    object ShowListContacts: AddEvent()
+    object CloseListContacts: AddEvent()
+    data class OnSelectContact(val contact: ContactInfo): AddEvent()
 
     data class OnPickPhoto(val photo: ByteArray?): AddEvent() {
         override fun equals(other: Any?): Boolean {

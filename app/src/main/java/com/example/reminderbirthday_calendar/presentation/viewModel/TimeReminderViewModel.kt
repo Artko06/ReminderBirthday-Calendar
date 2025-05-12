@@ -10,6 +10,7 @@ import com.example.domain.useCase.settings.notification.UpsertNotificationEventU
 import com.example.reminderbirthday_calendar.presentation.event.TimeReminderEvent
 import com.example.reminderbirthday_calendar.presentation.state.TimeReminderState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -42,7 +43,7 @@ class TimeReminderViewModel @Inject constructor(
     fun onEvent(event: TimeReminderEvent){
         when(event){
             is TimeReminderEvent.EditNotificationEvent -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     upsertNotificationEventUseCase.invoke(notificationEvent = event.notificationEvent)
 
                     updateListTimeReminder()
@@ -51,17 +52,15 @@ class TimeReminderViewModel @Inject constructor(
             }
 
             is TimeReminderEvent.ChangeStatusByIdNotificationEvent -> {
-                viewModelScope.launch {
-                    val updatedList = _timeReminderState.value.listTimeReminder.map { notification ->
-                        if (notification.id == event.id) {
-                            notification.copy(statusOn = !notification.statusOn)
-                        } else notification
-                    }
-
-                    _timeReminderState.update { it.copy(
-                        listTimeReminder = updatedList
-                    ) }
+                val updatedList = _timeReminderState.value.listTimeReminder.map { notification ->
+                    if (notification.id == event.id) {
+                        notification.copy(statusOn = !notification.statusOn)
+                    } else notification
                 }
+
+                _timeReminderState.update { it.copy(
+                    listTimeReminder = updatedList
+                ) }
             }
 
             TimeReminderEvent.CloseEditTimeReminderDialog -> {
@@ -77,7 +76,7 @@ class TimeReminderViewModel @Inject constructor(
             }
 
             TimeReminderEvent.SaveButtonClick -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     val listTimeReminder = _timeReminderState.value.listTimeReminder
 
                     upsertAllNotificationEventsUseCase.invoke(notificationEvents = listTimeReminder)
@@ -90,7 +89,7 @@ class TimeReminderViewModel @Inject constructor(
     }
 
     private fun updateListTimeReminder(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val listTimeReminder = getAllNotificationEventUseCase.invoke().first()
 
             _timeReminderState.update { it.copy(

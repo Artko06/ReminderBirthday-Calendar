@@ -1,8 +1,13 @@
 package com.example.reminderbirthday_calendar.presentation.viewModel
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.event.EventType
+import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
@@ -10,6 +15,7 @@ import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSha
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow.ShowToast
 import com.example.reminderbirthday_calendar.presentation.state.AddEventState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,16 +33,20 @@ import javax.inject.Inject
 @HiltViewModel
 class AddEventViewModel @Inject constructor(
     private val upsertEventUseCase: UpsertEventUseCase,
-    private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase
+    private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
+    private val importContactsUseCase: ImportContactsUseCase,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _addEventState = MutableStateFlow(AddEventState())
     private val _isAddButtonEnabled = _addEventState.asStateFlow()
         .map { state ->
-            state.valueName.trim().isNotEmpty()
-                    && state.date != null
-                    && state.date.year <= LocalDate.now().year
-                    && (state.date.year < LocalDate.now().year ||
-                    state.date.dayOfYear <= LocalDate.now().dayOfYear)
+            if (state.valueName.trim().isEmpty()) false
+            else if (state.date == null) false
+            else if (state.yearMatter && state.date.year > LocalDate.now().year) false
+            else if (state.yearMatter &&
+                state.date.year == LocalDate.now().year &&
+                state.date.dayOfYear > LocalDate.now().dayOfYear) false
+            else true
         }
         .stateIn(
             scope = viewModelScope,
@@ -174,7 +184,42 @@ class AddEventViewModel @Inject constructor(
                 }
             }
 
+            AddEvent.CloseListContacts -> {
+                _addEventState.update { it.copy(
+                    isShowListContacts = false,
+                    isLoadingContactList = false
+                ) }
+            }
 
+            is AddEvent.OnSelectContact -> {
+                _addEventState.update { it.copy(
+                    valueName = event.contact.name,
+                    valueSurname = event.contact.surname,
+                    pickedPhoto = event.contact.image,
+                    isShowListContacts = false,
+                    isLoadingContactList = false
+                ) }
+            }
+
+            AddEvent.ShowListContacts -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    _addEventState.update { it.copy(
+                        isLoadingContactList = true
+                    ) }
+
+                    val permissionReadState =
+                        ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
+                                PackageManager.PERMISSION_GRANTED
+
+                    val contacts = if (permissionReadState) importContactsUseCase() else emptyList()
+
+                    _addEventState.update { it.copy(
+                        listContacts = contacts,
+                        isShowListContacts = true,
+                        isLoadingContactList = false
+                    ) }
+                }
+            }
         }
     }
 }

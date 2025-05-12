@@ -3,11 +3,15 @@ package com.example.reminderbirthday_calendar.presentation.components.addWindow
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.AutoStories
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -27,6 +31,9 @@ fun TextEntry(
     description: String,
     hint: String,
     leadingIcon: ImageVector,
+    trailingIcon: ImageVector? = null,
+    trailingIconClick: (() -> Unit)? = null,
+    isLoadingTrailingIcon: Boolean = false,
     textValue: String,
     onValueChanged: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Unspecified,
@@ -55,6 +62,29 @@ fun TextEntry(
                     tint = MaterialTheme.colorScheme.primary
                 )
             },
+            trailingIcon = {
+                if (trailingIcon != null && trailingIconClick != null){
+                    if (isLoadingTrailingIcon) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(28.dp)
+                                .padding(end = 8.dp, top = 4.dp),
+                            strokeWidth = 3.dp
+                        )
+                    } else {
+                        IconButton(
+                            onClick = { trailingIconClick() },
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Icon(
+                                imageVector = trailingIcon,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                }
+            },
             placeholder = {
                 Text(
                     text = hint,
@@ -74,14 +104,16 @@ fun TextEntry(
 @Composable
 fun TextEntryPreview() {
     TextEntry(
-        description = "Email address",
+        description = "Name",
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp, 0.dp, 10.dp, 5.dp)
         ,
         hint = "",
-        leadingIcon = Icons.Default.Email,
+        leadingIcon = Icons.Default.Person,
         textValue = "Some text",
-        onValueChanged = {}
+        onValueChanged = {},
+        trailingIcon = Icons.Filled.AutoStories,
+        trailingIconClick = {}
     )
 }

@@ -100,6 +100,28 @@ class ContactAppRepositoryImpl(
     }
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    private fun getPhoneNumber(resolver: ContentResolver, contactId: String): String {
+        val phoneCursor = resolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
+            "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
+            arrayOf(contactId),
+            null
+        )
+
+        var phone = ""
+        phoneCursor?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                phone = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                ) ?: ""
+            }
+        }
+
+        return phone
+    }
+
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
     private fun getContacts(resolver: ContentResolver): List<ContactInfo> {
         val contactsInfo = mutableListOf<ContactInfo>()
         val idsSet = mutableSetOf<String>() // For filter duplicate
@@ -148,6 +170,7 @@ class ContactAppRepositoryImpl(
                 val middleName = cursor.getStringOrNull(middleNameValue) ?: ""
                 val lastName = cursor.getStringOrNull(lastNameValue) ?: ""
                 val suffix = cursor.getStringOrNull(suffixValue) ?: ""
+                val phone = getPhoneNumber(contactId = id, resolver = resolver)
 
                 // The format at this time is first name, last name (+ extra stuff)
                 val birthdayFirstName = "$prefix $firstName $middleName".replace(',', ' ').trim()
@@ -180,6 +203,7 @@ class ContactAppRepositoryImpl(
                     id = id,
                     name = birthdayFirstName,
                     surname = birthdayLastName,
+                    phone = phone,
                     image = image,
                 )
                 contactsInfo.add(contactInfo)
@@ -187,7 +211,7 @@ class ContactAppRepositoryImpl(
 
                 Log.d(
                     "import",
-                    "birthday name is: ${contactInfo.name} ${contactInfo.surname} for id $id"
+                    "birthday name is: ${contactInfo.name} ${contactInfo.surname} for id $id, phone = $phone"
                 )
             }
         }

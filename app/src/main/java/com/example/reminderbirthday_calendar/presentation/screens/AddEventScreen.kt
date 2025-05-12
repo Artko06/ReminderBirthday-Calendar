@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.NoteAlt
@@ -56,6 +57,7 @@ import com.example.reminderbirthday_calendar.presentation.components.addWindow.S
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorSortEventTypeForAdd
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.TextEntry
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.CustomDatePickerDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.SelectContactDialog
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.AddEventViewModel
@@ -111,6 +113,18 @@ fun AddEventScreen(
             },
             changeValueDatePicker = { date ->
                 addEventViewModel.onEvent(event = AddEvent.ChangeDate(date))
+            }
+        )
+    }
+
+    if (addEventState.isShowListContacts){
+        SelectContactDialog(
+            contacts = addEventState.listContacts,
+            onSelectContact = { contact ->
+                addEventViewModel.onEvent(event = AddEvent.OnSelectContact(contact))
+            },
+            onDismiss = {
+                addEventViewModel.onEvent(event = AddEvent.CloseListContacts)
             }
         )
     }
@@ -203,6 +217,11 @@ fun AddEventScreen(
                 description = "Name",
                 hint = "",
                 leadingIcon = Icons.Filled.Person,
+                trailingIcon = Icons.Filled.AutoStories,
+                trailingIconClick = {
+                    addEventViewModel.onEvent(event = AddEvent.ShowListContacts)
+                },
+                isLoadingTrailingIcon = addEventState.isLoadingContactList,
                 textValue = addEventState.valueName,
                 onValueChanged = { name ->
                     addEventViewModel.onEvent(event = AddEvent.ChangeValueName(name))
@@ -217,6 +236,11 @@ fun AddEventScreen(
                 hint = "",
                 leadingIcon = Icons.Filled.Person,
                 textValue = addEventState.valueSurname,
+                trailingIcon = Icons.Filled.AutoStories,
+                trailingIconClick = {
+                    addEventViewModel.onEvent(event = AddEvent.ShowListContacts)
+                },
+                isLoadingTrailingIcon = addEventState.isLoadingContactList,
                 onValueChanged = { surname ->
                     addEventViewModel.onEvent(event = AddEvent.ChangeValueSurname(surname))
                 },
