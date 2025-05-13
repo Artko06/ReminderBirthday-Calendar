@@ -1,54 +1,71 @@
 package com.example.domain.models.mappers
 
 import com.example.domain.models.event.Event
-import com.example.domain.models.event.EventType
 import com.example.domain.models.notification.AlarmEventItem
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.Month
+import java.time.YearMonth
 
-fun Event.toAlarmEventItem(
+fun List<Event>.toAlarmEventItem(
     numberNotification: Int,
     hourNotify: Int,
     minuteNotify: Int,
     daysBeforeEvent: Int
 ): AlarmEventItem {
-    val event = this
+    val events = this
+    val originalDate = events.first().originalDate
 
-    val nowDate = LocalDate.now()
-    val nowYear = nowDate.year
-    val nowDayOfYear = nowDate.dayOfYear
-    val eventDayOfYear =
-        event.originalDate.withYear(nowYear).minusDays(daysBeforeEvent.toLong()).dayOfYear
-    var notificationDate = event.originalDate
-        .withYear(if (nowDayOfYear > eventDayOfYear) nowYear + 1 else nowYear)
+    val nowDateTime = LocalDateTime.now()
+    val currentYear = nowDateTime.year
+
+    val eventMonth = originalDate.month
+    val eventDay = originalDate.dayOfMonth
+    val eventDateThisYear = getValidDate(currentYear, eventMonth, eventDay)
+
+    val notificationDateTimeThisYear = eventDateThisYear
         .minusDays(daysBeforeEvent.toLong())
+        .atTime(hourNotify, minuteNotify)
 
-    val alarmDateTime = notificationDate.atTime(hourNotify, minuteNotify)
+    val finalEventDate = if (notificationDateTimeThisYear.isBefore(nowDateTime)) {
+        getValidDate(currentYear + 1, eventMonth, eventDay)
+    } else {
+        eventDateThisYear
+    }
 
+    val alarmDateTime = finalEventDate
+        .minusDays(daysBeforeEvent.toLong())
+        .atTime(hourNotify, minuteNotify)
 
     val message = buildString {
-        if (daysBeforeEvent != 0) append("Congratulate ${event.nameContact}")
-        else append("CONGRATULATE ${event.nameContact}")
-        if (!event.surnameContact.isNullOrBlank()) append(" ${event.surnameContact}")
-        if (event.eventType != EventType.OTHER) {
-            append(
-                " with ${
-                    event.eventType.name.lowercase().replaceFirstChar { it.uppercase() }
-                }")
-        }
-        if (daysBeforeEvent != 0) {
-            if (daysBeforeEvent == 1) append(" in $daysBeforeEvent day")
-            else append(" in $daysBeforeEvent days")
-        }
-        if (!event.notes.isNullOrBlank()) {
-            if (notes.length > 20) append(" — ${event.notes.take(20)}...")
-            else append(" — ${event.notes.take(20)}")
-        }
+        append("\uD83C\uDF89 ") // Firework symbol
+
+        append(
+            if (daysBeforeEvent != 0) "Congratulate" else "CONGRATULATE"
+        )
+
+        append(" ${events.joinToString(", ") {
+            buildString {
+                append(it.nameContact)
+                if (!it.surnameContact.isNullOrBlank()) append(" ${it.surnameContact}")
+            }
+        }}")
+
+        if (daysBeforeEvent > 0) {
+            append(" in $daysBeforeEvent ${if (daysBeforeEvent == 1) "day" else "days"}")
+        } else append(" today")
     }
 
     return AlarmEventItem(
-        id = this.id,
+        id = this.first().id,
         numberNotification = numberNotification,
         message = message,
         dateTime = alarmDateTime
     )
+}
+
+private fun getValidDate(year: Int, month: Month, day: Int): LocalDate {
+    val maxDayOfMonth = YearMonth.of(year, month).lengthOfMonth()
+    val safeDay = minOf(day, maxDayOfMonth)
+    return LocalDate.of(year, month, safeDay)
 }

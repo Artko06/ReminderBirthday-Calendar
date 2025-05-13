@@ -51,7 +51,8 @@ fun SettingsItem(
     ) {
         if (isLoadingStatus){
             CircularProgressIndicator(
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
+                color = Color.White
             )
         } else {
             Icon(

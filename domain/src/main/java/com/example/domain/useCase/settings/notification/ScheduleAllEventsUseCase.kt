@@ -5,6 +5,7 @@ import com.example.domain.repository.AlarmEventScheduler
 import com.example.domain.repository.EventRepository
 import com.example.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.first
+import java.time.LocalDate
 
 class ScheduleAllEventsUseCase(
     private val alarmRepository: AlarmEventScheduler,
@@ -12,13 +13,15 @@ class ScheduleAllEventsUseCase(
     private val settingsRepository: SettingsRepository
 ) {
     suspend operator fun invoke() {
-        val notificationEvents = settingsRepository.getAllNotificationEvent().first()
+        val notificationEvents = settingsRepository.getAllNotificationEvent().first().distinct()
         val allEvent = eventRepository.getAllEvents().first()
+
+        val groupEvents = allEvent.groupBy { it.originalDate.withYear(LocalDate.now().year) }
 
         notificationEvents.forEach { notification ->
             if (notification.statusOn) {
-                allEvent.forEach { event ->
-                    alarmRepository.schedule(item = event.toAlarmEventItem(
+                groupEvents.forEach { date, events ->
+                    alarmRepository.schedule(item = events.toAlarmEventItem(
                         numberNotification = notification.id,
                         hourNotify = notification.hour,
                         minuteNotify = notification.minute,
