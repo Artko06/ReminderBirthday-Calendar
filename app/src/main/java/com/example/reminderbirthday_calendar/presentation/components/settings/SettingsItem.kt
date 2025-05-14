@@ -28,6 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.domain.models.settings.ThemeType
+import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.ui.theme.platinum
 
 @Composable
 fun SettingsItem(
@@ -42,7 +45,10 @@ fun SettingsItem(
 ){
     Row(
         modifier = Modifier
-            .background(color = Color.DarkGray, shape = RoundedCornerShape(percent = 35))
+            .background(
+                color = if (LocalTheme.current == ThemeType.DARK) Color.DarkGray else platinum,
+                shape = RoundedCornerShape(percent = 35)
+            )
             .clip(shape = RoundedCornerShape(percent = 35))
             .fillMaxWidth()
             .clickable(enabled = onClick != null) { onClick?.invoke() }
@@ -52,14 +58,14 @@ fun SettingsItem(
         if (isLoadingStatus){
             CircularProgressIndicator(
                 modifier = Modifier.size(32.dp),
-                color = Color.White
+                color = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
             )
         } else {
             Icon(
                 imageVector = icon,
                 contentDescription = title,
                 modifier = Modifier.size(32.dp),
-                tint = Color.White
+                tint = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
             )
         }
 
@@ -72,7 +78,7 @@ fun SettingsItem(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color.White
+                color = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
             )
 
             Spacer(modifier = Modifier.height(3.dp))
@@ -81,7 +87,7 @@ fun SettingsItem(
                 text = subtitle,
                 fontWeight = FontWeight.Light,
                 fontSize = 12.sp,
-                color = Color.LightGray
+                color = if (LocalTheme.current == ThemeType.DARK) Color.LightGray else Color.DarkGray
             )
         }
         if (hasSwitch) {
@@ -94,7 +100,7 @@ fun SettingsItem(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                 contentDescription = null,
                 modifier = Modifier.size(18.dp),
-                tint = Color.White
+                tint = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
             )
         }
     }

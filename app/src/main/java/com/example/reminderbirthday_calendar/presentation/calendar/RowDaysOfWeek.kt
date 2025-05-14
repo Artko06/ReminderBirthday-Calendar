@@ -1,0 +1,53 @@
+package com.example.reminderbirthday_calendar.presentation.calendar
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.domain.models.settings.ThemeType
+import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.ui.theme.darkRed
+import java.time.DayOfWeek
+import java.time.LocalDate
+
+@Composable
+fun RowDaysOfWeek(
+    modifier: Modifier = Modifier
+){
+    val daysOfWeek = DayOfWeek.entries
+
+    Row(
+        modifier = Modifier.then(modifier),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        daysOfWeek.forEach { day ->
+            Text(
+                text = day.name.lowercase().replaceFirstChar { it.uppercase() }.take(3),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f),
+                color = if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) { darkRed }
+                    else if(day == LocalDate.now().dayOfWeek) { MaterialTheme.colorScheme.primary }
+                    else { if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black },
+                fontFamily = FontFamily.Serif,
+                maxLines = 1
+            )
+        }
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun RowDaysOfWeekPreview(){
+    RowDaysOfWeek(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+    )
+}

@@ -14,6 +14,8 @@ import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEvent
 import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowAnniversaryEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowBirthdayEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowOtherEventUseCase
+import com.example.domain.useCase.settings.theme.GetThemeUseCase
+import com.example.domain.useCase.settings.theme.SetThemeUseCase
 import com.example.reminderbirthday_calendar.presentation.event.PreferencesEvent
 import com.example.reminderbirthday_calendar.presentation.state.PreferencesState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +42,9 @@ class PreferencesViewModel @Inject constructor(
     private val setStatusShowAnniversaryEventUseCase: SetStatusShowAnniversaryEventUseCase,
     private val setStatusShowBirthdayEventUseCase: SetStatusShowBirthdayEventUseCase,
     private val setStatusShowOtherEventUseCase: SetStatusShowOtherEventUseCase,
+
+    private val getThemeUseCase: GetThemeUseCase,
+    private val setThemeUseCase: SetThemeUseCase,
 
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
@@ -157,6 +162,28 @@ class PreferencesViewModel @Inject constructor(
                     it.copy(
                         isShowStatusTypeEventsDialog = false
                     )
+                }
+            }
+
+            is PreferencesEvent.ChangeAppTheme -> {
+                viewModelScope.launch {
+                    setThemeUseCase.invoke(theme = event.theme)
+                }
+            }
+
+            PreferencesEvent.CloseAppThemeDialog -> {
+                _preferencesState.update { it.copy(
+                    isShowAppThemeDialog = false
+                ) }
+            }
+            PreferencesEvent.ShowAppThemeDialog -> {
+                viewModelScope.launch {
+                    val theme = getThemeUseCase.invoke().first()
+
+                    _preferencesState.update { it.copy(
+                        isShowAppThemeDialog = true,
+                        selectedTheme = theme
+                    ) }
                 }
             }
 

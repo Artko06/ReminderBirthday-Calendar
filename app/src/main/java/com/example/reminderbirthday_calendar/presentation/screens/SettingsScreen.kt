@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,6 +47,7 @@ import com.example.reminderbirthday_calendar.intents.shareIntent.shareFileIntent
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteAllEventsDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.SortEventTypeDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ThemeDialog
 import com.example.reminderbirthday_calendar.presentation.components.settings.NotificationPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.settings.RedClearButton
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
@@ -184,6 +184,18 @@ fun SettingsScreen(
         )
     }
 
+    if (preferencesState.isShowAppThemeDialog){
+        ThemeDialog(
+            onDismiss = {
+                preferencesViewModel.onEvent(event = PreferencesEvent.CloseAppThemeDialog)
+            },
+            selectedTheme = preferencesState.selectedTheme,
+            onSelectTheme = {
+                theme -> preferencesViewModel.onEvent(event = PreferencesEvent.ChangeAppTheme(theme))
+            }
+        )
+    }
+
     LazyColumn(
         state = listState,
         modifier = Modifier
@@ -238,7 +250,9 @@ fun SettingsScreen(
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ShowAppThemeDialog)
+                }
             )
         }
 
@@ -476,13 +490,4 @@ fun SettingsScreen(
 
 
     }
-}
-
-
-@Preview(showSystemUi = true)
-@Composable
-fun SettingsScreenPreview() {
-    SettingsScreen(
-        onNavigateToTimeReminderScreen = {}
-    )
 }

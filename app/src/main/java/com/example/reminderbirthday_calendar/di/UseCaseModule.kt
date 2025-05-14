@@ -48,6 +48,8 @@ import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEvent
 import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowAnniversaryEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowBirthdayEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.SetStatusShowOtherEventUseCase
+import com.example.domain.useCase.settings.theme.GetThemeUseCase
+import com.example.domain.useCase.settings.theme.SetThemeUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.SetStatusViewDaysLeftUseCase
 import dagger.Module
@@ -336,5 +338,17 @@ object UseCaseModule {
     @Singleton
     fun provideImportContactsUseCase(contactAppRepository: ContactAppRepository): ImportContactsUseCase{
         return ImportContactsUseCase(repository = contactAppRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetThemeUseCase(settingsRepository: SettingsRepository): GetThemeUseCase{
+        return GetThemeUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetThemeUseCase(settingsRepository: SettingsRepository): SetThemeUseCase{
+        return SetThemeUseCase(repository = settingsRepository)
     }
 }

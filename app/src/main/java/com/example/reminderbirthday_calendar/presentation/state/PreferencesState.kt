@@ -1,5 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.state
 
+import com.example.domain.models.settings.ThemeType
+
 data class PreferencesState(
     val isEnableWesternZodiac: Boolean = false,
     val isEnableChineseZodiac: Boolean = false,
@@ -11,5 +13,8 @@ data class PreferencesState(
     val isEnableShowOtherEvent: Boolean = false,
 
     val isShowStatusTypeEventsDialog: Boolean = false,
-    val isShowSettingsNotificationDialog: Boolean = false
+    val isShowSettingsNotificationDialog: Boolean = false,
+    val isShowAppThemeDialog: Boolean = false,
+
+    val selectedTheme: ThemeType = ThemeType.SYSTEM
 )

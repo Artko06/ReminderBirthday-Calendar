@@ -36,10 +36,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.event.EventType
 import com.example.domain.models.event.SortTypeEvent
+import com.example.domain.models.settings.ThemeType
+import com.example.reminderbirthday_calendar.LocalTheme
 import com.example.reminderbirthday_calendar.ui.theme.blueAzure
 import com.example.reminderbirthday_calendar.ui.theme.darkGreen
 import com.example.reminderbirthday_calendar.ui.theme.darkPurple
 import com.example.reminderbirthday_calendar.ui.theme.darkRed
+import com.example.reminderbirthday_calendar.ui.theme.platinum
 import com.example.reminderbirthday_calendar.ui.theme.yellow
 
 @Composable
@@ -59,7 +62,10 @@ fun EventItem(
         modifier = Modifier
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(24.dp))
-            .background(Color.DarkGray)
+            .background(
+                color = if (LocalTheme.current == ThemeType.DARK) Color.DarkGray else platinum,
+                shape = RoundedCornerShape(24.dp)
+            )
             .height(IntrinsicSize.Min)
     ) {
         Box(
@@ -102,7 +108,7 @@ fun EventItem(
                     imageVector = Icons.Filled.AccountCircle,
                     contentDescription = "Profile",
                     modifier = Modifier.size(46.dp),
-                    tint = Color.White
+                    tint = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.DarkGray
                 )
             }
 
@@ -117,7 +123,7 @@ fun EventItem(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     lineHeight = 21.sp,
-                    color = Color.White
+                    color = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
                 )
 
                 Text(
@@ -127,7 +133,7 @@ fun EventItem(
                     fontWeight = FontWeight.Light,
                     fontSize = 12.sp,
                     lineHeight = 13.sp,
-                    color = Color.LightGray
+                    color = if (LocalTheme.current == ThemeType.DARK) Color.LightGray else Color.DarkGray
                 )
             }
 

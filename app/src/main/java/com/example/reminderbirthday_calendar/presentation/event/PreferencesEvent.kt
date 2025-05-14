@@ -1,5 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.event
 
+import com.example.domain.models.settings.ThemeType
+
 sealed class PreferencesEvent {
     object ChangeChineseZodiacStatus: PreferencesEvent()
     object ChangeWesternZodiacStatus: PreferencesEvent()
@@ -12,4 +14,8 @@ sealed class PreferencesEvent {
 
     object ShowSettingsNotificationDialog: PreferencesEvent()
     object CloseSettingsNotificationDialog: PreferencesEvent()
+
+    data class ChangeAppTheme(val theme: ThemeType): PreferencesEvent()
+    object ShowAppThemeDialog: PreferencesEvent()
+    object CloseAppThemeDialog: PreferencesEvent()
 }
