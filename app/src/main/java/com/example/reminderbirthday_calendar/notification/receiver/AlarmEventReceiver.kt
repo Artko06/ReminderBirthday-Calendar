@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.reminderbirthday_calendar.di.AlarmEventReceiverEntryPoint
+import com.example.reminderbirthday_calendar.intents.openApp.pendingIntent
 import com.example.reminderbirthday_calendar.notification.common.EXTRA_DAY_NOTIFICATION
 import com.example.reminderbirthday_calendar.notification.common.EXTRA_HOUR_NOTIFICATION
 import com.example.reminderbirthday_calendar.notification.common.EXTRA_ID_EVENT
@@ -60,6 +61,8 @@ class AlarmEventReceiver: BroadcastReceiver() {
 //            .setColor(ContextCompat.getColor(context, com.example.reminderbirthday_calendar.R.color.blue)) // Set background color
             .setContentTitle("Birthday Reminder")
             .setContentText(message)
+            .setContentIntent(pendingIntent(context = context))
+            .setAutoCancel(true)
             .build()
 
         val nowDateTime = LocalDate.now().plusYears(1).atTime(hourNotification, minuteNotification)

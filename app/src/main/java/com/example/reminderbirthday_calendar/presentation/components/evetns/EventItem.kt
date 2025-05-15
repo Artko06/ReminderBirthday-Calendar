@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -137,7 +138,25 @@ fun EventItem(
                 )
             }
 
-            if (isViewDaysLeft){
+            if (daysLeft == 0){
+                Box(
+                    modifier = Modifier.padding(end = 8.dp),
+                    contentAlignment = Alignment.Center
+                ){
+                    Icon(
+                        imageVector = Icons.Filled.Cake,
+                        contentDescription = null,
+                        tint = when(sortTypeEvent){
+                            SortTypeEvent.FAMILY -> darkRed
+                            SortTypeEvent.RELATIVE -> yellow
+                            SortTypeEvent.FRIEND -> blueAzure
+                            SortTypeEvent.COLLEAGUE -> darkGreen
+                            SortTypeEvent.OTHER -> darkPurple
+                        }
+                    )
+                }
+            }
+            else if (isViewDaysLeft){
                 Column(
                     verticalArrangement = Arrangement.spacedBy(1.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
