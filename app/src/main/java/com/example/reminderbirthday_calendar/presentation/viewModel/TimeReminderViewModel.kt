@@ -63,6 +63,33 @@ class TimeReminderViewModel @Inject constructor(
                 ) }
             }
 
+            is TimeReminderEvent.ChangeDaysBeforeNotificationEvent -> {
+                val updatedList = _timeReminderState.value.listTimeReminder.map { notification ->
+                    if (notification.id == event.notificationEvent.id){
+                        notification.copy(daysBeforeEvent = event.notificationEvent.daysBeforeEvent)
+                    } else notification
+                }
+
+                _timeReminderState.update { it.copy(
+                    listTimeReminder = updatedList
+                ) }
+            }
+
+            is TimeReminderEvent.ChangeHourMinuteNotificationEvent -> {
+                val updatedList = _timeReminderState.value.listTimeReminder.map { notification ->
+                    if (notification.id == event.notificationEvent.id){
+                        notification.copy(
+                            hour = event.notificationEvent.hour,
+                            minute = event.notificationEvent.minute
+                        )
+                    } else notification
+                }
+
+                _timeReminderState.update { it.copy(
+                    listTimeReminder = updatedList
+                ) }
+            }
+
             TimeReminderEvent.CloseEditTimeReminderDialog -> {
                 _timeReminderState.update { it.copy(
                     isShowEditTimeReminderDialog = false
@@ -84,6 +111,19 @@ class TimeReminderViewModel @Inject constructor(
                     cancelNotifyAllEventUseCase()
                     scheduleAllEventsUseCase()
                 }
+            }
+
+            TimeReminderEvent.CloseTimePickerDialog -> {
+                _timeReminderState.update { it.copy(
+                    isShowTimePickerDialog = false,
+                    currentNotificationForEdit = null
+                ) }
+            }
+            is TimeReminderEvent.ShowTimePickerDialog -> {
+                _timeReminderState.update { it.copy(
+                    isShowTimePickerDialog = true,
+                    currentNotificationForEdit = event.notificationEvent
+                ) }
             }
         }
     }

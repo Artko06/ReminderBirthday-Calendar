@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.TimePickerDialog
 import com.example.reminderbirthday_calendar.presentation.components.notification.TimeReminderItem
 import com.example.reminderbirthday_calendar.presentation.event.TimeReminderEvent
 import com.example.reminderbirthday_calendar.presentation.viewModel.TimeReminderViewModel
@@ -38,6 +39,18 @@ fun TimeReminderScreen(
     timeReminderViewModel: TimeReminderViewModel = hiltViewModel()
 ) {
     val stateTimeReminder = timeReminderViewModel.timeReminderState.collectAsState().value
+
+    if (stateTimeReminder.isShowTimePickerDialog && stateTimeReminder.currentNotificationForEdit != null) {
+        TimePickerDialog(
+            notificationEvent = stateTimeReminder.currentNotificationForEdit,
+            onDismiss = {
+                timeReminderViewModel.onEvent(event = TimeReminderEvent.CloseTimePickerDialog)
+            },
+            onConfirm = { notification ->
+                timeReminderViewModel.onEvent(event = TimeReminderEvent.ChangeHourMinuteNotificationEvent(notification))
+            }
+        )
+    }
 
     Scaffold { paddingValues ->
         Box(
@@ -88,10 +101,30 @@ fun TimeReminderScreen(
                 key = { it.id }
             ) { notificationEvent ->
                 TimeReminderItem(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     notificationEvent = notificationEvent,
                     changeStatusNotification = { id ->
-                        timeReminderViewModel.onEvent(event = TimeReminderEvent.ChangeStatusByIdNotificationEvent(id))
+                        timeReminderViewModel.onEvent(
+                            event = TimeReminderEvent.ChangeStatusByIdNotificationEvent(
+                                id
+                            )
+                        )
+                    },
+                    selectNewDaysBefore = { notification ->
+                        timeReminderViewModel.onEvent(
+                            event = TimeReminderEvent.ChangeDaysBeforeNotificationEvent(
+                                notification
+                            )
+                        )
+                    },
+                    timeIconClick = { notification ->
+                        timeReminderViewModel.onEvent(
+                            event = TimeReminderEvent.ShowTimePickerDialog(
+                                notification
+                            )
+                        )
                     }
                 )
             }
@@ -100,7 +133,9 @@ fun TimeReminderScreen(
                 key = "Save_Button"
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(

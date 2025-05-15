@@ -13,6 +13,8 @@ import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
 import com.example.domain.useCase.calendar.event.GetEventByTypeUseCase
+import com.example.domain.useCase.calendar.event.GetEventsByDateUseCase
+import com.example.domain.useCase.calendar.event.GetEventsByMonthUseCase
 import com.example.domain.useCase.calendar.event.GetEventsBySortTypeUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
@@ -351,4 +353,12 @@ object UseCaseModule {
     fun provideSetThemeUseCase(settingsRepository: SettingsRepository): SetThemeUseCase{
         return SetThemeUseCase(repository = settingsRepository)
     }
+
+    @Provides
+    @Singleton
+    fun provideGetEventsByDateUseCase() = GetEventsByDateUseCase()
+
+    @Provides
+    @Singleton
+    fun provideGetEventsByMonthUseCase() = GetEventsByMonthUseCase()
 }
