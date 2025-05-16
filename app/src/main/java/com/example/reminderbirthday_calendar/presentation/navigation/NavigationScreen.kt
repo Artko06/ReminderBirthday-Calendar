@@ -3,14 +3,19 @@ package com.example.reminderbirthday_calendar.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.reminderbirthday_calendar.presentation.event.NavigationEvent
+import com.example.reminderbirthday_calendar.presentation.navigation.model.EVENT_ID_KEY
 import com.example.reminderbirthday_calendar.presentation.navigation.model.Screen
 import com.example.reminderbirthday_calendar.presentation.screens.AddEventScreen
+import com.example.reminderbirthday_calendar.presentation.screens.EventDetailScreen
 import com.example.reminderbirthday_calendar.presentation.screens.NotificationPermissionScreen
 import com.example.reminderbirthday_calendar.presentation.screens.TimeReminderScreen
+import com.example.reminderbirthday_calendar.presentation.viewModel.EventDetailViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.NavigationViewModel
 
 @Composable
@@ -44,6 +49,9 @@ fun NavigationScreen(
                     },
                     onNavigateToTimeReminderScreen = {
                         navController.navigate(Screen.TimeReminderScreen.route)
+                    },
+                    onNavigateToEventDetailScreen = { eventId ->
+                        navController.navigate(Screen.EventDetailScreen.passEventId(eventId))
                     }
                 )
             }
@@ -63,6 +71,21 @@ fun NavigationScreen(
                     }
                 )
             }
+
+            composable(
+                route = Screen.EventDetailScreen.route,
+                arguments = listOf(navArgument(EVENT_ID_KEY) { type = NavType.LongType })
+            ){
+                val eventDetailViewModel = hiltViewModel<EventDetailViewModel>()
+
+                EventDetailScreen(
+                    eventDetailViewModel = eventDetailViewModel,
+                    onBackFromDetailScreen = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
 
         }
     }

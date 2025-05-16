@@ -52,6 +52,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun EventsScreen(
     modifier: Modifier = Modifier,
+    onNavigateToEventDetailScreen: (Long) -> Unit,
     eventsViewModel: EventsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -202,6 +203,7 @@ fun EventsScreen(
                         key = { it.id.toString() + it.nameContact + it.surnameContact }
                     ) { event ->
                         EventItem(
+                            id = event.id,
                             name = event.nameContact,
                             surname = event.surnameContact ?: "",
                             eventType = event.eventType,
@@ -211,7 +213,8 @@ fun EventsScreen(
                             age = event.originalDate.calculateNextAge(),
                             isViewDaysLeft = eventState.isViewDaysLeft,
                             daysLeft = event.originalDate.calculateDaysLeft(),
-                            image = event.image
+                            image = event.image,
+                            onNavigateByClick = onNavigateToEventDetailScreen
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }

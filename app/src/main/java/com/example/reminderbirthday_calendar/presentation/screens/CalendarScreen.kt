@@ -49,6 +49,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CalendarScreen(
     modifier: Modifier = Modifier,
+    onNavigateToEventDetailScreen: (Long) -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     eventsViewModel: EventsViewModel = hiltViewModel()
 ) {
@@ -162,6 +163,7 @@ fun CalendarScreen(
                 key = { it.id.toString() + it.nameContact + it.surnameContact }
             ) { event ->
                 EventItem(
+                    id = event.id,
                     name = event.nameContact,
                     surname = event.surnameContact ?: "",
                     eventType = event.eventType,
@@ -175,7 +177,8 @@ fun CalendarScreen(
                     daysLeft = event.originalDate.calculateDaysLeftWithMyYear(
                         year = calendarState.currentMonth.plusMonths(pagerState.currentPage.toLong()).year
                     ),
-                    image = event.image
+                    image = event.image,
+                    onNavigateByClick = onNavigateToEventDetailScreen
                 )
                 Spacer(modifier = Modifier.height(6.dp))
             }

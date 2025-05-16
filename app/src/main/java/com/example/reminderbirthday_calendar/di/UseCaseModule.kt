@@ -12,6 +12,7 @@ import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
 import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
+import com.example.domain.useCase.calendar.event.GetEventByIdUseCase
 import com.example.domain.useCase.calendar.event.GetEventByTypeUseCase
 import com.example.domain.useCase.calendar.event.GetEventsByDateUseCase
 import com.example.domain.useCase.calendar.event.GetEventsByMonthUseCase
@@ -361,4 +362,10 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideGetEventsByMonthUseCase() = GetEventsByMonthUseCase()
+
+    @Provides
+    @Singleton
+    fun provideGetEventByIdUseCase(eventRepository: EventRepository): GetEventByIdUseCase{
+        return GetEventByIdUseCase(repository = eventRepository)
+    }
 }

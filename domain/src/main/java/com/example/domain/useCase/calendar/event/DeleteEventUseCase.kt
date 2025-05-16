@@ -5,8 +5,8 @@ import com.example.domain.repository.EventRepository
 import kotlinx.coroutines.flow.firstOrNull
 
 class DeleteEventUseCase(private val repository: EventRepository) {
-    suspend operator fun invoke(idEvent: Int): Boolean {
-        val event = repository.getByIdEvents(idEvent).firstOrNull()
+    suspend operator fun invoke(idEvent: Long): Boolean {
+        val event = repository.getByIdEvent(idEvent).firstOrNull()
 
         return if (event != null) {
             return repository.deleteEvent(event = event)

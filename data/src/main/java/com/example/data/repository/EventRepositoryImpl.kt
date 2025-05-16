@@ -29,7 +29,7 @@ class EventRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getByIdEvents(id: Int): Flow<Event?> {
+    override fun getByIdEvent(id: Long): Flow<Event?> {
         return eventDao.getByIdEvents(id = id).map { event ->
             event?.toDomain()
         }

@@ -10,6 +10,6 @@ data class CalendarState(
 
     val calendarPage: Int = 0,
 
-    val selectDate: LocalDate? = LocalDate.now(),
+    val selectDate: LocalDate? = null,
     val currentMonth: YearMonth = YearMonth.now()
 )

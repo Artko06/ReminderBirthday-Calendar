@@ -7,7 +7,7 @@ interface EventRepository {
     // Get
     fun getAllEvents(): Flow<List<Event>>
     fun getByTypeEvents(eventType: String): Flow<List<Event>>
-    fun getByIdEvents(id: Int): Flow<Event?>
+    fun getByIdEvent(id: Long): Flow<Event?>
 
     // Upsert
     suspend fun upsertEvent(event: Event): Boolean

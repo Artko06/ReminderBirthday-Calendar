@@ -1,6 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.components.evetns
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,7 @@ import com.example.reminderbirthday_calendar.ui.theme.yellow
 
 @Composable
 fun EventItem(
+    id: Long,
     name: String,
     surname: String,
     date: String,
@@ -58,6 +60,7 @@ fun EventItem(
     isViewDaysLeft: Boolean,
     daysLeft: Int,
     image: ByteArray?,
+    onNavigateByClick: (Long) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -68,6 +71,7 @@ fun EventItem(
                 shape = RoundedCornerShape(24.dp)
             )
             .height(IntrinsicSize.Min)
+            .clickable(onClick = { onNavigateByClick(id) })
     ) {
         Box(
             modifier = Modifier
@@ -238,6 +242,7 @@ fun EventItem(
 @Composable
 fun EventItemPreview() {
     EventItem(
+        id = 0,
         name = "Elon",
         surname = "Musk",
         date = "28.06.1971",
@@ -247,6 +252,7 @@ fun EventItemPreview() {
         age = 54,
         isViewDaysLeft = true,
         daysLeft = 365,
-        image = null
+        image = null,
+        onNavigateByClick = {}
     )
 }

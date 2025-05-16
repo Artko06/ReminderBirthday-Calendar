@@ -7,4 +7,7 @@ sealed class Screen(
     object MainScreen: Screen(route = "MAIN_SCREEN")
     object AddEventScreen: Screen(route = "ADD_EVENT_SCREEN")
     object TimeReminderScreen: Screen(route = "TIME_REMINDER_SCREEN")
+    object EventDetailScreen : Screen("EVENT_DETAIL_SCREEN/{$EVENT_ID_KEY}") {
+        fun passEventId(eventId: Long) = "EVENT_DETAIL_SCREEN/$eventId"
+    }
 }
