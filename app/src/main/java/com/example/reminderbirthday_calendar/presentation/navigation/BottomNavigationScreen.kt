@@ -22,7 +22,7 @@ import com.example.reminderbirthday_calendar.presentation.event.BottomNavigation
 import com.example.reminderbirthday_calendar.presentation.navigation.model.BottomNavigationItem
 import com.example.reminderbirthday_calendar.presentation.navigation.model.NumberBottomScreen
 import com.example.reminderbirthday_calendar.presentation.screens.EventsScreen
-import com.example.reminderbirthday_calendar.presentation.screens.MainScreen
+import com.example.reminderbirthday_calendar.presentation.screens.CalendarScreen
 import com.example.reminderbirthday_calendar.presentation.screens.SettingsScreen
 import com.example.reminderbirthday_calendar.presentation.viewModel.BottomNavigationViewModel
 
@@ -36,14 +36,14 @@ fun BottomNavigationScreen(
 
     val bottomItems = listOf<BottomNavigationItem>(
         BottomNavigationItem(
-            title = "Calendar",
-            selectedIcon = Icons.Filled.CalendarMonth,
-            unselectedIcon = Icons.Outlined.CalendarMonth
-        ),
-        BottomNavigationItem(
             title = "Events",
             selectedIcon = Icons.Filled.Cake,
             unselectedIcon = Icons.Outlined.Cake
+        ),
+        BottomNavigationItem(
+            title = "Calendar",
+            selectedIcon = Icons.Filled.CalendarMonth,
+            unselectedIcon = Icons.Outlined.CalendarMonth
         ),
         BottomNavigationItem(
             title = "Settings",
@@ -80,8 +80,8 @@ fun BottomNavigationScreen(
         }
     ) { paddingValues ->
         when(NumberBottomScreen.entries[state.selectedIndexScreen]){
-            NumberBottomScreen.CALENDAR -> MainScreen(modifier = Modifier.padding(paddingValues))
             NumberBottomScreen.EVENTS -> EventsScreen(modifier = Modifier.padding(paddingValues))
+            NumberBottomScreen.CALENDAR -> CalendarScreen(modifier = Modifier.padding(paddingValues))
             NumberBottomScreen.SETTINGS -> SettingsScreen(
                 onNavigateToTimeReminderScreen = onNavigateToTimeReminderScreen,
                 modifier = Modifier.padding(paddingValues)

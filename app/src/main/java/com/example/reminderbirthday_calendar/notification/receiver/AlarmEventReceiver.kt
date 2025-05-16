@@ -7,21 +7,12 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.reminderbirthday_calendar.di.AlarmEventReceiverEntryPoint
 import com.example.reminderbirthday_calendar.intents.openApp.pendingIntent
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_DAY_NOTIFICATION
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_HOUR_NOTIFICATION
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_ID_EVENT
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_MESSAGE_EVENT_NAME
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_MINUTE_NOTIFICATION
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_MONTH_NOTIFICATION
-import com.example.reminderbirthday_calendar.notification.common.EXTRA_NUMBER_NOTIFICATION
-import com.example.reminderbirthday_calendar.notification.common.NOTIFICATION_EVENT_CHANNEL_ID
-import com.example.reminderbirthday_calendar.notification.common.NOTIFICATION_EVENT_ID
+import com.example.reminderbirthday_calendar.notification.common.*
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-
 
 class AlarmEventReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -58,17 +49,18 @@ class AlarmEventReceiver: BroadcastReceiver() {
         val notificationManager = context.getSystemService(NotificationManager::class.java) as NotificationManager
         val notificationEvent = NotificationCompat.Builder(context, NOTIFICATION_EVENT_CHANNEL_ID)
             .setSmallIcon(com.example.reminderbirthday_calendar.R.drawable.ic_stat_birthday_2)
-//            .setColor(ContextCompat.getColor(context, com.example.reminderbirthday_calendar.R.color.blue)) // Set background color
             .setContentTitle("Birthday Reminder")
             .setContentText(message)
             .setContentIntent(pendingIntent(context = context))
             .setAutoCancel(true)
             .build()
 
-        val nowDateTime = LocalDate.now().plusYears(1).atTime(hourNotification, minuteNotification)
+        val nowDateTime = LocalDate.now()
+            .plusYears(1)
+            .atTime(hourNotification, minuteNotification)
 
         if (dayNotification == nowDateTime.dayOfMonth && monthNotification == nowDateTime.monthValue){
-            notificationManager.notify(NOTIFICATION_EVENT_ID, notificationEvent)
+            notificationManager.notify(numberNotification, notificationEvent)
         }
 
         val entryPoint = EntryPointAccessors.fromApplication(

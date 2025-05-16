@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun MainScreen(
+fun CalendarScreen(
     modifier: Modifier = Modifier,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     eventsViewModel: EventsViewModel = hiltViewModel()
