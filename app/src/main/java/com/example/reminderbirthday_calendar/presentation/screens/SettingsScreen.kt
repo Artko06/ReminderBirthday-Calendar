@@ -23,7 +23,6 @@ import androidx.compose.material.icons.outlined.ColorLens
 import androidx.compose.material.icons.outlined.CrueltyFree
 import androidx.compose.material.icons.outlined.DriveFileMoveRtl
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.MarkEmailRead
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.SaveAs
@@ -45,10 +44,10 @@ import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsA
 import com.example.reminderbirthday_calendar.intents.settingsNotification.settingsNotificationIntent
 import com.example.reminderbirthday_calendar.intents.shareIntent.shareFileIntent
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteAllEventsDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.NotificationPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.SortEventTypeDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ThemeDialog
-import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.NotificationPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.settings.RedClearButton
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ClearEvents
@@ -256,17 +255,17 @@ fun SettingsScreen(
             )
         }
 
-        item(key = lazyKey++) {
-            SettingsItem(
-                icon = Icons.Outlined.Language,
-                title = "Language",
-                subtitle = "Select language app",
-                hasSwitch = false,
-                isSwitchChecked = false,
-                onSwitchChange = {},
-                onClick = {}
-            )
-        }
+//        item(key = lazyKey++) {
+//            SettingsItem(
+//                icon = Icons.Outlined.Language,
+//                title = "Language",
+//                subtitle = "Select language app",
+//                hasSwitch = false,
+//                isSwitchChecked = false,
+//                onSwitchChange = {},
+//                onClick = {}
+//            )
+//        }
 
         item(key = lazyKey++) {
             SettingsItem(

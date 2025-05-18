@@ -7,5 +7,6 @@ sealed class DetailInfoEvent {
 
     object OnShowNotesDialog: DetailInfoEvent()
     object OnCloseNotesDialog: DetailInfoEvent()
+    data class OnChangeNotes(val newNotes: String): DetailInfoEvent()
     object SaveNewNotes: DetailInfoEvent()
 }

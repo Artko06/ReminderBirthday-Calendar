@@ -64,10 +64,7 @@ fun CalendarScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(pagerState.currentPage) {
-        if (pagerState.currentPage != 0) {
-            calendarViewModel.onEvent(event = CalendarEvent.SelectDate(null))
-        }
-
+        calendarViewModel.onEvent(event = CalendarEvent.SelectDate(null))
         calendarViewModel.onEvent(event = CalendarEvent.ChangeCalendarPage(pagerState.currentPage))
     }
 

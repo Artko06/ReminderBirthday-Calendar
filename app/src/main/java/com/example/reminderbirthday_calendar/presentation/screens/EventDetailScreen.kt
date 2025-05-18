@@ -1,6 +1,7 @@
 package com.example.reminderbirthday_calendar.presentation.screens
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -54,6 +56,7 @@ import com.example.domain.util.extensionFunc.calculateNextAge
 import com.example.reminderbirthday_calendar.LocalTheme
 import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteEventDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.NotesDialog
 import com.example.reminderbirthday_calendar.presentation.detailWindow.DetailItem
 import com.example.reminderbirthday_calendar.presentation.event.DetailInfoEvent
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventDetailViewModel
@@ -89,6 +92,21 @@ fun EventDetailScreen(
             },
             onDismiss = {
                 eventDetailViewModel.onEvent(event = DetailInfoEvent.OnCloseDeleteDialog)
+            }
+        )
+    }
+
+    if (eventDetailState.isShowNotesDialog) {
+        NotesDialog(
+            text = eventDetailState.newNotes,
+            onChangeNotes = { newNotes ->
+                eventDetailViewModel.onEvent(event = DetailInfoEvent.OnChangeNotes(newNotes))
+            },
+            onDismiss = {
+                eventDetailViewModel.onEvent(event = DetailInfoEvent.OnCloseNotesDialog)
+            },
+            onConfirm = {
+                eventDetailViewModel.onEvent(event = DetailInfoEvent.SaveNewNotes)
             }
         )
     }
@@ -268,7 +286,8 @@ fun EventDetailScreen(
                 )
 
                 if (eventDetailState.statusWesternZodiac &&
-                    eventDetailState.event.eventType == EventType.BIRTHDAY) {
+                    eventDetailState.event.eventType == EventType.BIRTHDAY
+                ) {
                     DetailItem(
                         modifier = Modifier.fillMaxWidth(),
                         painter = painterResource(
@@ -296,7 +315,8 @@ fun EventDetailScreen(
 
                 if (eventDetailState.event.yearMatter &&
                     eventDetailState.statusChineseZodiac &&
-                    eventDetailState.event.eventType == EventType.BIRTHDAY) {
+                    eventDetailState.event.eventType == EventType.BIRTHDAY
+                ) {
                     DetailItem(
                         modifier = Modifier.fillMaxWidth(),
                         painter = painterResource(
@@ -323,10 +343,19 @@ fun EventDetailScreen(
                 }
 
                 DetailItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(16.dp))
+                        .clickable(onClick = {
+                            eventDetailViewModel.onEvent(event = DetailInfoEvent.OnShowNotesDialog)
+                        }),
                     icon = Icons.Outlined.NoteAlt,
                     colorIcon = MaterialTheme.colorScheme.primary,
-                    text = "Click to show",
+                    text = if (eventDetailState.event.notes == null) "Click to show"
+                    else if (eventDetailState.event.notes!!.trim().isEmpty()) "Click to show"
+                    else eventDetailState.event.notes!!.let {
+                        if (it.length > 15) "${it.take(15)}..." else it
+                    },
                     aboutText = "Notes"
                 )
 

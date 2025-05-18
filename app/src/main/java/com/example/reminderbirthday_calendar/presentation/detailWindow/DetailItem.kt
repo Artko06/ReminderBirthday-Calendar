@@ -92,7 +92,7 @@ fun DetailItem(
     painter: Painter,
     colorIcon: Color,
     text: String,
-    aboutText: String,
+    aboutText: String
 ){
     Card(
         modifier = Modifier.then(modifier),

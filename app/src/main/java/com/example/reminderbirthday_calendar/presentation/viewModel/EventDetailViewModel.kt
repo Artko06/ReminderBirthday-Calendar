@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.models.event.Event
 import com.example.domain.useCase.calendar.event.DeleteEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByIdUseCase
+import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.calendar.zodiac.GetChineseZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.GetWesternZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.GetStatusChineseZodiacUseCase
@@ -37,7 +38,8 @@ class EventDetailViewModel @Inject constructor(
     private val getWesternZodiacUseCase: GetWesternZodiacUseCase,
     private val getStatusWesternZodiacUseCase: GetStatusWesternZodiacUseCase,
     private val getStatusChineseZodiacUseCase: GetStatusChineseZodiacUseCase,
-    private val deleteEventUseCase: DeleteEventUseCase
+    private val upsertEventUseCase: UpsertEventUseCase,
+    private val deleteEventUseCase: DeleteEventUseCase,
 ) : ViewModel() {
 
     private val _eventDetailState = MutableStateFlow(EventDetailState())
@@ -55,7 +57,9 @@ class EventDetailViewModel @Inject constructor(
     ) { eventDetailState, eventById ->
         if (eventById != null){
             eventDetailState.copy(
-                event = eventById
+                event = eventById,
+                westernZodiac = getWesternZodiacUseCase(date = eventById.originalDate),
+                chineseZodiac = getChineseZodiacUseCase(date = eventById.originalDate)
             )
         } else eventDetailState
     }.stateIn(
@@ -119,21 +123,35 @@ class EventDetailViewModel @Inject constructor(
             }
 
             DetailInfoEvent.SaveNewNotes -> {
-                val event = _eventDetailState.value.event
+                viewModelScope.launch(Dispatchers.IO) {
+                    val event = _eventDetailState.value.event
 
-                _eventDetailState.update { it.copy(
-                    event = Event(
+                    _eventDetailState.update { it.copy(
+                        event = Event(
+                            id = event.id,
+                            eventType = event.eventType,
+                            sortTypeEvent = event.sortTypeEvent,
+                            nameContact = event.nameContact,
+                            surnameContact = event.surnameContact,
+                            originalDate = event.originalDate,
+                            yearMatter = event.yearMatter,
+                            notes = _eventDetailState.value.newNotes,
+                            image = event.image
+                        )
+                    ) }
+
+                    upsertEventUseCase.invoke(
                         id = event.id,
                         eventType = event.eventType,
                         sortTypeEvent = event.sortTypeEvent,
                         nameContact = event.nameContact,
                         surnameContact = event.surnameContact,
-                        originalDate = event.originalDate,
+                        originalDate =  event.originalDate,
                         yearMatter = event.yearMatter,
                         notes = _eventDetailState.value.newNotes,
                         image = event.image
                     )
-                ) }
+                }
             }
 
             DetailInfoEvent.OnCloseDeleteDialog -> {
@@ -145,6 +163,12 @@ class EventDetailViewModel @Inject constructor(
             DetailInfoEvent.OnShowDeleteDialog -> {
                 _eventDetailState.update { it.copy(
                     isShowDeleteDialog = true
+                ) }
+            }
+
+            is DetailInfoEvent.OnChangeNotes -> {
+                _eventDetailState.update { it.copy(
+                    newNotes = event.newNotes
                 ) }
             }
 

@@ -42,7 +42,7 @@ class DeleteEventUseCaseTest {
 
     @Test
     fun `invoke should delete event when found`() = runTest {
-        whenever(repository.getByIdEvents(42)).thenReturn(flowOf(mockEvent))
+        whenever(repository.getByIdEvent(42)).thenReturn(flowOf(mockEvent))
         whenever(repository.deleteEvent(mockEvent)).thenReturn(true)
 
         val result = useCase(42)
@@ -53,7 +53,7 @@ class DeleteEventUseCaseTest {
 
     @Test
     fun `invoke should return false when event not found`() = runTest {
-        whenever(repository.getByIdEvents(999)).thenReturn(flowOf(null))
+        whenever(repository.getByIdEvent(999)).thenReturn(flowOf(null))
 
         val result = useCase(999)
 
