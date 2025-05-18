@@ -1,5 +1,6 @@
 package com.example.reminderbirthday_calendar.presentation.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -45,7 +47,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.example.domain.models.event.EventType
 import com.example.domain.models.event.SortTypeEvent
 import com.example.domain.models.settings.ThemeType
@@ -168,8 +169,8 @@ fun EventDetailScreen(
                 contentAlignment = Alignment.Center
             ) {
                 if (eventDetailState.event.image != null) {
-                    AsyncImage(
-                        model = eventDetailState.event.image,
+                    Image(
+                        bitmap = eventDetailState.event.image!!.decodeToImageBitmap(),
                         contentDescription = "Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -351,8 +352,7 @@ fun EventDetailScreen(
                         }),
                     icon = Icons.Outlined.NoteAlt,
                     colorIcon = MaterialTheme.colorScheme.primary,
-                    text = if (eventDetailState.event.notes == null) "Click to show"
-                    else if (eventDetailState.event.notes!!.trim().isEmpty()) "Click to show"
+                    text = if (eventDetailState.event.notes.isNullOrBlank()) "Click to show"
                     else eventDetailState.event.notes!!.let {
                         if (it.length > 15) "${it.take(15)}..." else it
                     },

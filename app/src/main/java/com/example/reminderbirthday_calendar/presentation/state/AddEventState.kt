@@ -11,6 +11,7 @@ data class AddEventState (
 
     val isLoadingContactList: Boolean = false,
     val listContacts: List<ContactInfo> = emptyList(),
+    val idSelectedContact: String? = null,
     val pickedPhoto: ByteArray? = null,
     val sortType: SortTypeEvent = SortTypeEvent.FAMILY,
     val eventType: EventType = EventType.BIRTHDAY,
@@ -34,6 +35,7 @@ data class AddEventState (
         if (yearMatter != other.yearMatter) return false
         if (isEnableAddEventButton != other.isEnableAddEventButton) return false
         if (listContacts != other.listContacts) return false
+        if (idSelectedContact != other.idSelectedContact) return false
         if (!pickedPhoto.contentEquals(other.pickedPhoto)) return false
         if (sortType != other.sortType) return false
         if (eventType != other.eventType) return false
@@ -52,6 +54,7 @@ data class AddEventState (
         result = 31 * result + yearMatter.hashCode()
         result = 31 * result + isEnableAddEventButton.hashCode()
         result = 31 * result + listContacts.hashCode()
+        result = 31 * result + (idSelectedContact?.hashCode() ?: 0)
         result = 31 * result + (pickedPhoto?.contentHashCode() ?: 0)
         result = 31 * result + sortType.hashCode()
         result = 31 * result + eventType.hashCode()

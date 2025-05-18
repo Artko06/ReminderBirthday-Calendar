@@ -68,7 +68,10 @@ fun EventItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .clickable(onClick = { onNavigateByClick(id) }),
+            .clip(shape = RoundedCornerShape(24.dp))
+            .clickable(
+                onClick = { onNavigateByClick(id) }
+            ),
         colors = CardDefaults.cardColors(
             containerColor = if (LocalTheme.current == ThemeType.DARK) Color.DarkGray else platinum
         ),

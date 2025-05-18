@@ -40,7 +40,9 @@ fun NotificationPermissionScreen(
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = {}
+        onResult = {
+            onNavigateToMainScreen()
+        }
     )
 
     LaunchedEffect(notificationPermState.requestPermission) {
@@ -92,7 +94,6 @@ fun NotificationPermissionScreen(
             TextButton(
                 onClick = {
                     viewModel.onEvent(event = NotificationPermEvent.OnRequestNotificationPermission)
-                    onNavigateToMainScreen()
                 },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

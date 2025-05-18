@@ -8,6 +8,7 @@ import com.example.domain.repository.GoogleClientRepository
 import com.example.domain.repository.ImportFileRepository
 import com.example.domain.repository.SettingsRepository
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
+import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
 import com.example.domain.useCase.calendar.event.DeleteEventUseCase
 import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
@@ -389,5 +390,11 @@ object UseCaseModule {
     @Singleton
     fun provideGetWesternZodiacUseCase(zodiacCalculator: ZodiacCalculator): GetWesternZodiacUseCase {
         return GetWesternZodiacUseCase(zodiacCalculator = zodiacCalculator)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddEventToContactAppUseCase(contactAppRepository: ContactAppRepository): AddEventToContactAppUseCase{
+        return AddEventToContactAppUseCase(repository = contactAppRepository)
     }
 }

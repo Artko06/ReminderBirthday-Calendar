@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.event.EventType
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
+import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
@@ -33,6 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddEventViewModel @Inject constructor(
     private val upsertEventUseCase: UpsertEventUseCase,
+    private val addEventToContactAppUseCase: AddEventToContactAppUseCase,
     private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
     private val importContactsUseCase: ImportContactsUseCase,
     @ApplicationContext private val appContext: Context
@@ -159,6 +161,14 @@ class AddEventViewModel @Inject constructor(
 
                     if (isSuccess) {
                         scheduleAllEventsUseCase()
+//                        if (_addEventState.value.idSelectedContact != null){
+//                            val isSuccessWriteToContact = addEventToContactAppUseCase.invoke(
+//                                contactId = _addEventState.value.idSelectedContact!!,
+//                                eventDate = _addEventState.value.date!!,
+//                                eventType = _addEventState.value.eventType,
+//                                yearMatter = _addEventState.value.yearMatter
+//                            )
+//                        }
                         _addEventSharedFlow.emit(
                             value = ShowToast(
                                 message = "Successfully added " +
@@ -193,6 +203,7 @@ class AddEventViewModel @Inject constructor(
 
             is AddEvent.OnSelectContact -> {
                 _addEventState.update { it.copy(
+                    idSelectedContact = event.contact.id,
                     valueName = event.contact.name,
                     valueSurname = event.contact.surname,
                     pickedPhoto = event.contact.image,

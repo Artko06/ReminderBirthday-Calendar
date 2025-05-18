@@ -16,6 +16,15 @@ android {
     namespace = "com.example.reminderbirthday_calendar"
     compileSdk = 35
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.property("RELEASE_STORE_FILE") as String)
+            storePassword = project.property("RELEASE_STORE_PASSWORD") as String
+            keyAlias = project.property("RELEASE_KEY_ALIAS") as String
+            keyPassword = project.property("RELEASE_KEY_PASSWORD") as String
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.reminderbirthday_calendar"
         minSdk = 26
@@ -24,6 +33,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        signingConfig = signingConfigs.getByName("release")
     }
 
     buildTypes {
