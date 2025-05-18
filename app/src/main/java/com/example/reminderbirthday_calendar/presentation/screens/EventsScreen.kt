@@ -216,7 +216,8 @@ fun EventsScreen(
                             image = event.image,
                             onNavigateByClick = onNavigateToEventDetailScreen
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }

@@ -12,9 +12,11 @@ import com.example.reminderbirthday_calendar.presentation.event.NavigationEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.EVENT_ID_KEY
 import com.example.reminderbirthday_calendar.presentation.navigation.model.Screen
 import com.example.reminderbirthday_calendar.presentation.screens.AddEventScreen
+import com.example.reminderbirthday_calendar.presentation.screens.EditEventScreen
 import com.example.reminderbirthday_calendar.presentation.screens.EventDetailScreen
 import com.example.reminderbirthday_calendar.presentation.screens.NotificationPermissionScreen
 import com.example.reminderbirthday_calendar.presentation.screens.TimeReminderScreen
+import com.example.reminderbirthday_calendar.presentation.viewModel.EditEventViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventDetailViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.NavigationViewModel
 
@@ -81,6 +83,23 @@ fun NavigationScreen(
                 EventDetailScreen(
                     eventDetailViewModel = eventDetailViewModel,
                     onBackFromDetailScreen = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToEditEventScreen = { eventId ->
+                        navController.navigate(Screen.EditEventScreen.passEventId(eventId))
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.EditEventScreen.route,
+                arguments = listOf(navArgument(EVENT_ID_KEY) { type = NavType.LongType })
+            ) {
+                val editEventViewModel = hiltViewModel<EditEventViewModel>()
+
+                EditEventScreen(
+                    editEventViewModel = editEventViewModel,
+                    onBackFromEditEventScreen = {
                         navController.popBackStack()
                     }
                 )

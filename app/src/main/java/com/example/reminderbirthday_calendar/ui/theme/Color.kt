@@ -21,4 +21,7 @@ val backgroundDarkGreen = Color(0xFF0F2B11)
 val backgroundDarkPurple = Color(0xFF1C1447)
 val backgroundYellow = Color(0xFF2E2E05)
 val backgroundBlueAzure = Color(0xFF0A183A)
+
 val platinum = Color(0xFFE5E4E2)
+val ghostlyWhite = Color(0xFFF8F8FF)
+val veryDarkGray = Color(0xFF23282B)

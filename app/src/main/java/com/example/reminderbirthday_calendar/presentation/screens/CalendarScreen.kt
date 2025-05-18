@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -78,6 +79,10 @@ fun CalendarScreen(
         Column(
             modifier = Modifier
                 .padding(15.dp)
+                .shadow(
+                    elevation = 8.dp,
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .background(
                     color = if (LocalTheme.current == ThemeType.DARK) Color.DarkGray else platinum,
                     shape = RoundedCornerShape(16.dp)
@@ -180,7 +185,7 @@ fun CalendarScreen(
                     image = event.image,
                     onNavigateByClick = onNavigateToEventDetailScreen
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }

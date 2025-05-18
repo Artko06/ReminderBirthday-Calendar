@@ -18,19 +18,19 @@ fun DeleteAllEventsDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Удаление всех событий")
+            Text("Delete all events")
         },
         text = {
             Text(
                 text = buildAnnotatedString {
-                    append("Вы точно уверены, что хотите ")
+                    append("Are you sure you want to ")
 
                     // Выделенное слово
                     withStyle(style = SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)) {
-                        append("удалить ")
+                        append("delete ")
                     }
 
-                    append("все события?")
+                    append("all events?")
                 }
             )
         },
@@ -39,12 +39,12 @@ fun DeleteAllEventsDialog(
                 onConfirmButton()
                 onDismiss()
             }) {
-                Text("Да")
+                Text("Yes")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Закрыть")
+                Text("Close")
             }
         }
     )

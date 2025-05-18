@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +46,10 @@ fun SettingsItem(
 ){
     Row(
         modifier = Modifier
+            .shadow(
+                elevation = 4.dp,
+                shape = RoundedCornerShape(percent = 35)
+            )
             .background(
                 color = if (LocalTheme.current == ThemeType.DARK) Color.DarkGray else platinum,
                 shape = RoundedCornerShape(percent = 35)

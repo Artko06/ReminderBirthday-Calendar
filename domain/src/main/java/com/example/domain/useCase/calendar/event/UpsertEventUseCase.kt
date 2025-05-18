@@ -32,5 +32,31 @@ class UpsertEventUseCase(private val repository: EventRepository) {
         )
     }
 
+    suspend operator fun invoke(
+        id: Long,
+        eventType: EventType,
+        sortTypeEvent: SortTypeEvent,
+        nameContact: String,
+        surnameContact: String?,
+        originalDate: LocalDate,
+        yearMatter: Boolean,
+        notes: String?,
+        image: ByteArray?
+    ): Boolean {
+        return repository.upsertEvent(
+            event = Event(
+                id = id,
+                eventType = eventType,
+                sortTypeEvent = sortTypeEvent,
+                nameContact = nameContact,
+                surnameContact = surnameContact,
+                originalDate = originalDate,
+                yearMatter = yearMatter,
+                notes = notes,
+                image = image
+            )
+        )
+    }
+
     suspend operator fun invoke(event: Event): Boolean = repository.upsertEvent(event = event)
 }

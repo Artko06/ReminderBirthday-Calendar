@@ -18,6 +18,8 @@ import com.example.domain.repository.ExportFileRepository
 import com.example.domain.repository.GoogleClientRepository
 import com.example.domain.repository.ImportFileRepository
 import com.example.domain.repository.SettingsRepository
+import com.example.domain.util.zodiac.ZodiacCalculator
+import com.example.domain.util.zodiac.ZodiacCalculatorImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -83,5 +85,10 @@ object RepositoryModule {
             googleAuthClient = googleAuthClient,
             googleDriveClient = googleDriveClient
         )
+    }
+
+    @Provides
+    fun provideZodiacCalculator(): ZodiacCalculator{
+        return ZodiacCalculatorImpl()
     }
 }

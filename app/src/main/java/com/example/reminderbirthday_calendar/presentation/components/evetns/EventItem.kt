@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Cake
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,167 +64,128 @@ fun EventItem(
     image: ByteArray?,
     onNavigateByClick: (Long) -> Unit
 ) {
-    Box(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(24.dp))
-            .background(
-                color = if (LocalTheme.current == ThemeType.DARK) Color.DarkGray else platinum,
-                shape = RoundedCornerShape(24.dp)
-            )
             .height(IntrinsicSize.Min)
-            .clickable(onClick = { onNavigateByClick(id) })
+            .clickable(onClick = { onNavigateByClick(id) }),
+        colors = CardDefaults.cardColors(
+            containerColor = if (LocalTheme.current == ThemeType.DARK) Color.DarkGray else platinum
+        ),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.cardElevation(3.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .width(4.dp)
-                .fillMaxHeight()
-                .background(
-                    color = when(sortTypeEvent){
-                        SortTypeEvent.FAMILY -> darkRed
-                        SortTypeEvent.RELATIVE -> yellow
-                        SortTypeEvent.FRIEND -> blueAzure
-                        SortTypeEvent.COLLEAGUE -> darkGreen
-                        SortTypeEvent.OTHER -> darkPurple
-                    },
-                    shape = RoundedCornerShape(24.dp)
-                )
-        )
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(horizontal = 14.dp, vertical = 12.dp)
-        ) {
-
-            if(image != null){
-                Box(
-                    modifier = Modifier
-                        .size(46.dp)
-                        .clip(RoundedCornerShape(46.dp))
-                ){
-                    AsyncImage(
-                        model = image,
-                        contentDescription = "User image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            } else {
-                Icon(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = "Profile",
-                    modifier = Modifier.size(46.dp),
-                    tint = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.DarkGray
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Text(
-                    text = "$name $surname",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    lineHeight = 21.sp,
-                    color = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
-                )
-
-                Text(
-                    text = (if (yearMatter) date else date.replaceRange(6, 10, "????")) + " — ${
-                        eventType.name.lowercase().replaceFirstChar { it.uppercase() }
-                    }",
-                    fontWeight = FontWeight.Light,
-                    fontSize = 12.sp,
-                    lineHeight = 13.sp,
-                    color = if (LocalTheme.current == ThemeType.DARK) Color.LightGray else Color.DarkGray
-                )
-            }
-
-            if (daysLeft == 0){
-                Box(
-                    modifier = Modifier.padding(end = 8.dp),
-                    contentAlignment = Alignment.Center
-                ){
-                    Icon(
-                        imageVector = Icons.Filled.Cake,
-                        contentDescription = null,
-                        tint = when(sortTypeEvent){
+        Row {
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .fillMaxHeight()
+                    .background(
+                        color = when (sortTypeEvent) {
                             SortTypeEvent.FAMILY -> darkRed
                             SortTypeEvent.RELATIVE -> yellow
                             SortTypeEvent.FRIEND -> blueAzure
                             SortTypeEvent.COLLEAGUE -> darkGreen
                             SortTypeEvent.OTHER -> darkPurple
-                        }
-                    )
-                }
-            }
-            else if (isViewDaysLeft){
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(1.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = daysLeft.toString(),
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold
-                                )
-                            ) {
-                                append("days")
-                            }
-
-                            append(" left")
                         },
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        lineHeight = 17.sp,
-                        color = Color.Gray
+                        shape = RoundedCornerShape(24.dp)
+                    )
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(horizontal = 14.dp, vertical = 12.dp)
+            ) {
+
+                if (image != null) {
+                    Box(
+                        modifier = Modifier
+                            .size(46.dp)
+                            .clip(RoundedCornerShape(46.dp))
+                    ) {
+                        AsyncImage(
+                            model = image,
+                            contentDescription = "User image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                } else {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(46.dp),
+                        tint = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.DarkGray
                     )
                 }
-            } else {
+
+                Spacer(modifier = Modifier.width(12.dp))
+
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(1.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
-                        text = "Turns",
+                        text = "$name $surname",
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Gray
+                        fontSize = 20.sp,
+                        lineHeight = 21.sp,
+                        color = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
                     )
-                    
-                    Row {
+
+                    Text(
+                        text = (if (yearMatter) date else date.replaceRange(6, 10, "????")) + " — ${
+                            eventType.name.lowercase().replaceFirstChar { it.uppercase() }
+                        }",
+                        fontWeight = FontWeight.Light,
+                        fontSize = 12.sp,
+                        lineHeight = 13.sp,
+                        color = if (LocalTheme.current == ThemeType.DARK) Color.LightGray else Color.DarkGray
+                    )
+                }
+
+                if (daysLeft == 0) {
+                    Box(
+                        modifier = Modifier.padding(end = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Cake,
+                            contentDescription = null,
+                            tint = when (sortTypeEvent) {
+                                SortTypeEvent.FAMILY -> darkRed
+                                SortTypeEvent.RELATIVE -> yellow
+                                SortTypeEvent.FRIEND -> blueAzure
+                                SortTypeEvent.COLLEAGUE -> darkGreen
+                                SortTypeEvent.OTHER -> darkPurple
+                            }
+                        )
+                    }
+                } else if (isViewDaysLeft) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(1.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = daysLeft.toString(),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        )
+
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(
                                     style = SpanStyle(
-                                        fontWeight = FontWeight.Bold,
-
-                                        )
-                                ) {
-                                    append( if(yearMatter) age.toString() else "?" )
-                                }
-
-                                withStyle(
-                                    style = SpanStyle(
-                                        fontWeight = FontWeight.Light
+                                        fontWeight = FontWeight.Bold
                                     )
                                 ) {
-                                    append(" years")
+                                    append("days")
                                 }
+
+                                append(" left")
                             },
                             textAlign = TextAlign.Center,
                             fontSize = 16.sp,
@@ -230,10 +193,50 @@ fun EventItem(
                             color = Color.Gray
                         )
                     }
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(1.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Turns",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        )
+
+                        Row {
+                            Text(
+                                text = buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontWeight = FontWeight.Bold,
+
+                                            )
+                                    ) {
+                                        append(if (yearMatter) age.toString() else "?")
+                                    }
+
+                                    withStyle(
+                                        style = SpanStyle(
+                                            fontWeight = FontWeight.Light
+                                        )
+                                    ) {
+                                        append(" years")
+                                    }
+                                },
+                                textAlign = TextAlign.Center,
+                                fontSize = 16.sp,
+                                lineHeight = 17.sp,
+                                color = Color.Gray
+                            )
+                        }
+                    }
                 }
+
+
             }
-
-
         }
     }
 }

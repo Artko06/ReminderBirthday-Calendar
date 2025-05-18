@@ -1,4 +1,4 @@
-package com.example.reminderbirthday_calendar.presentation.components.settings
+package com.example.reminderbirthday_calendar.presentation.components.dialogWindow
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -19,37 +19,37 @@ fun NotificationPermissionDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Разрешение на уведомления")
+            Text("Permission for notifications")
         },
         text = {
             if (statusNotification) {
                 Text(
                     text = buildAnnotatedString {
-                        append("Уведомления в приложении ")
+                        append("Notifications in the app are ")
 
                         // Выделенное слово
                         withStyle(style = SpanStyle(color = Color.Green, fontWeight = FontWeight.Bold)) {
-                            append("включены")
+                            append("turn on")
                         }
 
-                        append(", вы точно хотите их выключить? " +
-                                "Разрешение на отправку уведомлений позволяет оповещать вас о событиях календаря. ")
+                        append(". Are you sure you want to turn off them? " +
+                                "Permission to send notifications allows you to be notified about calendar events. ")
 
-                        append("Eсли уведомления всё равно не приходят, то проверте настройки")
+                        append("If notifications still don't arrive, check your settings")
                     }
                 )
             } else{
                 Text(
                     text = buildAnnotatedString {
-                        append("Уведомления в приложении ")
+                        append("Notifications in the app are ")
 
                         // Выделенное слово
                         withStyle(style = SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)) {
-                            append("выключены")
+                            append("turn off")
                         }
 
-                        append(", рекомендуем включить их. " +
-                                "Разрешение на отправку уведомлений позволяет оповещать вас о событиях календаря")
+                        append(". We recommend turning on them. " +
+                                "Permission to send notifications allows you to be notified about calendar events")
                     }
                 )
             }
@@ -60,12 +60,12 @@ fun NotificationPermissionDialog(
                 onConfirmButton()
                 onDismiss()
             }) {
-                Text("Перейти")
+                Text("To setting")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Закрыть")
+                Text("Close")
             }
         }
     )

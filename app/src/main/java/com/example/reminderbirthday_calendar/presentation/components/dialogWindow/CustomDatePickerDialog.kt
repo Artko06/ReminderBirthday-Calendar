@@ -14,10 +14,13 @@ import java.time.ZoneId
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDatePickerDialog(
+    initDate: LocalDate? = null,
     onDismiss: () -> Unit,
     changeValueDatePicker: (LocalDate) -> Unit
 ) {
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = initDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
+    )
 
     
     DatePickerDialog(

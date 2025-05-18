@@ -22,7 +22,7 @@ import java.time.LocalDate
 @Composable
 fun RowDaysOfWeek(
     modifier: Modifier = Modifier
-){
+) {
     val daysOfWeek = DayOfWeek.entries
 
     Row(
@@ -34,9 +34,13 @@ fun RowDaysOfWeek(
                 text = day.name.lowercase().replaceFirstChar { it.uppercase() }.take(3),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f),
-                color = if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) { darkRed }
-                    else if(day == LocalDate.now().dayOfWeek) { MaterialTheme.colorScheme.primary }
-                    else { if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black },
+                color = if (day == LocalDate.now().dayOfWeek) {
+                    MaterialTheme.colorScheme.primary
+                } else if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
+                    darkRed
+                } else {
+                    if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
+                },
                 fontFamily = FontFamily.Serif,
                 maxLines = 1
             )
@@ -46,8 +50,10 @@ fun RowDaysOfWeek(
 
 @Preview(showBackground = false)
 @Composable
-fun RowDaysOfWeekPreview(){
+fun RowDaysOfWeekPreview() {
     RowDaysOfWeek(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
     )
 }

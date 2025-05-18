@@ -48,7 +48,7 @@ import com.example.reminderbirthday_calendar.presentation.components.dialogWindo
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.SortEventTypeDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ThemeDialog
-import com.example.reminderbirthday_calendar.presentation.components.settings.NotificationPermissionDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.NotificationPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.settings.RedClearButton
 import com.example.reminderbirthday_calendar.presentation.components.settings.SettingsItem
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ClearEvents

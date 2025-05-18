@@ -72,7 +72,7 @@ fun NotificationPermissionScreen(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 Text(
-                    text = "Разрешение на отправку уведомлений",
+                    text = "Permission to send notifications",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center
@@ -81,8 +81,8 @@ fun NotificationPermissionScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Разрешение на отправку уведомлений позволит оповещать вас о событиях календаря " +
-                            "(разрешение можно всегда отключить в настройках)",
+                    text = "Permission to send notifications will allow you to be notified about calendar events " +
+                            "(The resolution can always be disabled in the settings)",
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
@@ -99,7 +99,7 @@ fun NotificationPermissionScreen(
                     .padding(18.dp)
             ) {
                 Text(
-                    text = "Разрешить",
+                    text = "Allow",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                 )

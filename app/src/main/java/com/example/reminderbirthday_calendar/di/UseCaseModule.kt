@@ -9,6 +9,7 @@ import com.example.domain.repository.ImportFileRepository
 import com.example.domain.repository.SettingsRepository
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
 import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
+import com.example.domain.useCase.calendar.event.DeleteEventUseCase
 import com.example.domain.useCase.calendar.event.DeleteEventsUseCase
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventByContactNameUseCase
@@ -20,6 +21,8 @@ import com.example.domain.useCase.calendar.event.GetEventsBySortTypeUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
+import com.example.domain.useCase.calendar.zodiac.GetChineseZodiacUseCase
+import com.example.domain.useCase.calendar.zodiac.GetWesternZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.GetStatusChineseZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.GetStatusWesternZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.SetStatusChineseZodiacUseCase
@@ -55,6 +58,7 @@ import com.example.domain.useCase.settings.theme.GetThemeUseCase
 import com.example.domain.useCase.settings.theme.SetThemeUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.SetStatusViewDaysLeftUseCase
+import com.example.domain.util.zodiac.ZodiacCalculator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -165,6 +169,12 @@ object UseCaseModule {
     @Singleton
     fun provideDeleteAllEventsUseCase(eventRepository: EventRepository): DeleteAllEventsUseCase{
         return DeleteAllEventsUseCase(repository = eventRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteEventUseCase(eventRepository: EventRepository): DeleteEventUseCase{
+        return DeleteEventUseCase(repository = eventRepository)
     }
 
     @Provides
@@ -367,5 +377,17 @@ object UseCaseModule {
     @Singleton
     fun provideGetEventByIdUseCase(eventRepository: EventRepository): GetEventByIdUseCase{
         return GetEventByIdUseCase(repository = eventRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetChineseZodiacUseCase(zodiacCalculator: ZodiacCalculator): GetChineseZodiacUseCase {
+        return GetChineseZodiacUseCase(zodiacCalculator = zodiacCalculator)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetWesternZodiacUseCase(zodiacCalculator: ZodiacCalculator): GetWesternZodiacUseCase {
+        return GetWesternZodiacUseCase(zodiacCalculator = zodiacCalculator)
     }
 }

@@ -220,6 +220,8 @@ class AddEventViewModel @Inject constructor(
                     ) }
                 }
             }
+
+
         }
     }
 }

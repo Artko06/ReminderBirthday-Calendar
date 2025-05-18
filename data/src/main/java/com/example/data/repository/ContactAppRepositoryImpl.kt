@@ -5,13 +5,12 @@ import android.content.ContentProviderOperation
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.graphics.BitmapFactory
-import android.media.ThumbnailUtils
 import android.provider.ContactsContract
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.core.database.getStringOrNull
 import com.example.data.local.util.image.bitmapToByteArray
-import com.example.data.local.util.image.getBitmapSquareSize
+import com.example.data.local.util.image.compressImageWithResize
 import com.example.domain.models.event.ContactInfo
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
@@ -178,25 +177,17 @@ class ContactAppRepositoryImpl(
 
                 // Get the image, if any, and convert it to byte array
                 val imageStream = ContactsContract.Contacts.openContactPhotoInputStream(
-                    resolver,
-                    ContentUris.withAppendedId(
+                    /* cr = */ resolver,
+                    /* contactUri = */ ContentUris.withAppendedId(
                         ContactsContract.Contacts.CONTENT_URI,
                         id.toLong()
-                    )
+                    ),
+                    /* preferHighres = */ true
                 )
                 val bitmap = BitmapFactory.decodeStream(imageStream)
                 var image: ByteArray? = null
                 if (bitmap != null) {
-                    // Check if the image is too big and resize it to a square if needed
-                    var sizeImage = getBitmapSquareSize(bitmap)
-                    if (sizeImage > 450) sizeImage = 450
-                    val resizedBitmap = ThumbnailUtils.extractThumbnail(
-                        bitmap,
-                        sizeImage,
-                        sizeImage,
-                        ThumbnailUtils.OPTIONS_RECYCLE_INPUT,
-                    )
-                    image = bitmapToByteArray(resizedBitmap)
+                    image = bitmapToByteArray(bitmap).compressImageWithResize()
                 }
 
                 val contactInfo = ContactInfo(

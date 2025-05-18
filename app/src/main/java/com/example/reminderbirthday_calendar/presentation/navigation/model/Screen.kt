@@ -10,4 +10,7 @@ sealed class Screen(
     object EventDetailScreen : Screen("EVENT_DETAIL_SCREEN/{$EVENT_ID_KEY}") {
         fun passEventId(eventId: Long) = "EVENT_DETAIL_SCREEN/$eventId"
     }
+    object EditEventScreen: Screen("EDIT_EVENT_SCREEN/{$EVENT_ID_KEY}") {
+        fun passEventId(eventId: Long) = "EDIT_EVENT_SCREEN/$eventId"
+    }
 }
