@@ -69,7 +69,10 @@ fun EditEventScreen(
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            if (uri == null) return@rememberLauncherForActivityResult
+            if (uri == null) {
+                editEventViewModel.onEvent(event = EditEvent.OnPickPhoto(null))
+                return@rememberLauncherForActivityResult
+            }
 
             val byteArray: ByteArray?
 

@@ -53,6 +53,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.data.local.util.image.compressImageWithResize
 import com.example.data.local.util.image.toByteArray
+import com.example.domain.models.settings.ThemeType
+import com.example.reminderbirthday_calendar.LocalTheme
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorEventType
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorSortEventTypeForAdd
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.TextEntry
@@ -61,6 +63,7 @@ import com.example.reminderbirthday_calendar.presentation.components.dialogWindo
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.AddEventViewModel
+import com.example.reminderbirthday_calendar.ui.theme.platinum
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -85,7 +88,10 @@ fun AddEventScreen(
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            if (uri == null) return@rememberLauncherForActivityResult
+            if (uri == null) {
+                addEventViewModel.onEvent(event = AddEvent.OnPickPhoto(null))
+                return@rememberLauncherForActivityResult
+            }
 
             val byteArray: ByteArray?
 
@@ -176,7 +182,7 @@ fun AddEventScreen(
                 modifier = Modifier
                     .size(80.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color.LightGray)
+                    .background(if (LocalTheme.current == ThemeType.DARK) Color.LightGray else platinum)
                     .clickable {
                         singlePhotoPickerLauncher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
