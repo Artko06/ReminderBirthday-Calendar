@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -68,11 +68,11 @@ fun CalendarGrid(
             count = daysOfMonth,
             key = { num -> "DayInThisMonth_$num" }
         ) { dayIndex ->
-            Column(
+            Box(
                 modifier = Modifier
                     .size(45.dp)
                     .padding(6.dp)
-                    .clip(shape = CircleShape)
+                    .clip(CircleShape)
                     .background(
                         color = if (dayIndex + 1 == selectedDate?.dayOfMonth)
                             MaterialTheme.colorScheme.primary
@@ -81,17 +81,37 @@ fun CalendarGrid(
                     )
                     .border(
                         width = 1.dp,
-                        color = if (currentMonth.atDay(dayIndex + 1) == LocalDate.now()) MaterialTheme.colorScheme.primary
+                        color = if (currentMonth.atDay(dayIndex + 1) == LocalDate.now())
+                            MaterialTheme.colorScheme.primary
                         else Color.Transparent,
                         shape = CircleShape
                     )
-                    .clickable(onClick = { onDateSelected(currentMonth.atDay(dayIndex + 1)) }),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .clickable { onDateSelected(currentMonth.atDay(dayIndex + 1)) },
+                contentAlignment = Alignment.Center
             ) {
+                Text(
+                    text = (dayIndex + 1).toString(),
+                    color = when {
+                        currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SATURDAY ||
+                                currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SUNDAY -> darkRed
+
+                        dayIndex + 1 == selectedDate?.dayOfMonth -> {
+                            if (LocalTheme.current == ThemeType.DARK) Color.Black else Color.White
+                        }
+
+                        else -> {
+                            if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
+                        }
+                    },
+                    fontFamily = FontFamily.Serif
+                )
+
                 if (currentMonth.atDay(dayIndex + 1).withYear(anyYear) in dates.keys) {
                     Box(
                         modifier = Modifier
+                            .align(Alignment.TopCenter)
                             .size(6.dp)
+                            .offset(y=1.5.dp)
                             .background(
                                 brush = Brush.radialGradient(
                                     colors = getSafeGradientColorsForDay(
@@ -106,21 +126,7 @@ fun CalendarGrid(
                                 shape = CircleShape
                             )
                     )
-                } else Box(modifier = Modifier.size(6.dp))
-
-                Text(
-                    text = (dayIndex + 1).toString(),
-                    color = if (currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SATURDAY ||
-                        currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SUNDAY
-                    ) {
-                        darkRed
-                    } else if (dayIndex + 1 == selectedDate?.dayOfMonth) {
-                        if (LocalTheme.current == ThemeType.DARK) Color.Black else Color.White
-                    } else {
-                        if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
-                    },
-                    fontFamily = FontFamily.Serif,
-                )
+                }
             }
         }
     }
