@@ -102,6 +102,7 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun deleteAllNotificationEvent(): Int {
+        settingsDao.resetNotificationAutoIncrement()
         return settingsDao.deleteAllNotificationEvent()
     }
 

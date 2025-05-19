@@ -60,6 +60,7 @@ class EventRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllEvents(): Int {
+        eventDao.resetEventAutoIncrement()
         return eventDao.deleteAllEvents()
     }
 }

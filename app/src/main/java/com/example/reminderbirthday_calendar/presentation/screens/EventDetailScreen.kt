@@ -234,7 +234,9 @@ fun EventDetailScreen(
                                 ) {
                                     append(it.calculateNextAge().toString())
                                 }
-                                append(" years in ")
+                                append(" years ")
+                                if (it.calculateDaysLeft() != 0)
+                                    append("in ")
                                 withStyle(
                                     style = SpanStyle(
                                         fontStyle = FontStyle.Italic,
@@ -242,9 +244,13 @@ fun EventDetailScreen(
                                         fontWeight = FontWeight.Normal
                                     )
                                 ) {
-                                    append(it.calculateDaysLeft().toString())
+                                    if (it.calculateDaysLeft() == 0)
+                                        append("today")
+                                    else
+                                        append(it.calculateDaysLeft().toString())
                                 }
-                                append(if (it.calculateDaysLeft() == 1) " day" else " days")
+                                if (it.calculateDaysLeft() != 0)
+                                    append(if (it.calculateDaysLeft() == 1) " day" else " days")
                             }
                         },
                         fontWeight = FontWeight.Light,

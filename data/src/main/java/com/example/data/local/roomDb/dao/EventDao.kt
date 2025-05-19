@@ -32,4 +32,7 @@ interface EventDao {
 
     @Query("DELETE FROM event")
     suspend fun deleteAllEvents(): Int
+
+    @Query("DELETE FROM sqlite_sequence WHERE name = 'event'")
+    suspend fun resetEventAutoIncrement()
 }

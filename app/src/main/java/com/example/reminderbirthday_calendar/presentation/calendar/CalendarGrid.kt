@@ -4,27 +4,32 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.example.domain.models.event.Event
+import com.example.domain.models.event.SortTypeEvent
 import com.example.domain.models.settings.ThemeType
 import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.ui.theme.blueAzure
+import com.example.reminderbirthday_calendar.ui.theme.darkGreen
+import com.example.reminderbirthday_calendar.ui.theme.darkPurple
 import com.example.reminderbirthday_calendar.ui.theme.darkRed
+import com.example.reminderbirthday_calendar.ui.theme.yellow
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -53,7 +58,7 @@ fun CalendarGrid(
         ) {
             Box(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(45.dp)
                     .padding(6.dp),
                 contentAlignment = Alignment.Center
             ) { }
@@ -63,57 +68,88 @@ fun CalendarGrid(
             count = daysOfMonth,
             key = { num -> "DayInThisMonth_$num" }
         ) { dayIndex ->
-            BadgedBox(
-                badge = {
-                    if (currentMonth.atDay(dayIndex + 1).withYear(anyYear) in dates.keys) {
-                        Badge(
-                            modifier = Modifier.size(16.dp).offset(x = (-5).dp, y = 5.dp).clip(shape = CircleShape),
-                            contentColor = if (LocalTheme.current == ThemeType.DARK) Color.Black else Color.White,
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ) {
-                            Text(
-                                text = dates[currentMonth.atDay(dayIndex + 1)
-                                    .withYear(anyYear)].toString()
-                            )
-                        }
-                    }
-                }
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .padding(6.dp)
-                        .clip(shape = CircleShape)
-                        .background(
-                            color = if (dayIndex + 1 == selectedDate?.dayOfMonth)
-                                MaterialTheme.colorScheme.primary
-                            else Color.Transparent,
-                            shape = CircleShape
-                        )
-                        .border(
-                            width = 1.dp,
-                            color = if (currentMonth.atDay(dayIndex + 1) == LocalDate.now()) MaterialTheme.colorScheme.primary
-                            else Color.Transparent,
-                            shape = CircleShape
-                        )
-                        .clickable(onClick = { onDateSelected(currentMonth.atDay(dayIndex + 1)) }),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = (dayIndex + 1).toString(),
-                        color = if (currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SATURDAY ||
-                            currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SUNDAY
-                        ) {
-                            darkRed
-                        } else if (dayIndex + 1 == selectedDate?.dayOfMonth) {
-                            if (LocalTheme.current == ThemeType.DARK) Color.Black else Color.White
-                        } else {
-                            if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
-                        },
-                        fontFamily = FontFamily.Serif,
+            Column(
+                modifier = Modifier
+                    .size(45.dp)
+                    .padding(6.dp)
+                    .clip(shape = CircleShape)
+                    .background(
+                        color = if (dayIndex + 1 == selectedDate?.dayOfMonth)
+                            MaterialTheme.colorScheme.primary
+                        else Color.Transparent,
+                        shape = CircleShape
                     )
-                }
+                    .border(
+                        width = 1.dp,
+                        color = if (currentMonth.atDay(dayIndex + 1) == LocalDate.now()) MaterialTheme.colorScheme.primary
+                        else Color.Transparent,
+                        shape = CircleShape
+                    )
+                    .clickable(onClick = { onDateSelected(currentMonth.atDay(dayIndex + 1)) }),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                if (currentMonth.atDay(dayIndex + 1).withYear(anyYear) in dates.keys) {
+                    Box(
+                        modifier = Modifier
+                            .size(6.dp)
+                            .background(
+                                brush = Brush.radialGradient(
+                                    colors = getSafeGradientColorsForDay(
+                                        events = events,
+                                        currentMonth = currentMonth,
+                                        dayIndex = dayIndex,
+                                        anyYear = anyYear
+                                    ),
+                                    center = Offset(25f, 25f),
+                                    radius = 50f
+                                ),
+                                shape = CircleShape
+                            )
+                    )
+                } else Box(modifier = Modifier.size(6.dp))
+
+                Text(
+                    text = (dayIndex + 1).toString(),
+                    color = if (currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SATURDAY ||
+                        currentMonth.atDay(dayIndex + 1).dayOfWeek == DayOfWeek.SUNDAY
+                    ) {
+                        darkRed
+                    } else if (dayIndex + 1 == selectedDate?.dayOfMonth) {
+                        if (LocalTheme.current == ThemeType.DARK) Color.Black else Color.White
+                    } else {
+                        if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
+                    },
+                    fontFamily = FontFamily.Serif,
+                )
             }
         }
     }
 }
+
+fun getSafeGradientColorsForDay(
+    events: List<Event>,
+    currentMonth: YearMonth,
+    dayIndex: Int,
+    anyYear: Int
+): List<Color> {
+    val matchedColors = events
+        .filter {
+            it.originalDate.withYear(anyYear) == currentMonth.atDay(dayIndex + 1).withYear(anyYear)
+        }
+        .map { it.toColor() }
+
+    return when {
+        matchedColors.size >= 2 -> matchedColors
+        matchedColors.size == 1 -> listOf(matchedColors[0], matchedColors[0])
+        else -> listOf(Color.Transparent, Color.Transparent)
+    }
+}
+
+fun Event.toColor(): Color = when (this.sortTypeEvent) {
+    SortTypeEvent.FAMILY -> darkRed
+    SortTypeEvent.RELATIVE -> yellow
+    SortTypeEvent.FRIEND -> blueAzure
+    SortTypeEvent.COLLEAGUE -> darkGreen
+    SortTypeEvent.OTHER -> darkPurple
+}
+

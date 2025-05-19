@@ -1,6 +1,5 @@
 package com.example.data.local.util.google
 
-import android.util.Base64
 import com.example.data.local.entity.settings.event.EventEntity
 import com.example.data.local.roomDb.dao.EventDao
 import com.google.firebase.auth.FirebaseAuth
@@ -141,7 +140,6 @@ class GoogleDriveClient(
             "originalDate" to originalDate,
             "yearMatter" to yearMatter,
             "notes" to notes,
-            "image" to image?.let { Base64.encodeToString(it, Base64.DEFAULT) },
         )
     }
 
@@ -155,9 +153,7 @@ class GoogleDriveClient(
             originalDate = event["originalDate"] as String,
             yearMatter = event["yearMatter"] as Boolean,
             notes = event["notes"] as? String,
-            image = (event["image"] as? String)?.let {
-                Base64.decode(it, Base64.DEFAULT)
-            }
+            image = null
         )
     }
 }

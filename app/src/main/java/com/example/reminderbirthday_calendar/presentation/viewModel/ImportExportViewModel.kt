@@ -381,7 +381,7 @@ class ImportExportViewModel @Inject constructor(
                         )
                     } else{
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "Fail upload from ${email ?: ""}}"
+                            message = "Fail upload from ${email ?: ""}"
                         )
                         )
                     }

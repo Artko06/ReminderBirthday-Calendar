@@ -148,7 +148,38 @@ fun EventItem(
                     )
                 }
 
-                if (daysLeft == 0) {
+                if (daysLeft < 0){
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(1.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = (daysLeft * -1).toString(),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        )
+
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                ) {
+                                    if (daysLeft == -1) append("day") else append("days")
+                                }
+
+                                append(" ago")
+                            },
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            lineHeight = 17.sp,
+                            color = Color.Gray
+                        )
+                    }
+                } else if (daysLeft == 0) {
                     Box(
                         modifier = Modifier.padding(end = 8.dp),
                         contentAlignment = Alignment.Center
@@ -185,7 +216,7 @@ fun EventItem(
                                         fontWeight = FontWeight.Bold
                                     )
                                 ) {
-                                    append("days")
+                                    if (daysLeft == 1) append("day") else append("days")
                                 }
 
                                 append(" left")

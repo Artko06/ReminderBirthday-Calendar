@@ -19,7 +19,7 @@ fun LocalDate.calculateDaysLeftWithMyYear(year: Int): Int {
     val eventDate = this.withYear(year)
     val today = LocalDate.now()
 
-    if (today > eventDate) return 0
+    if (today > eventDate) return ChronoUnit.DAYS.between(today, eventDate).toInt() * -1
 
     return ChronoUnit.DAYS.between(today, eventDate).toInt()
 }

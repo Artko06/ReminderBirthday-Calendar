@@ -24,4 +24,7 @@ interface SettingsDao {
 
     @Query("DELETE FROM notification_event")
     suspend fun deleteAllNotificationEvent(): Int
+
+    @Query("DELETE FROM sqlite_sequence WHERE name = 'notification_event'")
+    suspend fun resetNotificationAutoIncrement()
 }

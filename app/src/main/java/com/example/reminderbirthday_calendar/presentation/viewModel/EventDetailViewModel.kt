@@ -124,7 +124,7 @@ class EventDetailViewModel @Inject constructor(
 
             DetailInfoEvent.SaveNewNotes -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val event = _eventDetailState.value.event
+                    val event = eventDetailState.value.event
 
                     _eventDetailState.update { it.copy(
                         event = Event(
