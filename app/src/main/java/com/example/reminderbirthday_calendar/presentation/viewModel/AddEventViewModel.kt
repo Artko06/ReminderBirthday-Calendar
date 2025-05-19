@@ -161,14 +161,18 @@ class AddEventViewModel @Inject constructor(
 
                     if (isSuccess) {
                         scheduleAllEventsUseCase()
-//                        if (_addEventState.value.idSelectedContact != null){
-//                            val isSuccessWriteToContact = addEventToContactAppUseCase.invoke(
-//                                contactId = _addEventState.value.idSelectedContact!!,
-//                                eventDate = _addEventState.value.date!!,
-//                                eventType = _addEventState.value.eventType,
-//                                yearMatter = _addEventState.value.yearMatter
-//                            )
-//                        }
+                        if (_addEventState.value.idSelectedContact != null &&
+                            _addEventState.value.readNameContact == _addEventState.value.valueName &&
+                            _addEventState.value.readSurnameContact == _addEventState.value.valueSurname){
+                            val isSuccessWriteToContact = addEventToContactAppUseCase.invoke(
+                                contactId = _addEventState.value.idSelectedContact!!,
+                                eventDate = _addEventState.value.date!!,
+                                eventType = _addEventState.value.eventType,
+                                yearMatter = _addEventState.value.yearMatter
+                            )
+
+                            println("isSuccessWriteToContact: $isSuccessWriteToContact")
+                        }
                         _addEventSharedFlow.emit(
                             value = ShowToast(
                                 message = "Successfully added " +
@@ -204,6 +208,8 @@ class AddEventViewModel @Inject constructor(
             is AddEvent.OnSelectContact -> {
                 _addEventState.update { it.copy(
                     idSelectedContact = event.contact.id,
+                    readNameContact = event.contact.name,
+                    readSurnameContact = event.contact.surname,
                     valueName = event.contact.name,
                     valueSurname = event.contact.surname,
                     pickedPhoto = event.contact.image,

@@ -10,6 +10,8 @@ data class AddEventState (
     val isShowListContacts: Boolean = false,
 
     val isLoadingContactList: Boolean = false,
+    val readNameContact: String = "",
+    val readSurnameContact: String = "",
     val listContacts: List<ContactInfo> = emptyList(),
     val idSelectedContact: String? = null,
     val pickedPhoto: ByteArray? = null,
@@ -34,6 +36,8 @@ data class AddEventState (
         if (isLoadingContactList != other.isLoadingContactList) return false
         if (yearMatter != other.yearMatter) return false
         if (isEnableAddEventButton != other.isEnableAddEventButton) return false
+        if (readNameContact != other.readNameContact) return false
+        if (readSurnameContact != other.readSurnameContact) return false
         if (listContacts != other.listContacts) return false
         if (idSelectedContact != other.idSelectedContact) return false
         if (!pickedPhoto.contentEquals(other.pickedPhoto)) return false
@@ -53,6 +57,8 @@ data class AddEventState (
         result = 31 * result + isLoadingContactList.hashCode()
         result = 31 * result + yearMatter.hashCode()
         result = 31 * result + isEnableAddEventButton.hashCode()
+        result = 31 * result + readNameContact.hashCode()
+        result = 31 * result + readSurnameContact.hashCode()
         result = 31 * result + listContacts.hashCode()
         result = 31 * result + (idSelectedContact?.hashCode() ?: 0)
         result = 31 * result + (pickedPhoto?.contentHashCode() ?: 0)

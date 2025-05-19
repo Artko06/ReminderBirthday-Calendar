@@ -54,7 +54,7 @@ class ContactAppRepositoryImpl(
     ): Boolean {
         val operations = ArrayList<ContentProviderOperation>()
 
-        // Get rawContactId by contactId
+        // 1. get rawContactId by contactId
         val rawContactIdCursor = resolver.query(
             ContactsContract.RawContacts.CONTENT_URI,
             arrayOf(ContactsContract.RawContacts._ID),
@@ -63,31 +63,72 @@ class ContactAppRepositoryImpl(
             null
         )
 
-        var rawContactId: Long? = null
-        if (rawContactIdCursor != null && rawContactIdCursor.moveToFirst()) {
-            rawContactId = rawContactIdCursor.getLong(0)
-            rawContactIdCursor.close()
-        }
+        val rawContactId = rawContactIdCursor?.use {
+            if (it.moveToFirst()) it.getLong(0) else null
+        } ?: return false
 
-        if (rawContactId == null) return false
-
-        // Type Android event
+        // 2. Type event Android
         val androidEventType = when (eventType) {
             EventType.BIRTHDAY -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
             EventType.ANNIVERSARY -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
             EventType.OTHER -> ContactsContract.CommonDataKinds.Event.TYPE_OTHER
         }
 
-        val builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-            .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawContactId)
-            .withValue(
-                ContactsContract.Data.MIMETYPE,
-                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-            )
-            .withValue(ContactsContract.CommonDataKinds.Event.TYPE, androidEventType)
-            .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, eventDate)
+        // 3. Check: Type event Android exist?
+        val existingEventCursor = resolver.query(
+            ContactsContract.Data.CONTENT_URI,
+            arrayOf(ContactsContract.Data._ID),
+            "${ContactsContract.Data.RAW_CONTACT_ID} = ? AND " +
+                    "${ContactsContract.Data.MIMETYPE} = ? AND " +
+                    "${ContactsContract.CommonDataKinds.Event.TYPE} = ?",
+            arrayOf(
+                rawContactId.toString(),
+                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                androidEventType.toString()
+            ),
+            null
+        )
 
-        operations.add(builder.build())
+        val eventExists = existingEventCursor?.use {
+            it.moveToFirst()
+        } == true
+
+        if (eventExists) {
+            // 4a. Update event
+            val eventId = resolver.query(
+                ContactsContract.Data.CONTENT_URI,
+                arrayOf(ContactsContract.Data._ID),
+                "${ContactsContract.Data.RAW_CONTACT_ID} = ? AND " +
+                        "${ContactsContract.Data.MIMETYPE} = ? AND " +
+                        "${ContactsContract.CommonDataKinds.Event.TYPE} = ?",
+                arrayOf(
+                    rawContactId.toString(),
+                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                    androidEventType.toString()
+                ),
+                null
+            )?.use { cursor ->
+                if (cursor.moveToFirst()) cursor.getLong(0) else null
+            }
+
+            if (eventId != null) {
+                val updateOp = ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                    .withSelection("${ContactsContract.Data._ID} = ?", arrayOf(eventId.toString()))
+                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, eventDate)
+                operations.add(updateOp.build())
+            }
+        } else {
+            // 4b. Insert New Event
+            val insertOp = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawContactId)
+                .withValue(
+                    ContactsContract.Data.MIMETYPE,
+                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
+                )
+                .withValue(ContactsContract.CommonDataKinds.Event.TYPE, androidEventType)
+                .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, eventDate)
+            operations.add(insertOp.build())
+        }
 
         return try {
             resolver.applyBatch(ContactsContract.AUTHORITY, operations)
@@ -97,6 +138,7 @@ class ContactAppRepositoryImpl(
             false
         }
     }
+
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     private fun getPhoneNumber(resolver: ContentResolver, contactId: String): String {

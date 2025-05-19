@@ -46,7 +46,7 @@ import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -63,11 +63,16 @@ fun EventsScreen(
     val eventsSharedFlow = eventsViewModel.eventsSharedFlow
 
     @OptIn(ExperimentalPermissionsApi::class)
-    val permissionReadState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
+    val permissionsReadWriteContactsState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS
+        )
+    )
 
     LaunchedEffect(Unit) {
         @OptIn(ExperimentalPermissionsApi::class)
-        permissionReadState.launchPermissionRequest()
+        permissionsReadWriteContactsState.launchMultiplePermissionRequest()
     }
 
     LaunchedEffect(Unit) {
