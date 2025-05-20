@@ -8,6 +8,7 @@ import java.time.LocalDate
 data class EventDetailState(
     val event: Event = Event(
         id = 1,
+        idContact = null,
         nameContact = "UNKNOWN",
         originalDate = LocalDate.now(),
         yearMatter = true

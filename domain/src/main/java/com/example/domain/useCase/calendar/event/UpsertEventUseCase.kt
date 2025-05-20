@@ -8,6 +8,7 @@ import java.time.LocalDate
 
 class UpsertEventUseCase(private val repository: EventRepository) {
     suspend operator fun invoke(
+        idContact: String?,
         eventType: EventType,
         sortTypeEvent: SortTypeEvent,
         nameContact: String,
@@ -20,6 +21,7 @@ class UpsertEventUseCase(private val repository: EventRepository) {
         return repository.upsertEvent(
             event = Event(
                 id = 0,
+                idContact = idContact,
                 eventType = eventType,
                 sortTypeEvent = sortTypeEvent,
                 nameContact = nameContact,
@@ -34,6 +36,7 @@ class UpsertEventUseCase(private val repository: EventRepository) {
 
     suspend operator fun invoke(
         id: Long,
+        idContact: String?,
         eventType: EventType,
         sortTypeEvent: SortTypeEvent,
         nameContact: String,
@@ -46,6 +49,7 @@ class UpsertEventUseCase(private val repository: EventRepository) {
         return repository.upsertEvent(
             event = Event(
                 id = id,
+                idContact = idContact,
                 eventType = eventType,
                 sortTypeEvent = sortTypeEvent,
                 nameContact = nameContact,

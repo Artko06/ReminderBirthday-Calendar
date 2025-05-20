@@ -9,6 +9,7 @@ data class EditEventState(
     val listContacts: List<ContactInfo> = emptyList(),
 
     val id: Long = 0,
+    val idContact: String? = null,
     val eventType: EventType = EventType.BIRTHDAY,
     val sortType: SortTypeEvent = SortTypeEvent.RELATIVE,
     val name: String = "",
@@ -38,6 +39,7 @@ data class EditEventState(
         if (isShowListContacts != other.isShowListContacts) return false
         if (isSaveButtonEnable != other.isSaveButtonEnable) return false
         if (listContacts != other.listContacts) return false
+        if (idContact != other.idContact) return false
         if (eventType != other.eventType) return false
         if (sortType != other.sortType) return false
         if (name != other.name) return false
@@ -57,6 +59,7 @@ data class EditEventState(
         result = 31 * result + isShowListContacts.hashCode()
         result = 31 * result + isSaveButtonEnable.hashCode()
         result = 31 * result + listContacts.hashCode()
+        result = 31 * result + (idContact?.hashCode() ?: 0)
         result = 31 * result + eventType.hashCode()
         result = 31 * result + sortType.hashCode()
         result = 31 * result + name.hashCode()

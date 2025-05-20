@@ -43,6 +43,7 @@ object Deserialization {
                 result.add(
                     EventSerializable(
                         id = mapEvent["id"]!!.toLong(),
+                        idContact = mapEvent["idContact"],
                         eventType = mapEvent["eventType"]!!,
                         sortTypeEvent = mapEvent["sortTypeEvent"]!!,
                         nameContact = mapEvent["nameContact"]!!,
@@ -83,19 +84,21 @@ object Deserialization {
                 if (tokens.size < 9) continue // Skip empty strings
 
                 val id = tokens[0]
-                val eventType = tokens[1]
-                val sortType = tokens[2]
-                val nameContact = tokens[2]
-                val surnameContact = tokens[3]
-                val originalDate = tokens[4]
-                val yearMatter = tokens[5].toBoolean()
-                val notes = tokens[6]
-                val imageBase64 = tokens[7]
+                val idContact = tokens[1]
+                val eventType = tokens[2]
+                val sortType = tokens[3]
+                val nameContact = tokens[4]
+                val surnameContact = tokens[5]
+                val originalDate = tokens[6]
+                val yearMatter = tokens[7].toBoolean()
+                val notes = tokens[8]
+                val imageBase64 = tokens[9]
                 val imageBytes = if (imageBase64.isNotBlank()) Base64.decode(imageBase64, Base64.NO_WRAP) else null
 
                 events.add(
                     EventSerializable(
                         id = id.toLong(),
+                        idContact = idContact,
                         eventType = eventType,
                         sortTypeEvent = sortType,
                         nameContact = nameContact,

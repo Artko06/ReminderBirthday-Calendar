@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
+import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.example.domain.useCase.calendar.event.GetEventByIdUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
@@ -36,6 +37,7 @@ class EditEventViewModel @Inject constructor(
     private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
     private val importContactsUseCase: ImportContactsUseCase,
     private val getEventByIdUseCase: GetEventByIdUseCase,
+    private val addEventToContactAppUseCase: AddEventToContactAppUseCase,
     @ApplicationContext private val appContext: Context
 ): ViewModel() {
     private val _editEventState = MutableStateFlow(EditEventState())
@@ -77,6 +79,7 @@ class EditEventViewModel @Inject constructor(
             if (gotEvent != null){
                 _editEventState.update { it.copy(
                     id = gotEvent.id,
+                    idContact = gotEvent.idContact,
                     eventType = gotEvent.eventType,
                     sortType = gotEvent.sortTypeEvent,
                     name = gotEvent.nameContact,
@@ -96,14 +99,6 @@ class EditEventViewModel @Inject constructor(
                 _editEventState.update {
                     it.copy(
                         date = event.date
-                    )
-                }
-            }
-
-            is EditEvent.ChangeEventType -> {
-                _editEventState.update {
-                    it.copy(
-                        eventType = event.eventType
                     )
                 }
             }
@@ -205,6 +200,7 @@ class EditEventViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     val isSuccess = upsertEventUseCase.invoke(
                         id = _editEventState.value.id,
+                        idContact = _editEventState.value.idContact,
                         eventType = _editEventState.value.eventType,
                         sortTypeEvent = _editEventState.value.sortType,
                         nameContact = _editEventState.value.name,
@@ -217,6 +213,15 @@ class EditEventViewModel @Inject constructor(
 
                     if (isSuccess) {
                         scheduleAllEventsUseCase()
+
+                        if (!_editEventState.value.idContact.isNullOrBlank()){
+                            addEventToContactAppUseCase.invoke(
+                                contactId = _editEventState.value.idContact!!,
+                                eventDate = _editEventState.value.date,
+                                eventType = _editEventState.value.eventType,
+                                yearMatter = _editEventState.value.yearMatter
+                            )
+                        }
                     }
                 }
             }

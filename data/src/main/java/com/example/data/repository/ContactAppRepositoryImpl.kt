@@ -319,6 +319,7 @@ class ContactAppRepositoryImpl(
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     private fun getEventsFromContacts(resolver: ContentResolver): List<Event> {
         return getContactEvents(resolver).mapNotNull { contact ->
+            val idContact = contact.id.trim()
             val nameContact = contact.name.trim()
             val surnameContact = contact.surname.trim()
             var countYear = true
@@ -334,6 +335,7 @@ class ContactAppRepositoryImpl(
 
                 Event(
                     id = 0,
+                    idContact = idContact,
                     eventType = contact.eventType,
                     nameContact = nameContact,
                     surnameContact = surnameContact,

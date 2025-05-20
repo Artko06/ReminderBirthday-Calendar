@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 data class Event(
     val id: Long,
+    val idContact: String?,
     val eventType: EventType = EventType.BIRTHDAY,
     val sortTypeEvent: SortTypeEvent = SortTypeEvent.RELATIVE,
     val nameContact: String,
@@ -21,6 +22,7 @@ data class Event(
 
         if (id != other.id) return false
         if (yearMatter != other.yearMatter) return false
+        if (idContact != other.idContact) return false
         if (eventType != other.eventType) return false
         if (sortTypeEvent != other.sortTypeEvent) return false
         if (nameContact != other.nameContact) return false
@@ -35,6 +37,7 @@ data class Event(
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + yearMatter.hashCode()
+        result = 31 * result + (idContact?.hashCode() ?: 0)
         result = 31 * result + eventType.hashCode()
         result = 31 * result + sortTypeEvent.hashCode()
         result = 31 * result + nameContact.hashCode()

@@ -83,6 +83,7 @@ class EventDetailViewModel @Inject constructor(
                 it.copy(
                     event = gotEvent ?: Event(
                         id = 1,
+                        idContact = null,
                         nameContact = "UNKNOWN",
                         originalDate = localDate,
                         yearMatter = true
@@ -129,6 +130,7 @@ class EventDetailViewModel @Inject constructor(
                     _eventDetailState.update { it.copy(
                         event = Event(
                             id = event.id,
+                            idContact = event.idContact,
                             eventType = event.eventType,
                             sortTypeEvent = event.sortTypeEvent,
                             nameContact = event.nameContact,
@@ -142,6 +144,7 @@ class EventDetailViewModel @Inject constructor(
 
                     upsertEventUseCase.invoke(
                         id = event.id,
+                        idContact = event.idContact,
                         eventType = event.eventType,
                         sortTypeEvent = event.sortTypeEvent,
                         nameContact = event.nameContact,

@@ -47,7 +47,8 @@ class AddEventViewModel @Inject constructor(
             else if (state.yearMatter && state.date.year > LocalDate.now().year) false
             else if (state.yearMatter &&
                 state.date.year == LocalDate.now().year &&
-                state.date.dayOfYear > LocalDate.now().dayOfYear) false
+                state.date.dayOfYear > LocalDate.now().dayOfYear
+            ) false
             else true
         }
         .stateIn(
@@ -149,6 +150,7 @@ class AddEventViewModel @Inject constructor(
             AddEvent.AddEventButton -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val isSuccess = upsertEventUseCase.invoke(
+                        idContact = _addEventState.value.idSelectedContact,
                         eventType = _addEventState.value.eventType,
                         sortTypeEvent = _addEventState.value.sortType,
                         nameContact = _addEventState.value.valueName,
@@ -161,9 +163,10 @@ class AddEventViewModel @Inject constructor(
 
                     if (isSuccess) {
                         scheduleAllEventsUseCase()
-                        if (_addEventState.value.idSelectedContact != null &&
+                        if (!_addEventState.value.idSelectedContact.isNullOrBlank() &&
                             _addEventState.value.readNameContact == _addEventState.value.valueName &&
-                            _addEventState.value.readSurnameContact == _addEventState.value.valueSurname){
+                            _addEventState.value.readSurnameContact == _addEventState.value.valueSurname
+                        ) {
                             val isSuccessWriteToContact = addEventToContactAppUseCase.invoke(
                                 contactId = _addEventState.value.idSelectedContact!!,
                                 eventDate = _addEventState.value.date!!,
@@ -176,14 +179,14 @@ class AddEventViewModel @Inject constructor(
                         _addEventSharedFlow.emit(
                             value = ShowToast(
                                 message = "Successfully added " +
-                                    EventType.BIRTHDAY.name.lowercase() + " event"
+                                        EventType.BIRTHDAY.name.lowercase() + " event"
                             )
                         )
                     } else {
                         _addEventSharedFlow.emit(
                             value = ShowToast(
                                 message = "Error added " +
-                                    EventType.BIRTHDAY.name.lowercase() + " event"
+                                        EventType.BIRTHDAY.name.lowercase() + " event"
                             )
                         )
                     }
@@ -199,42 +202,53 @@ class AddEventViewModel @Inject constructor(
             }
 
             AddEvent.CloseListContacts -> {
-                _addEventState.update { it.copy(
-                    isShowListContacts = false,
-                    isLoadingContactList = false
-                ) }
+                _addEventState.update {
+                    it.copy(
+                        isShowListContacts = false,
+                        isLoadingContactList = false
+                    )
+                }
             }
 
             is AddEvent.OnSelectContact -> {
-                _addEventState.update { it.copy(
-                    idSelectedContact = event.contact.id,
-                    readNameContact = event.contact.name,
-                    readSurnameContact = event.contact.surname,
-                    valueName = event.contact.name,
-                    valueSurname = event.contact.surname,
-                    pickedPhoto = event.contact.image,
-                    isShowListContacts = false,
-                    isLoadingContactList = false
-                ) }
+                _addEventState.update {
+                    it.copy(
+                        idSelectedContact = event.contact.id,
+                        readNameContact = event.contact.name,
+                        readSurnameContact = event.contact.surname,
+                        valueName = event.contact.name,
+                        valueSurname = event.contact.surname,
+                        pickedPhoto = event.contact.image,
+                        isShowListContacts = false,
+                        isLoadingContactList = false
+                    )
+                }
             }
 
             AddEvent.ShowListContacts -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    _addEventState.update { it.copy(
-                        isLoadingContactList = true
-                    ) }
+                    _addEventState.update {
+                        it.copy(
+                            isLoadingContactList = true
+                        )
+                    }
 
                     val permissionReadState =
-                        ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
+                        ContextCompat.checkSelfPermission(
+                            appContext,
+                            Manifest.permission.READ_CONTACTS
+                        ) ==
                                 PackageManager.PERMISSION_GRANTED
 
                     val contacts = if (permissionReadState) importContactsUseCase() else emptyList()
 
-                    _addEventState.update { it.copy(
-                        listContacts = contacts,
-                        isShowListContacts = true,
-                        isLoadingContactList = false
-                    ) }
+                    _addEventState.update {
+                        it.copy(
+                            listContacts = contacts,
+                            isShowListContacts = true,
+                            isLoadingContactList = false
+                        )
+                    }
                 }
             }
 

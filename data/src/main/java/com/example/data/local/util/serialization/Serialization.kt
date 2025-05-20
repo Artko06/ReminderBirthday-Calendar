@@ -13,6 +13,7 @@ object Serialization {
         events.forEachIndexed { index, event ->
             strBuilder.append(" ".repeat(2) + "{\n")
             strBuilder.append(" ".repeat(4) + "\"id\": ${event.id},\n")
+            strBuilder.append(" ".repeat(4) + "\"idContact\": ${event.idContact},\n")
             strBuilder.append(" ".repeat(4) + "\"eventType\": \"${event.eventType}\",\n")
             strBuilder.append(" ".repeat(4) + "\"sortTypeEvent\": \"${event.sortTypeEvent}\",\n")
             strBuilder.append(" ".repeat(4) + "\"nameContact\": \"${event.nameContact}\",\n")
@@ -38,6 +39,7 @@ object Serialization {
 
         csvBuilder.appendLine(
                     "id," +
+                    "idContact," +
                     "eventType," +
                     "sortTypeEvent," +
                     "nameContact," +
@@ -53,6 +55,7 @@ object Serialization {
 
             val line = listOf(
                 event.id,
+                event.idContact ?: "",
                 event.eventType,
                 event.sortTypeEvent,
                 event.nameContact,

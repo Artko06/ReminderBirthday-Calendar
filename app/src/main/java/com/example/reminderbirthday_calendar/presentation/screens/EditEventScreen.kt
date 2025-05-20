@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.data.local.util.image.compressImageWithResize
 import com.example.data.local.util.image.toByteArray
-import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorEventType
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorSortEventTypeForAdd
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.TextEntry
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.CustomDatePickerDialog
@@ -189,17 +188,7 @@ fun EditEventScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
-
-            SelectorEventType(
-                onClick = { eventType ->
-                    editEventViewModel.onEvent(event = EditEvent.ChangeEventType(eventType))
-                },
-                selectedEventType = editEventState.eventType,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
-            )
+            Spacer(modifier = Modifier.width(40.dp))
 
             TextEntry(
                 description = "Name",
