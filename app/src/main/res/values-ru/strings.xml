@@ -35,4 +35,45 @@
     <string name="sort_type_event_friend">Друзья</string>
     <string name="sort_type_event_colleague">Коллеги</string>
     <string name="sort_type_event_other">Другие</string>
+
+    <!-- Settings -->
+    <string name="preferences">Предпочтения</string>
+    <string name="notification">Уведомления</string>
+    <string name="notification_info">Получать напоминания</string>
+    <string name="time_notification">Время уведомления</string>
+    <string name="time_notification_info">Установить время уведомлений</string>
+    <string name="theme">Тема</string>
+    <string name="theme_info">Выберите тему приложения</string>
+    <string name="type_event">Типы событий</string>
+    <string name="type_event_info">Выберите типы событий</string>
+    <string name="zodiac_sign">Знак зодиака</string>
+    <string name="chinese_sign">Китайский знак</string>
+    <string name="sign_info">Показывать знак</string>
+    <string name="export_and_import">Экспорт и импорт</string>
+    <string name="import_events">Импорт событий</string>
+    <string name="import_events_info">Импорт событий из контактов</string>
+    <string name="export_event_json">Экспорт событий и поделиться (JSON)</string>
+    <string name="export_event_csv">Экспорт событий и поделиться (CSV)</string>
+    <string name="export_event_file_info">Поделиться событиями с другими приложениями</string>
+    <string name="import_events_file">Импорт событий (JSON или CSV)</string>
+    <string name="import_events_file_info">Импорт событий из файловой системы</string>
+    <string name="cloud_export">Облачный экспорт событий</string>
+    <string name="cloud_export_info">Экспорт событий в firestore</string>
+    <string name="cloud_import">Облачный импорт событий</string>
+    <string name="cloud_import_info">Импорт событий из firestore</string>
+    <string name="data">Data</string>
+    <string name="sign_in_with_google">Вход с помощью google</string>
+    <string name="sign_in_with_google_ingo">Авторизуйтесь пж</string>
+    <string name="total_events">Всего событий</string>
+    <plurals name="total_events_count">
+        <item quantity="one">%d событие</item>
+        <item quantity="few">%d события</item>
+        <item quantity="many">%d событий</item>
+        <item quantity="other">%d событий</item>
+    </plurals>
+    <string name="About_app">О приложении</string>
+    <string name="About_app_info">Версия %s</string>
+    <string name="clear_events">Очистить события</string>
+
+
 </resources>

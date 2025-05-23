@@ -164,6 +164,11 @@ fun CalendarScreen(
                 items = calendarState.eventsInDate,
                 key = { it.id.toString() + it.nameContact + it.surnameContact }
             ) { event ->
+                val daysLeft = event.originalDate.calculateDaysLeftWithMyYear(
+                    year = calendarState.currentMonth.plusMonths(pagerState.currentPage.toLong()).year
+                )
+
+                if (calendarState.selectDate == null && daysLeft < 0) return@items
                 EventItem(
                     id = event.id,
                     name = event.nameContact,
@@ -176,9 +181,7 @@ fun CalendarScreen(
                         targetYear = calendarState.currentMonth.plusMonths(pagerState.currentPage.toLong()).year
                     ),
                     isViewDaysLeft = eventState.isViewDaysLeft,
-                    daysLeft = event.originalDate.calculateDaysLeftWithMyYear(
-                        year = calendarState.currentMonth.plusMonths(pagerState.currentPage.toLong()).year
-                    ),
+                    daysLeft = daysLeft,
                     image = event.image,
                     onNavigateByClick = onNavigateToEventDetailScreen
                 )

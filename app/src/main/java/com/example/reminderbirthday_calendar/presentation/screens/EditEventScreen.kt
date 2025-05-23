@@ -226,6 +226,8 @@ fun EditEventScreen(
                     .padding(horizontal = 10.dp),
             )
 
+            Spacer(modifier = Modifier.height(12.dp))
+
             SelectorSortEventTypeForAdd(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -235,6 +237,8 @@ fun EditEventScreen(
                 },
                 selectedSortType = editEventState.sortType
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             TextButton(
                 onClick = {

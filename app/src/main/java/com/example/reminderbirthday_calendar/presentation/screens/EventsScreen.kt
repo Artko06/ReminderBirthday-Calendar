@@ -33,8 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.models.date.MonthYear
 import com.example.domain.util.extensionFunc.calculateDaysLeft
 import com.example.domain.util.extensionFunc.calculateNextAge
+import com.example.domain.util.extensionFunc.nextEvent
 import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.evetns.DaysLeftButton
@@ -188,23 +190,27 @@ fun EventsScreen(
         } else {
             val events = if (eventState.searchStr.isEmpty()) eventState.events else eventState.filterEvents
 
-            val groupedEvents = events.groupBy { it.originalDate.monthValue }
+            val groupedEvents = events
+                .sortedBy { it.originalDate.calculateDaysLeft() }
+                .groupBy { event ->
+                    val nextDate = event.originalDate.nextEvent()
+                    MonthYear(nextDate.year, nextDate.monthValue)
+                }
 
             LazyColumn(state = stateLazyColumn) {
-                groupedEvents.forEach { (monthNumber, eventsInMonth) ->
-                    item(
-                        key = "MonthYearText_$monthNumber"
-                    ) {
+                groupedEvents.forEach { (yearMonthPair, eventsInGroup) ->
+                    val (year, month) = yearMonthPair
+
+                    item(key = "MonthYearText_${month}_$year") {
                         MonthYearText(
-                            numberMonth = monthNumber,
-                            numberYear = eventsInMonth[0].originalDate.year +
-                                    eventsInMonth[0].originalDate.calculateNextAge()
+                            numberMonth = month,
+                            numberYear = year
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }
 
                     items(
-                        items = eventsInMonth,
+                        items = eventsInGroup,
                         key = { it.id.toString() + it.nameContact + it.surnameContact }
                     ) { event ->
                         EventItem(

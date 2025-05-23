@@ -21,8 +21,8 @@ import com.example.reminderbirthday_calendar.presentation.components.main.Bottom
 import com.example.reminderbirthday_calendar.presentation.event.BottomNavigationEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.BottomNavigationItem
 import com.example.reminderbirthday_calendar.presentation.navigation.model.NumberBottomScreen
-import com.example.reminderbirthday_calendar.presentation.screens.EventsScreen
 import com.example.reminderbirthday_calendar.presentation.screens.CalendarScreen
+import com.example.reminderbirthday_calendar.presentation.screens.EventsScreen
 import com.example.reminderbirthday_calendar.presentation.screens.SettingsScreen
 import com.example.reminderbirthday_calendar.presentation.viewModel.BottomNavigationViewModel
 
@@ -55,7 +55,7 @@ fun BottomNavigationScreen(
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar{
                 BottomNavigationBar(
                     items = bottomItems,
                     selectedNavItem = state.selectedIndexScreen,

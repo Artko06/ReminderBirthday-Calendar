@@ -11,6 +11,8 @@ import com.example.domain.useCase.calendar.zodiac.GetChineseZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.GetWesternZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.GetStatusChineseZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.GetStatusWesternZodiacUseCase
+import com.example.domain.useCase.settings.notification.CancelNotifyAllEventUseCase
+import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.reminderbirthday_calendar.presentation.event.DetailInfoEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.EVENT_ID_KEY
 import com.example.reminderbirthday_calendar.presentation.state.EventDetailState
@@ -40,6 +42,8 @@ class EventDetailViewModel @Inject constructor(
     private val getStatusChineseZodiacUseCase: GetStatusChineseZodiacUseCase,
     private val upsertEventUseCase: UpsertEventUseCase,
     private val deleteEventUseCase: DeleteEventUseCase,
+    private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
+    private val cancelNotifyAllEventUseCase: CancelNotifyAllEventUseCase,
 ) : ViewModel() {
 
     private val _eventDetailState = MutableStateFlow(EventDetailState())
@@ -107,6 +111,9 @@ class EventDetailViewModel @Inject constructor(
             DetailInfoEvent.DeleteEvent -> {
                 viewModelScope.launch {
                     deleteEventUseCase.invoke(idEvent = _eventDetailState.value.event.id)
+
+                    cancelNotifyAllEventUseCase()
+                    scheduleAllEventsUseCase()
                 }
             }
 

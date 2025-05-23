@@ -114,6 +114,7 @@ fun AddEventScreen(
 
     if (addEventState.isShowDatePicker) {
         CustomDatePickerDialog(
+            initDate = addEventState.date,
             onDismiss = {
                 addEventViewModel.onEvent(event = AddEvent.CloseDatePickerDialog)
             },

@@ -2,10 +2,12 @@ package com.example.reminderbirthday_calendar
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -39,21 +41,40 @@ class MainActivity : ComponentActivity() {
                 ThemeType.SYSTEM -> isSystemInDarkTheme()
             }
 
-            val view = LocalView.current
-            val window = (view.context as Activity).window
-            SideEffect {
-                window.statusBarColor = Color.Transparent.toArgb()
-                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
-                    !isDarkTheme
-            }
-
             CompositionLocalProvider(LocalTheme provides if (isDarkTheme) ThemeType.DARK else ThemeType.LIGHT) {
                 ReminderBirthday_CalendarTheme(
                     darkTheme = isDarkTheme
                 ) {
+                    val navigationBarColor = NavigationBarDefaults.containerColor
+
+                    val view = LocalView.current
+                    val window = (view.context as Activity).window
+
+                    SideEffect {
+                        updateSystemColors(
+                            window = window,
+                            isDarkTheme = isDarkTheme,
+                            navigationBarColor = navigationBarColor
+                        )
+                    }
+
                     NavigationScreen()
                 }
             }
         }
+    }
+}
+
+fun updateSystemColors(
+    window: Window,
+    isDarkTheme: Boolean,
+    navigationBarColor: Color
+) {
+    window.statusBarColor = Color.Transparent.toArgb()
+    window.navigationBarColor = navigationBarColor.toArgb()
+
+    WindowCompat.getInsetsController(window, window.decorView).apply {
+        isAppearanceLightStatusBars = !isDarkTheme
+        isAppearanceLightNavigationBars = !isDarkTheme
     }
 }

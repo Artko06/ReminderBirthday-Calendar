@@ -31,8 +31,47 @@
     <!-- Sort type event -->
     <string name="sort_type_event_all">All</string>
     <string name="sort_type_event_family">Family</string>
-    <string name="sort_type_event_relative">Relative</string>
-    <string name="sort_type_event_friend">Friend</string>
-    <string name="sort_type_event_colleague">Colleague</string>
-    <string name="sort_type_event_other">Other</string>
+    <string name="sort_type_event_relative">Relatives</string>
+    <string name="sort_type_event_friend">Friends</string>
+    <string name="sort_type_event_colleague">Colleagues</string>
+    <string name="sort_type_event_other">Others</string>
+
+    <!-- Settings -->
+    <string name="preferences">Preferences</string>
+    <string name="notification">Notification</string>
+    <string name="notification_info">Receive reminders</string>
+    <string name="time_notification">Time notification</string>
+    <string name="time_notification_info">Set time notification</string>
+    <string name="theme">Theme</string>
+    <string name="theme_info">Select theme app</string>
+    <string name="type_event">Type event</string>
+    <string name="type_event_info">Select event types</string>
+    <string name="zodiac_sign">Zodiac sign</string>
+    <string name="chinese_sign">Chinese sign</string>
+    <string name="sign_info">Show sign</string>
+    <string name="export_and_import">Export and import</string>
+    <string name="import_events">Import events</string>
+    <string name="import_events_info">Import events from contacts</string>
+    <string name="export_event_json">Export events and share (JSON)</string>
+    <string name="export_event_csv">Export events and share (CSV)</string>
+    <string name="export_event_file_info">Share events with other apps</string>
+    <string name="import_events_file">Import events (JSON or CSV)</string>
+    <string name="import_events_file_info">Import events from file system</string>
+    <string name="cloud_export">Cloud export events</string>
+    <string name="cloud_export_info">Export events to the firestore</string>
+    <string name="cloud_import">Cloud import events</string>
+    <string name="cloud_import_info">Import events from the firestore</string>
+    <string name="data">Data</string>
+    <string name="sign_in_with_google">Sign-in with google</string>
+    <string name="sign_in_with_google_ingo">Auth pls</string>
+    <string name="total_events">Total events</string>
+    <plurals name="total_events_count">
+        <item quantity="one">%d event</item>
+        <item quantity="other">%d events</item>
+    </plurals>
+    <string name="About_app">About birthday reminder</string>
+    <string name="About_app_info">Version %s</string>
+    <string name="clear_events">Clear events</string>
+
+
 </resources>
