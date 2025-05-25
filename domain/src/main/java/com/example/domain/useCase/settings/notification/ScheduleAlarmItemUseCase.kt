@@ -15,13 +15,15 @@ class ScheduleAlarmItemUseCase(
         id: Long,
         numberNotification: Int,
         dateTime: LocalDateTime,
-        message: String
+        daysBeforeEvent: Int,
+        namesAlarmEvent: String
     ) {
         val alarmItem = AlarmEventItem(
             id = id,
             numberNotification = numberNotification,
+            daysBeforeEvent = daysBeforeEvent,
             dateTime = dateTime,
-            message = message
+            namesAlarmEvent = namesAlarmEvent
         )
 
         scheduler.schedule(item = alarmItem)

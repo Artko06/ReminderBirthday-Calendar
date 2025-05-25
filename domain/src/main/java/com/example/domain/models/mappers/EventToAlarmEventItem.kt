@@ -37,29 +37,18 @@ fun List<Event>.toAlarmEventItem(
         .minusDays(daysBeforeEvent.toLong())
         .atTime(hourNotify, minuteNotify)
 
-    val message = buildString {
-        append("\uD83C\uDF89 ") // Firework symbol
-
-        append(
-            if (daysBeforeEvent != 0) "Congratulate" else "CONGRATULATE"
-        )
-
-        append(" ${events.joinToString(", ") {
+    val message = events.joinToString(", ") {
             buildString {
                 append(it.nameContact)
                 if (!it.surnameContact.isNullOrBlank()) append(" ${it.surnameContact}")
             }
-        }}")
-
-        if (daysBeforeEvent > 0) {
-            append(" in $daysBeforeEvent ${if (daysBeforeEvent == 1) "day" else "days"}")
-        } else append(" today")
-    }
+        }
 
     return AlarmEventItem(
         id = this.first().id,
         numberNotification = numberNotification,
-        message = message,
+        namesAlarmEvent = message,
+        daysBeforeEvent = daysBeforeEvent,
         dateTime = alarmDateTime
     )
 }

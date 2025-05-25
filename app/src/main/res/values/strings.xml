@@ -278,4 +278,7 @@
 
     <string name="you_have_events">You have %1$s events</string>
 
+    <!-- Notification -->
+    <string name="congratulate">Congratulate</string>
+
 </resources>

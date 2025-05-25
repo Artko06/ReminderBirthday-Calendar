@@ -263,5 +263,8 @@
 
     <string name="you_have_events">У вас падзей: %1$s</string>
 
+    <!-- Паведамлення -->
+    <string name="congratulate">Павіншуйце</string>
+
 
 </resources>

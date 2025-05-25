@@ -18,8 +18,9 @@ class AlarmEventSchedulerImpl(
 
     override fun schedule(item: AlarmEventItem) {
         val intent = Intent(context, AlarmEventReceiver::class.java).apply {
-            putExtra(EXTRA_MESSAGE_EVENT_NAME, item.message)
             putExtra(EXTRA_ID_EVENT, item.id)
+            putExtra(EXTRA_NAMES_ALARM_EVENT, item.namesAlarmEvent)
+            putExtra(EXTRA_DAYS_BEFORE_EVENT, item.daysBeforeEvent)
             putExtra(EXTRA_NUMBER_NOTIFICATION, item.numberNotification)
             putExtra(EXTRA_HOUR_NOTIFICATION, item.dateTime.hour)
             putExtra(EXTRA_MINUTE_NOTIFICATION, item.dateTime.minute)
