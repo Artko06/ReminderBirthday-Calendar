@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun MonthYearText(
@@ -41,7 +43,8 @@ fun MonthYearText(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = (Month.fromNumber(numberMonth)?.name + " – " + numberYear.toString()),
+                text = (LocalizedContext.current.resources.getStringArray(R.array.months)[numberMonth - 1].uppercase() +
+                        " – " + numberYear.toString()),
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = 14.sp,
                 fontFamily = FontFamily.Serif,
@@ -58,25 +61,4 @@ fun MonthYearTextPreview(){
         numberMonth = 1,
         numberYear = 2026
     )
-}
-
-enum class Month(val number: Int) {
-    JANUARY(1),
-    FEBRUARY(2),
-    MARCH(3),
-    APRIL(4),
-    MAY(5),
-    JUNE(6),
-    JULY(7),
-    AUGUST(8),
-    SEPTEMBER(9),
-    OCTOBER(10),
-    NOVEMBER(11),
-    DECEMBER(12);
-
-    companion object {
-        fun fromNumber(number: Int): Month? {
-            return Month.entries.find { it.number == number }
-        }
-    }
 }

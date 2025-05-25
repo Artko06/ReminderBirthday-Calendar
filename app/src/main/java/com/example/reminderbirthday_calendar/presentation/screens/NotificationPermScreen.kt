@@ -28,6 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.event.NotificationPermEvent
 import com.example.reminderbirthday_calendar.presentation.viewModel.NotificationPermViewModel
 
@@ -74,7 +76,7 @@ fun NotificationPermissionScreen(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 Text(
-                    text = "Permission to send notifications",
+                    text = LocalizedContext.current.getString(R.string.notification_perm_window_title),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center
@@ -83,8 +85,7 @@ fun NotificationPermissionScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Permission to send notifications will allow you to be notified about calendar events " +
-                            "(The resolution can always be disabled in the settings)",
+                    text = LocalizedContext.current.getString(R.string.notification_perm_window_text),
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
@@ -100,7 +101,7 @@ fun NotificationPermissionScreen(
                     .padding(18.dp)
             ) {
                 Text(
-                    text = "Allow",
+                    text = LocalizedContext.current.getString(R.string.allow),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                 )

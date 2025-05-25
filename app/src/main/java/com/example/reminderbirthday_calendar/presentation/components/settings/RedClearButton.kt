@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun RedClearButton(
     modifier: Modifier = Modifier,
+    text: String,
     onClear: () -> Unit
 ){
     OutlinedButton(
@@ -39,7 +40,7 @@ fun RedClearButton(
             )
 
             Text(
-                text = "Clear events",
+                text = text,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Red,
@@ -53,6 +54,7 @@ fun RedClearButton(
 @Composable
 fun RedClearButtonPreview(){
     RedClearButton(
-        onClear = {}
+        onClear = {},
+        text = "Clear events"
     )
 }

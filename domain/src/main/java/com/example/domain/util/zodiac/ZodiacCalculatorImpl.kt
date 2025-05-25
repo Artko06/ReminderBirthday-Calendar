@@ -1,30 +1,30 @@
 package com.example.domain.util.zodiac
 
 import com.example.domain.models.zodiac.ChineseZodiac
-import com.example.domain.models.zodiac.WesternZodiac
+import com.example.domain.models.zodiac.ZodiacSign
 import java.time.LocalDate
 
 class ZodiacCalculatorImpl(
 
 ): ZodiacCalculator {
-    override fun getWesternZodiac(date: LocalDate): WesternZodiac {
+    override fun getZodiacSign(date: LocalDate): ZodiacSign {
         val day = date.dayOfMonth
         val month = date.monthValue
 
         return when {
-            (month == 1 && day >= 21) || (month == 2 && day <= 19) -> WesternZodiac.AQUARIUS
-            (month == 2 && day >= 20) || (month == 3 && day <= 20) -> WesternZodiac.PISCES
-            (month == 3 && day >= 21) || (month == 4 && day <= 20) -> WesternZodiac.ARIES
-            (month == 4 && day >= 21) || (month == 5 && day <= 20) -> WesternZodiac.TAURUS
-            (month == 5 && day >= 21) || (month == 6 && day <= 21) -> WesternZodiac.GEMINI
-            (month == 6 && day >= 22) || (month == 7 && day <= 22) -> WesternZodiac.CANCER
-            (month == 7 && day >= 23) || (month == 8 && day <= 23) -> WesternZodiac.LEO
-            (month == 8 && day >= 24) || (month == 9 && day <= 23) -> WesternZodiac.VIRGO
-            (month == 9 && day >= 24) || (month == 10 && day <= 23) -> WesternZodiac.LIBRA
-            (month == 10 && day >= 24) || (month == 11 && day <= 22) -> WesternZodiac.SCORPIO
-            (month == 11 && day >= 23) || (month == 12 && day <= 21) -> WesternZodiac.SAGITTARIUS
-            (month == 12 && day >= 22) || (month == 1 && day <= 20) -> WesternZodiac.CAPRICORN
-            else -> WesternZodiac.AQUARIUS
+            (month == 1 && day >= 21) || (month == 2 && day <= 19) -> ZodiacSign.AQUARIUS
+            (month == 2 && day >= 20) || (month == 3 && day <= 20) -> ZodiacSign.PISCES
+            (month == 3 && day >= 21) || (month == 4 && day <= 20) -> ZodiacSign.ARIES
+            (month == 4 && day >= 21) || (month == 5 && day <= 20) -> ZodiacSign.TAURUS
+            (month == 5 && day >= 21) || (month == 6 && day <= 21) -> ZodiacSign.GEMINI
+            (month == 6 && day >= 22) || (month == 7 && day <= 22) -> ZodiacSign.CANCER
+            (month == 7 && day >= 23) || (month == 8 && day <= 23) -> ZodiacSign.LEO
+            (month == 8 && day >= 24) || (month == 9 && day <= 23) -> ZodiacSign.VIRGO
+            (month == 9 && day >= 24) || (month == 10 && day <= 23) -> ZodiacSign.LIBRA
+            (month == 10 && day >= 24) || (month == 11 && day <= 22) -> ZodiacSign.SCORPIO
+            (month == 11 && day >= 23) || (month == 12 && day <= 21) -> ZodiacSign.SAGITTARIUS
+            (month == 12 && day >= 22) || (month == 1 && day <= 20) -> ZodiacSign.CAPRICORN
+            else -> ZodiacSign.AQUARIUS
         }
     }
 

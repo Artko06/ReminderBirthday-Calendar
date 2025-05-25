@@ -2,7 +2,6 @@ package com.example.reminderbirthday_calendar.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -51,10 +49,11 @@ import com.example.domain.models.event.EventType
 import com.example.domain.models.event.SortTypeEvent
 import com.example.domain.models.settings.ThemeType
 import com.example.domain.models.zodiac.ChineseZodiac
-import com.example.domain.models.zodiac.WesternZodiac
+import com.example.domain.models.zodiac.ZodiacSign
 import com.example.domain.util.extensionFunc.calculateDaysLeft
 import com.example.domain.util.extensionFunc.calculateNextAge
 import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.LocalizedContext
 import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteEventDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.NotesDialog
@@ -224,7 +223,7 @@ fun EventDetailScreen(
                     Text(
                         text = eventDetailState.event.originalDate.let {
                             buildAnnotatedString {
-                                append("turns ")
+                                append(LocalizedContext.current.getString(R.string.turns) + " ")
                                 withStyle(
                                     style = SpanStyle(
                                         fontStyle = FontStyle.Italic,
@@ -234,9 +233,10 @@ fun EventDetailScreen(
                                 ) {
                                     append(it.calculateNextAge().toString())
                                 }
-                                append(" years ")
+                                append(" " + LocalizedContext.current.resources
+                                    .getQuantityString(R.plurals.years, it.calculateNextAge(), it.calculateNextAge()) + " ")
                                 if (it.calculateDaysLeft() != 0)
-                                    append("in ")
+                                    append(LocalizedContext.current.getString(R.string.`in`) + " ")
                                 withStyle(
                                     style = SpanStyle(
                                         fontStyle = FontStyle.Italic,
@@ -245,12 +245,14 @@ fun EventDetailScreen(
                                     )
                                 ) {
                                     if (it.calculateDaysLeft() == 0)
-                                        append("today")
+                                        append(LocalizedContext.current.getString(R.string.today))
                                     else
                                         append(it.calculateDaysLeft().toString())
                                 }
-                                if (it.calculateDaysLeft() != 0)
-                                    append(if (it.calculateDaysLeft() == 1) " day" else " days")
+                                if (it.calculateDaysLeft() != 0){
+                                    append(" " + LocalizedContext.current.resources
+                                        .getQuantityString(R.plurals.days, it.calculateDaysLeft(), it.calculateDaysLeft()))
+                                }
                             }
                         },
                         fontWeight = FontWeight.Light,
@@ -272,51 +274,69 @@ fun EventDetailScreen(
                     icon = Icons.Outlined.Cake,
                     colorIcon = MaterialTheme.colorScheme.primary,
                     text = eventDetailState.event.originalDate.let {
-                        it.dayOfMonth.toString() + " " + it.month.name.lowercase()
-                            .replaceFirstChar { it.uppercase() } +
-                                if (eventDetailState.event.yearMatter) ", " + it.year.toString() else ""
+                        val arrayWithDate = LocalizedContext.current.resources.getStringArray(R.array.months_with_num)
+                        val text = String.format(arrayWithDate[it.month.value - 1], it.dayOfMonth)
+
+                        text + if (eventDetailState.event.yearMatter) ", " + it.year.toString() else ""
                     },
-                    aboutText =
-                        if (eventDetailState.event.eventType != EventType.OTHER)
-                            eventDetailState.event.eventType.name.lowercase()
-                                .replaceFirstChar { it.uppercase() }
-                        else "Event"
+                    aboutText = when (eventDetailState.event.eventType) {
+                                EventType.BIRTHDAY -> LocalizedContext.current.getString(R.string.birthday)
+                                EventType.ANNIVERSARY -> LocalizedContext.current.getString(R.string.anniversary)
+                                EventType.OTHER -> LocalizedContext.current.getString(R.string.other)
+                            }
                 )
 
                 DetailItem(
                     modifier = Modifier.fillMaxWidth(),
                     icon = Icons.Outlined.StarRate,
                     colorIcon = MaterialTheme.colorScheme.primary,
-                    text = eventDetailState.event.sortTypeEvent.name.lowercase()
-                        .replaceFirstChar { it.uppercase() },
-                    aboutText = "Tag"
+                    text = when(eventDetailState.event.sortTypeEvent){
+                        SortTypeEvent.FAMILY -> LocalizedContext.current.getString(R.string.sort_type_event_family)
+                        SortTypeEvent.RELATIVE -> LocalizedContext.current.getString(R.string.sort_type_event_relative)
+                        SortTypeEvent.FRIEND -> LocalizedContext.current.getString(R.string.sort_type_event_friend)
+                        SortTypeEvent.COLLEAGUE -> LocalizedContext.current.getString(R.string.sort_type_event_colleague)
+                        SortTypeEvent.OTHER -> LocalizedContext.current.getString(R.string.sort_type_event_other)
+                    },
+                    aboutText = LocalizedContext.current.getString(R.string.tag)
                 )
 
-                if (eventDetailState.statusWesternZodiac &&
+                if (eventDetailState.statusZodiacSign &&
                     eventDetailState.event.eventType == EventType.BIRTHDAY
                 ) {
                     DetailItem(
                         modifier = Modifier.fillMaxWidth(),
                         painter = painterResource(
-                            when (eventDetailState.westernZodiac) {
-                                WesternZodiac.AQUARIUS -> R.drawable.icon_aquarius
-                                WesternZodiac.PISCES -> R.drawable.icon_pisces
-                                WesternZodiac.ARIES -> R.drawable.icon_aries
-                                WesternZodiac.TAURUS -> R.drawable.icon_taurus
-                                WesternZodiac.GEMINI -> R.drawable.icon_gemini
-                                WesternZodiac.CANCER -> R.drawable.icon_cancer
-                                WesternZodiac.LEO -> R.drawable.icon_leo
-                                WesternZodiac.VIRGO -> R.drawable.icon_virgo
-                                WesternZodiac.LIBRA -> R.drawable.icon_libra
-                                WesternZodiac.SCORPIO -> R.drawable.icon_scorpio
-                                WesternZodiac.SAGITTARIUS -> R.drawable.icon_sagittarius
-                                WesternZodiac.CAPRICORN -> R.drawable.icon_capricorn
+                            when (eventDetailState.zodiacSign) {
+                                ZodiacSign.AQUARIUS -> R.drawable.icon_aquarius
+                                ZodiacSign.PISCES -> R.drawable.icon_pisces
+                                ZodiacSign.ARIES -> R.drawable.icon_aries
+                                ZodiacSign.TAURUS -> R.drawable.icon_taurus
+                                ZodiacSign.GEMINI -> R.drawable.icon_gemini
+                                ZodiacSign.CANCER -> R.drawable.icon_cancer
+                                ZodiacSign.LEO -> R.drawable.icon_leo
+                                ZodiacSign.VIRGO -> R.drawable.icon_virgo
+                                ZodiacSign.LIBRA -> R.drawable.icon_libra
+                                ZodiacSign.SCORPIO -> R.drawable.icon_scorpio
+                                ZodiacSign.SAGITTARIUS -> R.drawable.icon_sagittarius
+                                ZodiacSign.CAPRICORN -> R.drawable.icon_capricorn
                             }
                         ),
                         colorIcon = MaterialTheme.colorScheme.primary,
-                        text = eventDetailState.westernZodiac.name.lowercase()
-                            .replaceFirstChar { it.uppercase() },
-                        aboutText = "Western zodiac"
+                        text = when(eventDetailState.zodiacSign){
+                            ZodiacSign.AQUARIUS -> LocalizedContext.current.getString(R.string.zodiac_aquarius)
+                            ZodiacSign.PISCES -> LocalizedContext.current.getString(R.string.zodiac_pisces)
+                            ZodiacSign.ARIES -> LocalizedContext.current.getString(R.string.zodiac_aries)
+                            ZodiacSign.TAURUS -> LocalizedContext.current.getString(R.string.zodiac_taurus)
+                            ZodiacSign.GEMINI -> LocalizedContext.current.getString(R.string.zodiac_gemini)
+                            ZodiacSign.CANCER -> LocalizedContext.current.getString(R.string.zodiac_cancer)
+                            ZodiacSign.LEO -> LocalizedContext.current.getString(R.string.zodiac_leo)
+                            ZodiacSign.VIRGO -> LocalizedContext.current.getString(R.string.zodiac_virgo)
+                            ZodiacSign.LIBRA -> LocalizedContext.current.getString(R.string.zodiac_libra)
+                            ZodiacSign.SCORPIO -> LocalizedContext.current.getString(R.string.zodiac_scorpio)
+                            ZodiacSign.SAGITTARIUS -> LocalizedContext.current.getString(R.string.zodiac_sagittarius)
+                            ZodiacSign.CAPRICORN -> LocalizedContext.current.getString(R.string.zodiac_capricorn)
+                        },
+                        aboutText = LocalizedContext.current.getString(R.string.zodiac_sign)
                     )
                 }
 
@@ -343,26 +363,25 @@ fun EventDetailScreen(
                             }
                         ),
                         colorIcon = MaterialTheme.colorScheme.primary,
-                        text = eventDetailState.chineseZodiac.name.lowercase()
-                            .replaceFirstChar { it.uppercase() },
-                        aboutText = "Chinese zodiac"
+                        text = LocalizedContext.current.resources
+                            .getStringArray(R.array.chinese_zodiac_animals)[eventDetailState.chineseZodiac.value],
+                        aboutText = LocalizedContext.current.getString(R.string.chinese_sign)
                     )
                 }
 
                 DetailItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(shape = RoundedCornerShape(16.dp))
-                        .clickable(onClick = {
-                            eventDetailViewModel.onEvent(event = DetailInfoEvent.OnShowNotesDialog)
-                        }),
+                    modifier = Modifier.fillMaxWidth(),
                     icon = Icons.Outlined.NoteAlt,
                     colorIcon = MaterialTheme.colorScheme.primary,
-                    text = if (eventDetailState.event.notes.isNullOrBlank()) "Click to show"
+                    text = if (eventDetailState.event.notes.isNullOrBlank())
+                        LocalizedContext.current.getString(R.string.notes_info)
                     else eventDetailState.event.notes!!.let {
                         if (it.length > 15) "${it.take(15)}..." else it
                     },
-                    aboutText = "Notes"
+                    aboutText = LocalizedContext.current.getString(R.string.notes),
+                    onClick = {
+                        eventDetailViewModel.onEvent(event = DetailInfoEvent.OnShowNotesDialog)
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))

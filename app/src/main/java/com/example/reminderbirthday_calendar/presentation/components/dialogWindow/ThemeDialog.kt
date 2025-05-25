@@ -14,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.domain.models.settings.ThemeType
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun ThemeDialog(
@@ -23,7 +25,9 @@ fun ThemeDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "App theme") },
+        title = { Text(
+            text = LocalizedContext.current.getString(R.string.theme_title_dialog)
+        ) },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -46,7 +50,13 @@ fun ThemeDialog(
                             }
                         )
 
-                        Text(text = theme.name.lowercase().replaceFirstChar { it.uppercase() })
+                        Text(
+                            text = when(theme){
+                                ThemeType.SYSTEM -> LocalizedContext.current.getString(R.string.theme_text_1)
+                                ThemeType.LIGHT -> LocalizedContext.current.getString(R.string.theme_text_2)
+                                ThemeType.DARK -> LocalizedContext.current.getString(R.string.theme_text_3)
+                            }
+                        )
                     }
                 }
             }
@@ -54,7 +64,9 @@ fun ThemeDialog(
         confirmButton = {},
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = "Close")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.close)
+                )
             }
         }
     )

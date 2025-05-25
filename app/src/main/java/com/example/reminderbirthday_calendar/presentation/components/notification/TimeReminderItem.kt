@@ -26,6 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.notification.NotificationEvent
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun TimeReminderItem(
@@ -67,7 +69,8 @@ fun TimeReminderItem(
                         },
                         text = {
                             Text(
-                                text = if (day == 1) "$day day" else "$day days"
+                                text = LocalizedContext.current.resources
+                                    .getQuantityString(R.plurals.days_number, day, day)
                             )
                         }
                     )
@@ -91,7 +94,8 @@ fun TimeReminderItem(
             modifier = Modifier.weight(1f),
         ) {
             Text(
-                text = "Notification ${notificationEvent.id}",
+                text = LocalizedContext.current
+                    .getString(R.string.notification_number, notificationEvent.id),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )
@@ -99,8 +103,13 @@ fun TimeReminderItem(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = "${notificationEvent.daysBeforeEvent.let { if (it == 1) "$it day before" else "$it days before"}} " +
-                        "at ${notificationEvent.hour}:${notificationEvent.minute.let { if (it < 10) "0${it}" else it }}",
+                text = notificationEvent.daysBeforeEvent.let {
+                    val time =
+                        "${notificationEvent.hour}:${notificationEvent.minute.let { if (it < 10) "0${it}" else it }}"
+                    LocalizedContext.current.resources
+                        .getQuantityString(R.plurals.notification_time_format, it, it, time)
+
+                },
                 fontWeight = FontWeight.Light,
                 fontSize = 12.sp
             )

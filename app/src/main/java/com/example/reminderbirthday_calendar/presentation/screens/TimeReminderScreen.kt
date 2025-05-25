@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.TimePickerDialog
 import com.example.reminderbirthday_calendar.presentation.components.notification.TimeReminderItem
 import com.example.reminderbirthday_calendar.presentation.event.TimeReminderEvent
@@ -76,20 +78,27 @@ fun TimeReminderScreen(
             item(
                 key = "Title"
             ) {
-                Row {
-                    Text(
-                        text = "Time notification",
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Serif
-                    )
-
-                    Spacer(modifier = Modifier.width(6.dp))
-
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Alarm,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
+                    )
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    Text(
+                        text = LocalizedContext.current.getString(R.string.time_notifications),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Serif,
+                        modifier = Modifier.alignByBaseline()
                     )
                 }
 
@@ -144,7 +153,9 @@ fun TimeReminderScreen(
                             onBackFromTimeReminderScreen()
                         }
                     ) {
-                        Text("Save")
+                        Text(
+                            text = LocalizedContext.current.getString(R.string.save)
+                        )
                     }
                 }
             }

@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.event.SortTypeEvent
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.ui.theme.blueAzure
 import com.example.reminderbirthday_calendar.ui.theme.darkGreen
 import com.example.reminderbirthday_calendar.ui.theme.darkPurple
@@ -39,7 +41,7 @@ fun SelectorSortEventType(
     ) {
         item {
             SortTypeButton(
-                text = "All",
+                text = LocalizedContext.current.getString(R.string.sort_type_event_all),
                 isSelected = selectedSortType == null,
                 sortTypeEvent = null,
                 onClick = { onClick(null) }
@@ -53,7 +55,13 @@ fun SelectorSortEventType(
             key = { it.name }
         ) { sortType ->
             SortTypeButton(
-                text = sortType.name.lowercase().replaceFirstChar { it.uppercase() },
+                text = when(sortType){
+                    SortTypeEvent.FAMILY -> LocalizedContext.current.getString(R.string.sort_type_event_family)
+                    SortTypeEvent.RELATIVE ->LocalizedContext.current.getString(R.string.sort_type_event_relative)
+                    SortTypeEvent.FRIEND -> LocalizedContext.current.getString(R.string.sort_type_event_friend)
+                    SortTypeEvent.COLLEAGUE -> LocalizedContext.current.getString(R.string.sort_type_event_colleague)
+                    SortTypeEvent.OTHER -> LocalizedContext.current.getString(R.string.sort_type_event_other)
+                },
                 isSelected = selectedSortType == sortType,
                 sortTypeEvent = sortType,
                 onClick = { onClick(sortType) }

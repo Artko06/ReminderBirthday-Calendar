@@ -62,7 +62,7 @@ class EventDetailViewModel @Inject constructor(
         if (eventById != null){
             eventDetailState.copy(
                 event = eventById,
-                westernZodiac = getWesternZodiacUseCase(date = eventById.originalDate),
+                zodiacSign = getWesternZodiacUseCase(date = eventById.originalDate),
                 chineseZodiac = getChineseZodiacUseCase(date = eventById.originalDate)
             )
         } else eventDetailState
@@ -92,14 +92,14 @@ class EventDetailViewModel @Inject constructor(
                         originalDate = localDate,
                         yearMatter = true
                     ),
-                    westernZodiac = getWesternZodiacUseCase(
+                    zodiacSign = getWesternZodiacUseCase(
                         date = if (gotEvent != null) gotEvent.originalDate else localDate
                     ),
                     chineseZodiac = getChineseZodiacUseCase(
                         date = if (gotEvent != null) gotEvent.originalDate else localDate
                     ),
                     statusChineseZodiac = statusChineseZodiac,
-                    statusWesternZodiac = statusWesternZodiac
+                    statusZodiacSign = statusWesternZodiac
                 )
             }
         }

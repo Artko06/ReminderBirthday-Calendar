@@ -4,6 +4,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun ReadContactsPermissionDialog(
@@ -13,22 +15,30 @@ fun ReadContactsPermissionDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Permission to read contacts")
+            Text(
+                text = LocalizedContext.current.getString(R.string.perm_to_read_contact_title)
+            )
         },
         text = {
-            Text("The app needs permission to read contacts from your phone book.")
+            Text(
+                text = LocalizedContext.current.getString(R.string.perm_to_read_contact_text)
+            )
         },
         confirmButton = {
             TextButton(onClick = {
                 onConfirmButton()
                 onDismiss()
             }) {
-                Text("To settings")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.to_settings)
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Close")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.close)
+                )
             }
         }
     )

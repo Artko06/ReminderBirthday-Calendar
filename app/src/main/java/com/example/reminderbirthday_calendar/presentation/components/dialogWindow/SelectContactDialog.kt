@@ -23,6 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.event.ContactInfo
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.contact.ContactItem
 
 @Composable
@@ -34,7 +36,9 @@ fun SelectContactDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("My Contacts")
+            Text(
+                text = LocalizedContext.current.getString(R.string.my_contact)
+            )
         },
         text = {
             if (contacts.isNotEmpty()){
@@ -68,7 +72,7 @@ fun SelectContactDialog(
                     Spacer(modifier = Modifier.height(18.dp))
 
                     Text(
-                        text = "You don't have contacts or permission to read them is disabled",
+                        text = LocalizedContext.current.getString(R.string.my_contact_error),
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center
                     )
@@ -79,7 +83,9 @@ fun SelectContactDialog(
             TextButton(
                 onClick = onDismiss,
                 content = {
-                    Text(text = "Close")
+                    Text(
+                        text = LocalizedContext.current.getString(R.string.close)
+                    )
                 }
             )
         },

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun DaysLeftButton(
     modifier: Modifier = Modifier,
+    text: String,
     onClick: () -> Unit,
     isActive: Boolean
 ){
@@ -42,7 +43,7 @@ fun DaysLeftButton(
             )
 
             Text(
-                text = "View days left",
+                text = text,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (isActive) MaterialTheme.colorScheme.primary
@@ -57,6 +58,7 @@ fun DaysLeftButton(
 @Composable
 fun DaysLeftButtonPreview(){
     DaysLeftButton(
+        text = "View days left",
         onClick = {},
         isActive = false
     )

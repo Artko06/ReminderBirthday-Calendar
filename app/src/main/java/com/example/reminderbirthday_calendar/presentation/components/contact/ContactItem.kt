@@ -28,17 +28,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.event.ContactInfo
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun ContactItem(
     modifier: Modifier = Modifier,
     contact: ContactInfo,
     onSelectItem: (ContactInfo) -> Unit
-){
+) {
     Row(
         modifier = Modifier
             .then(modifier)
-            .clickable( onClick = { onSelectItem(contact) } ),
+            .clickable(onClick = { onSelectItem(contact) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
@@ -78,7 +80,11 @@ fun ContactItem(
                 )
 
                 Text(
-                    text = contact.phone.let { if (it.isEmpty()) "No number" else it },
+                    text = contact.phone.let {
+                        if (it.isEmpty()) {
+                            LocalizedContext.current.getString(R.string.no_number)
+                        } else it
+                    },
                     fontSize = 12.sp
                 )
             }
@@ -87,14 +93,16 @@ fun ContactItem(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
             contentDescription = null,
-            modifier = Modifier.padding(end = 8.dp).size(14.dp)
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .size(14.dp)
         )
     }
 }
 
 @Preview(showBackground = false)
 @Composable
-fun ContactItemPreview(){
+fun ContactItemPreview() {
     ContactItem(
         modifier = Modifier.fillMaxWidth(),
         contact = ContactInfo(

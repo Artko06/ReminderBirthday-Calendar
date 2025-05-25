@@ -9,6 +9,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun NotificationPermissionDialog(
@@ -19,53 +21,50 @@ fun NotificationPermissionDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Permission for notifications")
+            Text(
+                text = LocalizedContext.current.getString(R.string.title_notification_dialog)
+            )
         },
         text = {
-            if (statusNotification) {
-                Text(
-                    text = buildAnnotatedString {
-                        append("Notifications in the app are ")
+            Text(
+                text = buildAnnotatedString {
+                    append(LocalizedContext.current.getString(R.string.text_notification_dialog_part1) + " ")
 
-                        // Выделенное слово
-                        withStyle(style = SpanStyle(color = Color.Green, fontWeight = FontWeight.Bold)) {
-                            append("turn on")
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.Green,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        statusNotification.let {
+                            if (it) {
+                                append(LocalizedContext.current.getString(R.string.text_notification_dialog_highlight_on))
+                            } else {
+                                append(LocalizedContext.current.getString(R.string.text_notification_dialog_highlight_off))
+                            }
+
                         }
-
-                        append(". Are you sure you want to turn off them? " +
-                                "Permission to send notifications allows you to be notified about calendar events. ")
-
-                        append("If notifications still don't arrive, check your settings")
                     }
-                )
-            } else{
-                Text(
-                    text = buildAnnotatedString {
-                        append("Notifications in the app are ")
 
-                        // Выделенное слово
-                        withStyle(style = SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)) {
-                            append("turn off")
-                        }
-
-                        append(". We recommend turning on them. " +
-                                "Permission to send notifications allows you to be notified about calendar events")
-                    }
-                )
-            }
-
+                    append(LocalizedContext.current.getString(R.string.text_notification_dialog_part2))
+                }
+            )
         },
         confirmButton = {
             TextButton(onClick = {
                 onConfirmButton()
                 onDismiss()
             }) {
-                Text("To setting")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.to_settings)
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Close")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.close)
+                )
             }
         }
     )

@@ -107,11 +107,11 @@ class SettingsRepositoryImpl(
     }
 
     // Zodiac
-    override fun getStatusZodiacWestern(): Flow<Boolean> {
-        return PreferencesDataStore.getStatusZodiacWestern(context = context)
+    override fun getStatusZodiacSign(): Flow<Boolean> {
+        return PreferencesDataStore.getStatusZodiacSign(context = context)
     }
 
-    override suspend fun setStatusZodiacWestern(activeStatus: Boolean) {
+    override suspend fun setStatusZodiacSign(activeStatus: Boolean) {
         PreferencesDataStore.setStatusZodiacWestern(context = context, activeStatus = activeStatus)
     }
 

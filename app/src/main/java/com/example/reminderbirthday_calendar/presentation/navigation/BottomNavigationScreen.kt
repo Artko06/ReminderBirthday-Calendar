@@ -17,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.main.BottomNavigationBar
 import com.example.reminderbirthday_calendar.presentation.event.BottomNavigationEvent
 import com.example.reminderbirthday_calendar.presentation.navigation.model.BottomNavigationItem
@@ -37,17 +39,17 @@ fun BottomNavigationScreen(
 
     val bottomItems = listOf<BottomNavigationItem>(
         BottomNavigationItem(
-            title = "Events",
+            title = LocalizedContext.current.getString(R.string.navbar_events),
             selectedIcon = Icons.Filled.Cake,
             unselectedIcon = Icons.Outlined.Cake
         ),
         BottomNavigationItem(
-            title = "Calendar",
+            title = LocalizedContext.current.getString(R.string.navbar_calendar),
             selectedIcon = Icons.Filled.CalendarMonth,
             unselectedIcon = Icons.Outlined.CalendarMonth
         ),
         BottomNavigationItem(
-            title = "Settings",
+            title = LocalizedContext.current.getString(R.string.navbar_settings),
             selectedIcon = Icons.Filled.Settings,
             unselectedIcon = Icons.Outlined.Settings
         )

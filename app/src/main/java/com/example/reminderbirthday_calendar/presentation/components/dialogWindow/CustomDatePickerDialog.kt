@@ -7,6 +7,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -41,7 +43,9 @@ fun CustomDatePickerDialog(
                 if (localDate != null) changeValueDatePicker(localDate)
                 onDismiss()
             }) {
-                Text("OK")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.select)
+                )
             }
         },
         dismissButton = {}

@@ -41,6 +41,8 @@ import com.example.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.example.domain.useCase.settings.firstLaunch.GetIsFirstLaunchUseCase
 import com.example.domain.useCase.settings.firstLaunch.SetIsFirstLaunchUseCase
+import com.example.domain.useCase.settings.language.GetLanguageUseCase
+import com.example.domain.useCase.settings.language.SetLanguageUseCase
 import com.example.domain.useCase.settings.notification.CancelNotifyAllEventUseCase
 import com.example.domain.useCase.settings.notification.DeleteAllNotificationEventUseCase
 import com.example.domain.useCase.settings.notification.DeleteNotificationEventUseCase
@@ -396,5 +398,17 @@ object UseCaseModule {
     @Singleton
     fun provideAddEventToContactAppUseCase(contactAppRepository: ContactAppRepository): AddEventToContactAppUseCase{
         return AddEventToContactAppUseCase(repository = contactAppRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetLanguageUseCase(settingsRepository: SettingsRepository): GetLanguageUseCase{
+        return GetLanguageUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetLanguageUseCase(settingsRepository: SettingsRepository): SetLanguageUseCase{
+        return SetLanguageUseCase(repository = settingsRepository)
     }
 }

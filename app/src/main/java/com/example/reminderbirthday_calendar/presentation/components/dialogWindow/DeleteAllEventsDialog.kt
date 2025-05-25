@@ -9,6 +9,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun DeleteAllEventsDialog(
@@ -18,19 +20,20 @@ fun DeleteAllEventsDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Delete all events")
+            Text(
+                text = LocalizedContext.current.getString(R.string.delete_all_title)
+            )
         },
         text = {
             Text(
                 text = buildAnnotatedString {
-                    append("Are you sure you want to ")
+                    append(LocalizedContext.current.getString(R.string.deleting_all_event_text_part1) + " ")
 
-                    // Выделенное слово
                     withStyle(style = SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)) {
-                        append("delete ")
+                        append(LocalizedContext.current.getString(R.string.deleting_all_event_text_highlight))
                     }
 
-                    append("all events?")
+                    append(" " + LocalizedContext.current.getString(R.string.deleting_all_event_text_part2))
                 }
             )
         },
@@ -39,12 +42,12 @@ fun DeleteAllEventsDialog(
                 onConfirmButton()
                 onDismiss()
             }) {
-                Text("Yes")
+                Text(LocalizedContext.current.getString(R.string.delete))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Close")
+                Text(LocalizedContext.current.getString(R.string.close))
             }
         }
     )

@@ -49,6 +49,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.data.local.util.image.compressImageWithResize
 import com.example.data.local.util.image.toByteArray
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorSortEventTypeForAdd
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.TextEntry
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.CustomDatePickerDialog
@@ -140,10 +142,16 @@ fun EditEventScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Text(
-                    text = "Editing Event",
-                    fontSize = 26.sp,
+                    text = LocalizedContext.current.getString(R.string.editing_event),
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Serif
                 )
@@ -191,7 +199,7 @@ fun EditEventScreen(
             Spacer(modifier = Modifier.width(40.dp))
 
             TextEntry(
-                description = "Name",
+                description = LocalizedContext.current.getString(R.string.name),
                 hint = "",
                 leadingIcon = Icons.Filled.Person,
                 trailingIcon = Icons.Filled.AutoStories,
@@ -209,7 +217,7 @@ fun EditEventScreen(
             )
 
             TextEntry(
-                description = "Surname",
+                description = LocalizedContext.current.getString(R.string.surname),
                 hint = "",
                 leadingIcon = Icons.Filled.Person,
                 textValue = editEventState.surname ?: "",
@@ -262,8 +270,8 @@ fun EditEventScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = ("Selected: " + editEventState.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-                        .toString()),
+                    text = (LocalizedContext.current.getString(R.string.selected) + ": " +
+                            editEventState.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString()),
                 )
             }
 
@@ -276,7 +284,7 @@ fun EditEventScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Quiz,
-                    contentDescription = "Year is matter",
+                    contentDescription = "Consider the year",
                     tint = if (editEventState.yearMatter) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onBackground
                 )
@@ -284,7 +292,7 @@ fun EditEventScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "Year is matter"
+                    text = LocalizedContext.current.getString(R.string.consider_the_year)
                 )
 
                 Checkbox(
@@ -301,7 +309,9 @@ fun EditEventScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 TextButton(onClick = { onBackFromEditEventScreen() }) {
-                    Text("Cancel")
+                    Text(
+                        text = LocalizedContext.current.getString(R.string.cancel)
+                    )
                 }
 
                 TextButton(
@@ -311,7 +321,9 @@ fun EditEventScreen(
                     },
                     enabled = editEventState.isSaveButtonEnable
                 ) {
-                    Text("Save")
+                    Text(
+                        text = LocalizedContext.current.getString(R.string.save)
+                    )
                 }
             }
 

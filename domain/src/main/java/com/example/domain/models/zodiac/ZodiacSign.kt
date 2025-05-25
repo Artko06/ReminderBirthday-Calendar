@@ -1,6 +1,6 @@
 package com.example.domain.models.zodiac
 
-enum class WesternZodiac {
+enum class ZodiacSign {
     AQUARIUS,
     PISCES,
     ARIES,

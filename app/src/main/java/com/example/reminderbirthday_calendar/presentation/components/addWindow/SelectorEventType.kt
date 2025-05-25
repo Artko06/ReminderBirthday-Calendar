@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.event.EventType
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun SelectorEventType(
@@ -55,7 +57,11 @@ fun SelectorEventType(
                     )
 
                     Text(
-                        text = it.name.lowercase().replaceFirstChar { it.uppercase() },
+                        text = when(it){
+                            EventType.BIRTHDAY -> LocalizedContext.current.getString(R.string.birthday)
+                            EventType.ANNIVERSARY -> LocalizedContext.current.getString(R.string.anniversary)
+                            EventType.OTHER -> LocalizedContext.current.getString(R.string.other)
+                        },
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = if (selectedEventType == it) MaterialTheme.colorScheme.primary

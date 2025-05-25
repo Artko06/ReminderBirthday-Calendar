@@ -42,6 +42,8 @@ import com.example.domain.models.event.EventType
 import com.example.domain.models.event.SortTypeEvent
 import com.example.domain.models.settings.ThemeType
 import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.ui.theme.blueAzure
 import com.example.reminderbirthday_calendar.ui.theme.darkGreen
 import com.example.reminderbirthday_calendar.ui.theme.darkPurple
@@ -132,18 +134,21 @@ fun EventItem(
                     Text(
                         text = "$name $surname",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        lineHeight = 21.sp,
+                        fontSize = 18.sp,
+                        lineHeight = 19.sp,
                         color = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
                     )
 
                     Text(
-                        text = (if (yearMatter) date else date.replaceRange(6, 10, "????")) + " — ${
-                            eventType.name.lowercase().replaceFirstChar { it.uppercase() }
-                        }",
+                        text = (if (yearMatter) date else date.replaceRange(6, 10, "????")) + " — " +
+                                when(eventType){
+                                    EventType.BIRTHDAY -> LocalizedContext.current.getString(R.string.birthday)
+                                    EventType.ANNIVERSARY -> LocalizedContext.current.getString(R.string.anniversary)
+                                    EventType.OTHER -> LocalizedContext.current.getString(R.string.event)
+                                },
                         fontWeight = FontWeight.Light,
-                        fontSize = 12.sp,
-                        lineHeight = 13.sp,
+                        fontSize = 11.sp,
+                        lineHeight = 12.sp,
                         color = if (LocalTheme.current == ThemeType.DARK) Color.LightGray else Color.DarkGray
                     )
                 }
@@ -157,7 +162,8 @@ fun EventItem(
                             text = (daysLeft * -1).toString(),
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
-                            fontSize = 16.sp,
+                            fontSize = 13.sp,
+                            lineHeight = 14.sp,
                             color = Color.Gray
                         )
 
@@ -168,14 +174,16 @@ fun EventItem(
                                         fontWeight = FontWeight.Bold
                                     )
                                 ) {
-                                    if (daysLeft == -1) append("day") else append("days")
+                                    append(LocalizedContext.current.resources
+                                        .getQuantityString(R.plurals.days, daysLeft * (-1), daysLeft * (-1))
+                                    )
                                 }
 
-                                append(" ago")
+                                append(" " + LocalizedContext.current.getString(R.string.ago))
                             },
                             textAlign = TextAlign.Center,
-                            fontSize = 16.sp,
-                            lineHeight = 17.sp,
+                            fontSize = 13.sp,
+                            lineHeight = 14.sp,
                             color = Color.Gray
                         )
                     }
@@ -205,7 +213,8 @@ fun EventItem(
                             text = daysLeft.toString(),
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
-                            fontSize = 16.sp,
+                            fontSize = 13.sp,
+                            lineHeight = 14.sp,
                             color = Color.Gray
                         )
 
@@ -216,14 +225,16 @@ fun EventItem(
                                         fontWeight = FontWeight.Bold
                                     )
                                 ) {
-                                    if (daysLeft == 1) append("day") else append("days")
+                                    append(LocalizedContext.current.resources
+                                        .getQuantityString(R.plurals.days, daysLeft, daysLeft)
+                                    )
                                 }
 
-                                append(" left")
+                                append(" " + LocalizedContext.current.getString(R.string.left))
                             },
                             textAlign = TextAlign.Center,
-                            fontSize = 16.sp,
-                            lineHeight = 17.sp,
+                            fontSize = 13.sp,
+                            lineHeight = 14.sp,
                             color = Color.Gray
                         )
                     }
@@ -233,10 +244,11 @@ fun EventItem(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Turns",
+                            text = LocalizedContext.current.getString(R.string.turns).replaceFirstChar { it.uppercase() },
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
-                            fontSize = 16.sp,
+                            fontSize = 13.sp,
+                            lineHeight = 14.sp,
                             color = Color.Gray
                         )
 
@@ -257,12 +269,18 @@ fun EventItem(
                                             fontWeight = FontWeight.Light
                                         )
                                     ) {
-                                        append(" years")
+                                        if (yearMatter){
+                                            append(" " + LocalizedContext.current.resources
+                                                .getQuantityString(R.plurals.years, age, age))
+                                        } else{
+                                            append(" " + LocalizedContext.current.resources
+                                                .getQuantityString(R.plurals.years, 99, 99))
+                                        }
                                     }
                                 },
                                 textAlign = TextAlign.Center,
-                                fontSize = 16.sp,
-                                lineHeight = 17.sp,
+                                fontSize = 13.sp,
+                                lineHeight = 14.sp,
                                 color = Color.Gray
                             )
                         }

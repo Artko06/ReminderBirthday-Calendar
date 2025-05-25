@@ -9,6 +9,8 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import com.example.domain.models.notification.NotificationEvent
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +25,9 @@ fun TimePickerDialog(
     )
 
     AlertDialog(
-        title = { Text(text = "Time notification") },
+        title = { Text(
+            text = LocalizedContext.current.getString(R.string.time_notification)
+        ) },
         text = {
             Column {
                 TimePicker(
@@ -44,7 +48,9 @@ fun TimePickerDialog(
 
                 onDismiss()
             }) {
-                Text(text = "Save")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.save)
+                )
             }
         },
     )

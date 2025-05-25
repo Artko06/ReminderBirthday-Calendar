@@ -8,6 +8,8 @@ import com.example.domain.useCase.calendar.zodiac.status.GetStatusChineseZodiacU
 import com.example.domain.useCase.calendar.zodiac.status.GetStatusWesternZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.SetStatusChineseZodiacUseCase
 import com.example.domain.useCase.calendar.zodiac.status.SetStatusWesternZodiacUseCase
+import com.example.domain.useCase.settings.language.GetLanguageUseCase
+import com.example.domain.useCase.settings.language.SetLanguageUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowAnniversaryEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowBirthdayEventUseCase
 import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEventUseCase
@@ -45,6 +47,8 @@ class PreferencesViewModel @Inject constructor(
 
     private val getThemeUseCase: GetThemeUseCase,
     private val setThemeUseCase: SetThemeUseCase,
+    private val getLanguageUseCase: GetLanguageUseCase,
+    private val setLanguageUseCase: SetLanguageUseCase,
 
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
@@ -55,7 +59,7 @@ class PreferencesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _preferencesState.update {
                 it.copy(
-                    isEnableWesternZodiac = getStatusWesternZodiacUseCase.invoke().first(),
+                    isEnableZodiacSign = getStatusWesternZodiacUseCase.invoke().first(),
                     isEnableChineseZodiac = getStatusChineseZodiacUseCase.invoke().first(),
 
                     isEnableShowBirthdayEvent = getStatusShowBirthdayEventUseCase.invoke().first(),
@@ -81,15 +85,15 @@ class PreferencesViewModel @Inject constructor(
                 }
             }
 
-            PreferencesEvent.ChangeWesternZodiacStatus -> {
+            PreferencesEvent.ChangeZodiacSignStatus -> {
                 _preferencesState.update {
                     it.copy(
-                        isEnableWesternZodiac = !it.isEnableWesternZodiac
+                        isEnableZodiacSign = !it.isEnableZodiacSign
                     )
                 }
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    setStatusWesternZodiacUseCase(activeStatus = _preferencesState.value.isEnableWesternZodiac)
+                    setStatusWesternZodiacUseCase(activeStatus = _preferencesState.value.isEnableZodiacSign)
                 }
             }
 
@@ -167,6 +171,11 @@ class PreferencesViewModel @Inject constructor(
 
             is PreferencesEvent.ChangeAppTheme -> {
                 viewModelScope.launch {
+                    _preferencesState.update { it.copy(
+                        selectedTheme = event.theme
+                    )
+                    }
+
                     setThemeUseCase.invoke(theme = event.theme)
                 }
             }
@@ -183,6 +192,32 @@ class PreferencesViewModel @Inject constructor(
                     _preferencesState.update { it.copy(
                         isShowAppThemeDialog = true,
                         selectedTheme = theme
+                    ) }
+                }
+            }
+
+            is PreferencesEvent.ChangeAppLanguage -> {
+                viewModelScope.launch {
+                    _preferencesState.update { it.copy(
+                        selectedLanguage = event.language
+                    )
+                    }
+
+                    setLanguageUseCase.invoke(language = event.language)
+                }
+            }
+            PreferencesEvent.CloseAppLanguageDialog -> {
+                _preferencesState.update { it.copy(
+                    isShowAppLanguageDialog = false
+                ) }
+            }
+            PreferencesEvent.ShowAppLanguageDialog -> {
+                viewModelScope.launch {
+                    val language = getLanguageUseCase.invoke().first()
+
+                    _preferencesState.update { it.copy(
+                        isShowAppLanguageDialog = true,
+                        selectedLanguage = language
                     ) }
                 }
             }

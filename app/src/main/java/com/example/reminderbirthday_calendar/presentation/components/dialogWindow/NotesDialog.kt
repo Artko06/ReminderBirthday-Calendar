@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun NotesDialog(
@@ -42,7 +44,7 @@ fun NotesDialog(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "Notes",
+                    text = LocalizedContext.current.getString(R.string.notes),
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -54,7 +56,11 @@ fun NotesDialog(
                     onValueChange = {
                         if (it.length <= 500) onChangeNotes(it)
                     },
-                    placeholder = { Text("Write something…") },
+                    placeholder = {
+                        Text(
+                            text = LocalizedContext.current.getString(R.string.notes_placeholder)
+                        )
+                                  },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp),
@@ -75,12 +81,18 @@ fun NotesDialog(
                 onConfirm()
                 onDismiss()
             }) {
-                Text("Save", color = MaterialTheme.colorScheme.primary)
+                Text(
+                    text = LocalizedContext.current.getString(R.string.save),
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel", color = MaterialTheme.colorScheme.primary)
+                Text(
+                    text = LocalizedContext.current.getString(R.string.cancel),
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         },
         shape = RoundedCornerShape(24.dp)

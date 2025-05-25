@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string-array name="months">
+        <item>Студзень</item>
+        <item>Люты</item>
+        <item>Сакавік</item>
+        <item>Красавік</item>
+        <item>Май</item>
+        <item>Чэрвень</item>
+        <item>Ліпень</item>
+        <item>Жнівень</item>
+        <item>Верасень</item>
+        <item>Кастрычнік</item>
+        <item>Лістапад</item>
+        <item>Снежань</item>
+    </string-array>
+
+    <string-array name="days_of_week">
+        <item>Панядзелак</item>
+        <item>Аўторак</item>
+        <item>Серада</item>
+        <item>Чацвер</item>
+        <item>Пятніца</item>
+        <item>Субота</item>
+        <item>Нядзеля</item>
+    </string-array>
+
+    <string-array name="days_of_week_short">
+        <item>Пн</item>
+        <item>Аў</item>
+        <item>Ср</item>
+        <item>Чц</item>
+        <item>Пт</item>
+        <item>Сб</item>
+        <item>Нд</item>
+    </string-array>
+
+    <string name="sort_type_event_all">Усе</string>
+    <string name="sort_type_event_family">Сям\'я</string>
+    <string name="sort_type_event_relative">Родныя</string>
+    <string name="sort_type_event_friend">Сябры</string>
+    <string name="sort_type_event_colleague">Калегі</string>
+    <string name="sort_type_event_other">Іншыя</string>
+
+    <string name="birthday">Дзень нараджэння</string>
+    <string name="anniversary">Гадавіна</string>
+    <string name="other">Іншае</string>
+    <string name="event">Падзея</string>
+
+    <string name="zodiac_aquarius">Вадаліў</string>
+    <string name="zodiac_pisces">Рыбы</string>
+    <string name="zodiac_aries">Авен</string>
+    <string name="zodiac_taurus">Цялец</string>
+    <string name="zodiac_gemini">Блізняты</string>
+    <string name="zodiac_cancer">Рак</string>
+    <string name="zodiac_leo">Леў</string>
+    <string name="zodiac_virgo">Дзева</string>
+    <string name="zodiac_libra">Шалі</string>
+    <string name="zodiac_scorpio">Скарпіён</string>
+    <string name="zodiac_sagittarius">Стралец</string>
+    <string name="zodiac_capricorn">Казярог</string>
+
+    <string-array name="chinese_zodiac_animals">
+        <item>Малпа</item>
+        <item>Певень</item>
+        <item>Сабака</item>
+        <item>Свіння</item>
+        <item>Пацук</item>
+        <item>Бык</item>
+        <item>Тыгр</item>
+        <item>Трус</item>
+        <item>Цмок</item>
+        <item>Змяя</item>
+        <item>Конь</item>
+        <item>Каза</item>
+    </string-array>
+
+    <string name="left">да</string>
+    <string name="ago">таму</string>
+
+    <string name="close">Закрыць</string>
+    <string name="cancel">Скасаваць</string>
+    <string name="select">Выбраць</string>
+    <string name="to_settings">У налады</string>
+    <string name="search_placeholder">Пошук…</string>
+
+    <string name="navbar_events">Падзеі</string>
+    <string name="navbar_calendar">Каляндар</string>
+    <string name="navbar_settings">Налады</string>
+
+    <string name="notification_perm_window_title">Дазвол на адпраўку апавяшчэнняў</string>
+    <string name="notification_perm_window_text">Дазвол на адпраўку апавяшчэнняў дазволіць вам
+    атрымліваць апавяшчэнні пра падзеі календара (дазвол заўсёды можна адключыць у наладах)</string>
+    <string name="allow">Дазволіць</string>
+
+    <string name="days_before_events">Дзён да падзеі</string>
+    <string name="event_list_is_empty">Спіс падзей пусты</string>
+    <string name="event_list_is_empty_info">Імпартуйце падзеі з кантактаў, файла або дадайце ўручную</string>
+
+    <string name="events_on">Падзеі на</string>
+    <string-array name="months_with_num">
+        <item>%d студзеня</item>
+        <item>%d лютага</item>
+        <item>%d сакавіка</item>
+        <item>%d красавіка</item>
+        <item>%d мая</item>
+        <item>%d чэрвеня</item>
+        <item>%d ліпеня</item>
+        <item>%d жніўня</item>
+        <item>%d верасня</item>
+        <item>%d кастрычніка</item>
+        <item>%d лістапада</item>
+        <item>%d снежня</item>
+    </string-array>
+
+    <string name="tag">Тэг</string>
+    <string name="notes_info">Націсніце, каб паказаць</string>
+    <string name="notes_placeholder">Напішыце што-небудзь…</string>
+    <string name="turns">споўніцца</string>
+    <plurals name="years">
+        <item quantity="one" tools:ignore="ImpliedQuantity">год</item>
+        <item quantity="few">гады</item>
+        <item quantity="many">гадоў</item>
+        <item quantity="other">гадоў</item>
+    </plurals>
+    <string name="in">праз</string>
+    <plurals name="days">
+        <item quantity="one" tools:ignore="ImpliedQuantity">дзень</item>
+        <item quantity="few">дні</item>
+        <item quantity="many">дзён</item>
+        <item quantity="other">дзён</item>
+    </plurals>
+    <string name="today">Сёння</string>
+
+    <string name="adding_event">Даданне</string>
+    <string name="editing_event">Рэдагаванне</string>
+    <string name="name">Імя</string>
+    <string name="surname">Прозвішча</string>
+    <string name="select_date">Выберыце дату</string>
+    <string name="selected">Выбрана</string>
+    <string name="consider_the_year">Улічваць год</string>
+    <string name="notes">Нататкі</string>
+    <string name="my_contact">Мае кантакты</string>
+    <string name="my_contact_error">У вас няма кантактаў або дазвол на іх чытанне адключаны</string>
+    <string name="perm_to_read_contact_title">Дазвол на чытанне кантактаў</string>
+    <string name="perm_to_read_contact_text">Праграме неабходны дазвол на чытанне кантактаў
+    з вашай тэлефоннай кнігі</string>
+    <string name="no_number">Няма нумара</string>
+    <string name="add">Дадаць</string>
+    <string name="save">Захаваць</string>
+
+    <string name="deleting_event_title">Выдаленне падзеі</string>
+    <string name="deleting_event_text_part1">Вы сапраўды хочаце </string>
+    <string name="deleting_event_text_highlight">выдаліць</string>
+    <string name="deleting_event_text_part2"> гэту падзею?</string>
+    <string name="delete">Выдаліць</string>
+    <string name="delete_all_title">Выдаленне падзей</string>
+    <string name="deleting_all_event_text_part1">Вы сапраўды хочаце</string>
+    <string name="deleting_all_event_text_highlight">выдаліць</string>
+    <string name="deleting_all_event_text_part2">усе падзеі?</string>
+
+    <string name="preferences">Перавагі</string>
+    <string name="notification">Апавяшчэнні</string>
+    <string name="notification_info">Атрымліваць напаміны</string>
+    <string name="title_notification_dialog">Дазвол на апавяшчэнні</string>
+    <string name="text_notification_dialog_part1">Апавяшчэнні ў праграме </string>
+    <string name="text_notification_dialog_highlight_on">ўключаны</string>
+    <string name="text_notification_dialog_highlight_off">выключаны</string>
+    <string name="text_notification_dialog_part2">. Дазвол на адпраўку апавяшчэнняў дазваляе
+    вам атрымліваць апавяшчэнні пра падзеі календара.
+    Калі апавяшчэнні ўсё яшчэ не прыходзяць, праверце налады</string>
+    <string name="time_notification">Час апавяшчэння</string>
+    <string name="time_notifications">Час апавяшчэнняў</string>
+    <string name="time_notification_info">Усталяваць час апавяшчэнняў</string>
+    <string name="notification_number">Апавяшчэнне %d</string>
+    <plurals name="notification_time_format">
+        <item quantity="one">За %1$d дзень да падзеі ў %2$s</item>
+        <item quantity="few">За %1$d дні да падзеі ў %2$s</item>
+        <item quantity="many">За %1$d дзён да падзеі ў %2$s</item>
+        <item quantity="other">За %1$d дзён да падзеі ў %2$s</item>
+    </plurals>
+    <plurals name="days_number">
+        <item quantity="one">%d дзень</item>
+        <item quantity="few">%d дні</item>
+        <item quantity="many">%d дзён</item>
+        <item quantity="other">%d дзён</item>
+    </plurals>
+    <string name="theme">Тэма</string>
+    <string name="theme_info">Выберыце тэму праграмы</string>
+    <string name="theme_title_dialog">Тэма праграмы</string>
+    <string name="theme_text_1">Сістэмная</string>
+    <string name="theme_text_2">Светлая</string>
+    <string name="theme_text_3">Цёмная</string>
+    <string name="type_event">Тыпы падзей</string>
+    <string name="type_event_info">Выберыце тыпы падзей</string>
+    <string name="language_title_dialog">Мова праграмы</string>
+    <string name="language_text_1">Сістэмная</string>
+    <string name="language_text_2">Англійская</string>
+    <string name="language_text_3">Руская</string>
+    <string name="language_text_4">Беларуская</string>
+    <string name="language">Мова праграмы</string>
+    <string name="language_info">Выберыце мову</string>
+    <string name="types_events_title_dialog">Выберыце тыпы</string>
+    <string name="type_event_show_text">Паказваць</string>
+    <string name="type_events_1">Дні нараджэння</string>
+    <string name="type_events_2">Гадавіны</string>
+    <string name="type_events_3">Іншыя</string>
+    <string name="zodiac_sign">Задыякальны знак</string>
+    <string name="chinese_sign">Кітайскі знак</string>
+    <string name="sign_info">Паказваць знак</string>
+    <string name="export_and_import">Экспарт і імпарт</string>
+    <string name="import_events">Імпарт падзей</string>
+    <string name="import_events_info">Імпарт падзей з кантактаў</string>
+    <string name="export_event_json">Экспарт падзей і падзяліцца (JSON)</string>
+    <string name="export_event_csv">Экспарт падзей і падзяліцца (CSV)</string>
+    <string name="export_event_file_info">Падзяліцца падзеямі з іншымі праграмамі</string>
+    <string name="import_events_file">Імпарт падзей (JSON або CSV)</string>
+    <string name="import_events_file_info">Імпарт падзей з файлавай сістэмы</string>
+    <string name="cloud_export">Воблачны экспарт падзей</string>
+    <string name="cloud_export_info">Экспарт падзей у firestore</string>
+    <string name="cloud_import">Воблачны імпарт падзей</string>
+    <string name="cloud_import_info">Імпарт падзей з firestore</string>
+    <string name="data">Даныя</string>
+    <string name="sign_in_with_google">Уваход з дапамогай Google</string>
+    <string name="sign_in_with_google_info">Аўтарызуйцеся, калі ласка</string>
+    <string name="total_events">Усяго падзей</string>
+    <plurals name="total_events_count">
+        <item quantity="one">%d падзея</item>
+        <item quantity="few">%d падзеі</item>
+        <item quantity="many">%d падзей</item>
+        <item quantity="other">%d падзей</item>
+    </plurals>
+    <string name="about_app">Аб праграме</string>
+    <string name="about_app_info">Версія %s</string>
+    <string name="clear_events">Выдаліць падзеі</string>
+
+    <string name="export_json_success">JSON-файл паспяхова экспартаваны</string>
+    <string name="export_json_fail">Не ўдалося экспартаваць JSON-файл</string>
+
+    <string name="export_csv_success">CSV-файл паспяхова экспартаваны</string>
+    <string name="export_csv_fail">Не ўдалося экспартаваць CSV-файл</string>
+
+    <string name="import_zero_events">Імпартавана 0 падзей</string>
+
+    <string name="sign_in_error">Памылка ўваходу</string>
+    <string name="sign_in_success">Вы паспяхова ўвайшлі ў ўліковы запіс %1$s</string>
+    <string name="sign_out_success">Вы выйшлі з уліковага запісу %1$s</string>
+
+    <string name="remote_sign_in_required">Неабходна выканаць уваход праз Google</string>
+    <string name="no_remote_backup">Няма рэзервовых копій у воблачным сховішчы</string>
+
+    <string name="backup_time">Дата гэтай рэзервовай копіі: %1$s</string>
+
+    <string name="upload_zero_events">У вас няма падзей для адпраўкі</string>
+    <string name="upload_success">Паспяхова загружана з уліковага запісу %1$s</string>
+    <string name="upload_fail">Памылка загрузкі з уліковага запісу %1$s</string>
+
+    <string name="event_add_success">Падзея паспяхова дададзена</string>
+    <string name="event_add_error">Памылка пры даданні падзеі</string>
+    <string name="events_import_result">Імпартавана падзей: %1$s. Дададзена: %2$s</string>
+    <string name="events_deleted">Выдалена падзей: %1$s</string>
+
+    <string name="you_have_events">У вас падзей: %1$s</string>
+
+
+</resources>

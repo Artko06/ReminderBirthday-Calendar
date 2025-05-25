@@ -19,6 +19,7 @@ import com.example.domain.useCase.google.GoogleSignOutUseCase
 import com.example.domain.useCase.google.UploadEventsToRemoteUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.intents.shareIntent.TypeShareFile
 import com.example.reminderbirthday_calendar.presentation.event.ImportExportEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow
@@ -85,12 +86,12 @@ class ImportExportViewModel @Inject constructor(
                     _importExportSharedFlow.emit(
                         value = if (_importExportState.value.statusExportJson == true){
                             ShowToast(
-                                message = "Successfully export json file"
+                                messageResId = R.string.export_json_success
                             )
                         }
                         else
                             ShowToast(
-                                message = "Fail export json file"
+                                messageResId = R.string.export_json_fail
                             )
                     )
 
@@ -119,11 +120,11 @@ class ImportExportViewModel @Inject constructor(
                     _importExportSharedFlow.emit(
                         if (_importExportState.value.statusExportCsv == true)
                             ShowToast(
-                                message = "Successfully export csv file"
+                                messageResId = R.string.export_csv_success
                             )
                         else
                             ShowToast(
-                                message = "Fail export csv file"
+                                messageResId = R.string.export_csv_fail
                             )
                     )
 
@@ -151,7 +152,7 @@ class ImportExportViewModel @Inject constructor(
 
                     if (importedEvents.isEmpty()) {
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "0 imported events"
+                            messageResId = R.string.import_zero_events
                         )
                         )
                     } else {
@@ -174,7 +175,7 @@ class ImportExportViewModel @Inject constructor(
 
                     if (importedEvents.isEmpty()) {
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "0 imported events"
+                            messageResId = R.string.import_zero_events
                         )
                         )
                     } else {
@@ -208,7 +209,9 @@ class ImportExportViewModel @Inject constructor(
                             isLoadingReimportEvent = false
                         ) }
 
-                        _importExportSharedFlow.emit(value = ShowToast(message = "0 imported events"))
+                        _importExportSharedFlow.emit(value = ShowToast(
+                            messageResId = R.string.import_zero_events
+                        ))
                     } else{
                         _importExportState.update { it.copy(
                             isLoadingReimportEvent = false
@@ -233,8 +236,9 @@ class ImportExportViewModel @Inject constructor(
                                 isLoadingSignInWithGoogle = false
                             ) }
 
-                            _importExportSharedFlow.emit(
-                                value = ShowToast(message = "Error sign-in")
+                            _importExportSharedFlow.emit(value = ShowToast(
+                                messageResId = R.string.sign_in_error
+                            )
                             )
                         }
                         else{
@@ -246,7 +250,10 @@ class ImportExportViewModel @Inject constructor(
                             ) }
 
                             _importExportSharedFlow.emit(
-                                value = ShowToast(message = "Successfully sign-in to ${email ?: ""}")
+                                value = ShowToast(
+                                    messageResId = R.string.sign_in_success,
+                                    formatArgs = if (email != null) listOf(email) else emptyList()
+                                )
                             )
                         }
                     }
@@ -262,7 +269,10 @@ class ImportExportViewModel @Inject constructor(
                         ) }
 
                         _importExportSharedFlow.emit(
-                            value = ShowToast(message = "Successfully sign-out from ${email ?: ""}")
+                            value = ShowToast(
+                                messageResId = R.string.sign_out_success,
+                                formatArgs = if (email != null) listOf(email) else emptyList()
+                            )
                         )
                     }
                 }
@@ -280,7 +290,7 @@ class ImportExportViewModel @Inject constructor(
                         ) }
 
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "You should sigh-in with google"
+                            messageResId = R.string.remote_sign_in_required
                         )
                         )
                     }
@@ -301,7 +311,7 @@ class ImportExportViewModel @Inject constructor(
                         ) }
 
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "You don't have backups on remote storage"
+                            messageResId = R.string.no_remote_backup
                         )
                         )
 
@@ -317,7 +327,7 @@ class ImportExportViewModel @Inject constructor(
                         ) }
 
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "0 imported events"
+                            messageResId = R.string.import_zero_events
                         )
                         )
                     } else{
@@ -326,7 +336,8 @@ class ImportExportViewModel @Inject constructor(
                         ) }
 
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "Time this backup is $backupTime"
+                            messageResId = R.string.backup_time,
+                            formatArgs = if (backupTime != null) listOf(backupTime) else emptyList()
                         )
                         )
 
@@ -347,7 +358,7 @@ class ImportExportViewModel @Inject constructor(
                         ) }
 
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "You should sigh-in with google"
+                            messageResId = R.string.remote_sign_in_required
                         )
                         )
                     }
@@ -363,7 +374,9 @@ class ImportExportViewModel @Inject constructor(
                         ) }
 
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "You have 0 events!"))
+                            messageResId = R.string.upload_zero_events
+                        )
+                        )
 
                         return@launch
                     }
@@ -376,12 +389,14 @@ class ImportExportViewModel @Inject constructor(
 
                     if(statusUpload){
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "Successfully upload from ${email ?: ""}"
+                            messageResId = R.string.upload_success,
+                            formatArgs = if (email != null) listOf(email) else emptyList()
                         )
                         )
                     } else{
                         _importExportSharedFlow.emit(value = ShowToast(
-                            message = "Fail upload from ${email ?: ""}"
+                            messageResId = R.string.upload_fail,
+                            formatArgs = if (email != null) listOf(email) else emptyList()
                         )
                         )
                     }

@@ -34,8 +34,8 @@ interface SettingsRepository {
     suspend fun deleteAllNotificationEvent(): Int
 
     // Zodiac
-    fun getStatusZodiacWestern(): Flow<Boolean>
-    suspend fun setStatusZodiacWestern(activeStatus: Boolean)
+    fun getStatusZodiacSign(): Flow<Boolean>
+    suspend fun setStatusZodiacSign(activeStatus: Boolean)
     fun getStatusZodiacChinese(): Flow<Boolean>
     suspend fun setStatusZodiacChinese(activeStatus: Boolean)
 

@@ -21,6 +21,7 @@ import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEvent
 import com.example.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
 import com.example.domain.useCase.settings.viewDaysLeft.SetStatusViewDaysLeftUseCase
 import com.example.domain.util.extensionFunc.sortByClosestDate
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow.ShowToast
@@ -204,9 +205,12 @@ class EventsViewModel @Inject constructor(
 
                     _eventsSharedFlow.emit(
                         value = ShowToast(
-                            message = "${importEvents.size} imported events. " +
-                                    "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
-                    )
+                            messageResId = R.string.events_import_result,
+                            formatArgs = listOf(
+                                importEvents.size.toString(),
+                                (eventsDbAfterAdding.size - eventsDbBeforeAdding.size).toString()
+                            )
+                        ))
 
                     _eventsState.update { it.copy(
                         isLoadingImportEvents = false
@@ -242,9 +246,12 @@ class EventsViewModel @Inject constructor(
 
                     _eventsSharedFlow.emit(
                         value = ShowToast(
-                            message = "${importEvents.size} imported events. " +
-                                    "${eventsDbAfterAdding.size - eventsDbBeforeAdding.size} added events")
-                    )
+                            messageResId = R.string.events_import_result,
+                            formatArgs = listOf(
+                                importEvents.size.toString(),
+                                (eventsDbAfterAdding.size - eventsDbBeforeAdding.size).toString()
+                            )
+                    ))
                 }
             }
 
@@ -257,10 +264,13 @@ class EventsViewModel @Inject constructor(
 
                 viewModelScope.launch(Dispatchers.IO) {
                     cancelNotifyAllEventUseCase()
-                    val deleted = deleteAllEventsUseCase()
+                    val deleted = deleteAllEventsUseCase.invoke()
 
                     _eventsSharedFlow.emit(
-                        value = ShowToast("$deleted events deleted")
+                        value = ShowToast(
+                            messageResId = R.string.events_deleted,
+                            formatArgs = listOf(deleted.toString())
+                        )
                     )
                 }
             }

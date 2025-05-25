@@ -1,9 +1,10 @@
 package com.example.reminderbirthday_calendar.presentation.state
 
+import com.example.domain.models.settings.LanguageType
 import com.example.domain.models.settings.ThemeType
 
 data class PreferencesState(
-    val isEnableWesternZodiac: Boolean = false,
+    val isEnableZodiacSign: Boolean = false,
     val isEnableChineseZodiac: Boolean = false,
 
     val isEnableStatusNotification: Boolean = false,
@@ -15,6 +16,8 @@ data class PreferencesState(
     val isShowStatusTypeEventsDialog: Boolean = false,
     val isShowSettingsNotificationDialog: Boolean = false,
     val isShowAppThemeDialog: Boolean = false,
+    val isShowAppLanguageDialog: Boolean = false,
 
-    val selectedTheme: ThemeType = ThemeType.SYSTEM
+    val selectedTheme: ThemeType = ThemeType.SYSTEM,
+    val selectedLanguage: LanguageType = LanguageType.SYSTEM
 )

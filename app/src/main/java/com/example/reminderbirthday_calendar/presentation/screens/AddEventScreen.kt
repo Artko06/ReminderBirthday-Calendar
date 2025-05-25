@@ -55,6 +55,8 @@ import com.example.data.local.util.image.compressImageWithResize
 import com.example.data.local.util.image.toByteArray
 import com.example.domain.models.settings.ThemeType
 import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorEventType
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.SelectorSortEventTypeForAdd
 import com.example.reminderbirthday_calendar.presentation.components.addWindow.TextEntry
@@ -72,6 +74,7 @@ fun AddEventScreen(
     addEventViewModel: AddEventViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val localizedContext = LocalizedContext.current
     val addEventState = addEventViewModel.addEventState.collectAsState().value
     val addEventSharedFlow = addEventViewModel.addEventSharedFlow
 
@@ -79,7 +82,10 @@ fun AddEventScreen(
         addEventSharedFlow.collect { sharedFlow ->
             when(sharedFlow){
                 is AddEventSharedFlow.ShowToast -> {
-                    Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
+                    val message = localizedContext
+                        .getString(sharedFlow.messageResId, *sharedFlow.formatArgs.toTypedArray())
+
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -160,10 +166,16 @@ fun AddEventScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Text(
-                    text = "Adding Event",
-                    fontSize = 26.sp,
+                    text = LocalizedContext.current.getString(R.string.adding_event),
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Serif
                 )
@@ -221,7 +233,7 @@ fun AddEventScreen(
             )
 
             TextEntry(
-                description = "Name",
+                description = LocalizedContext.current.getString(R.string.name),
                 hint = "",
                 leadingIcon = Icons.Filled.Person,
                 trailingIcon = Icons.Filled.AutoStories,
@@ -239,7 +251,7 @@ fun AddEventScreen(
             )
 
             TextEntry(
-                description = "Surname",
+                description = LocalizedContext.current.getString(R.string.surname),
                 hint = "",
                 leadingIcon = Icons.Filled.Person,
                 textValue = addEventState.valueSurname,
@@ -288,9 +300,9 @@ fun AddEventScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = if (addEventState.date == null) "Select date"
-                    else ("Selected: " + addEventState.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-                        .toString()),
+                    text = if (addEventState.date == null) LocalizedContext.current.getString(R.string.select_date)
+                    else (LocalizedContext.current.getString(R.string.selected) + ": " +
+                            addEventState.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")).toString()),
                 )
             }
 
@@ -303,7 +315,7 @@ fun AddEventScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Quiz,
-                    contentDescription = "Year is matter",
+                    contentDescription = "Consider the year",
                     tint = if (addEventState.yearMatter) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onBackground
                 )
@@ -311,7 +323,7 @@ fun AddEventScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "Year is matter"
+                    text = LocalizedContext.current.getString(R.string.consider_the_year)
                 )
 
                 Checkbox(
@@ -323,7 +335,7 @@ fun AddEventScreen(
             }
 
             TextEntry(
-                description = "Notes",
+                description = LocalizedContext.current.getString(R.string.notes),
                 hint = "",
                 leadingIcon = Icons.Filled.NoteAlt,
                 textValue = addEventState.notes,
@@ -341,7 +353,9 @@ fun AddEventScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 TextButton(onClick = { onBackFromAddEventScreen() }) {
-                    Text("Cancel")
+                    Text(
+                        text = LocalizedContext.current.getString(R.string.cancel)
+                    )
                 }
 
                 TextButton(
@@ -351,7 +365,9 @@ fun AddEventScreen(
                     },
                     enabled = addEventState.isEnableAddEventButton
                 ) {
-                    Text("Add")
+                    Text(
+                        text = LocalizedContext.current.getString(R.string.add)
+                    )
                 }
             }
 

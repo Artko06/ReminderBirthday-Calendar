@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.domain.models.settings.ThemeType
 import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.ui.theme.darkRed
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -31,7 +33,8 @@ fun RowDaysOfWeek(
     ) {
         daysOfWeek.forEach { day ->
             Text(
-                text = day.name.lowercase().replaceFirstChar { it.uppercase() }.take(3),
+                text = LocalizedContext.current.resources
+                    .getStringArray(R.array.days_of_week_short)[day.value - 1],
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f),
                 color = if (day == LocalDate.now().dayOfWeek) {

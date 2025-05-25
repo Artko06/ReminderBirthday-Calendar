@@ -28,6 +28,17 @@
         <item>Sunday</item>
     </string-array>
 
+    <!-- Days of week, short -->
+    <string-array name="days_of_week_short">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
     <!-- Sort type event -->
     <string name="sort_type_event_all">All</string>
     <string name="sort_type_event_family">Family</string>
@@ -36,19 +47,183 @@
     <string name="sort_type_event_colleague">Colleagues</string>
     <string name="sort_type_event_other">Others</string>
 
-    <!-- Settings -->
+    <!-- Types events -->
+    <string name="birthday">Birthday</string>
+    <string name="anniversary">Anniversary</string>
+    <string name="other">Other</string>
+    <string name="event">Event</string>
+
+    <!-- Item Event -->
+    <string name="left">left</string>
+    <string name="ago">ago</string>
+
+    <!-- Zodiac sign -->
+    <string name="zodiac_aquarius">Aquarius</string>
+    <string name="zodiac_pisces">Pisces</string>
+    <string name="zodiac_aries">Aries</string>
+    <string name="zodiac_taurus">Taurus</string>
+    <string name="zodiac_gemini">Gemini</string>
+    <string name="zodiac_cancer">Cancer</string>
+    <string name="zodiac_leo">Leo</string>
+    <string name="zodiac_virgo">Virgo</string>
+    <string name="zodiac_libra">Libra</string>
+    <string name="zodiac_scorpio">Scorpio</string>
+    <string name="zodiac_sagittarius">Sagittarius</string>
+    <string name="zodiac_capricorn">Capricorn</string>
+
+    <!-- Chinese sign -->
+    <string-array name="chinese_zodiac_animals">
+        <item>Monkey</item>
+        <item>Rooster</item>
+        <item>Dog</item>
+        <item>Pig</item>
+        <item>Rat</item>
+        <item>Ox</item>
+        <item>Tiger</item>
+        <item>Rabbit</item>
+        <item>Dragon</item>
+        <item>Snake</item>
+        <item>Horse</item>
+        <item>Goat</item>
+    </string-array>
+
+    <!-- General -->
+    <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
+    <string name="select">Select</string>
+    <string name="to_settings">To settings</string>
+    <string name="search_placeholder">Search…</string>
+
+    <!-- NavBar -->
+    <string name="navbar_events">Events</string>
+    <string name="navbar_calendar">Calendar</string>
+    <string name="navbar_settings">Settings</string>
+
+    <!-- Notification perm Window -->
+    <string name="notification_perm_window_title">Permission to send notifications</string>
+    <string name="notification_perm_window_text">Permission to send notifications will allow you to be notified about
+        calendar events (The resolution can always be disabled in the settings)</string>
+    <string name="allow">Allow</string>
+
+    <!-- Events Window -->
+    <string name="days_before_events">Days before events</string>
+    <string name="event_list_is_empty">Event list is empty</string>
+    <string name="event_list_is_empty_info">Import events from contacts, file or add manually</string>
+
+    <!-- Calendar Window -->
+    <string name="events_on">Events on</string>
+    <string-array name="months_with_num">
+        <item>January %d</item>
+        <item>February %d</item>
+        <item>March %d</item>
+        <item>April %d</item>
+        <item>May %d</item>
+        <item>June %d</item>
+        <item>July %d</item>
+        <item>August %d</item>
+        <item>September %d</item>
+        <item>October %d</item>
+        <item>November %d</item>
+        <item>December %d</item>
+    </string-array>
+    
+    <!-- Detail event Window -->
+    <string name="tag">Tag</string>
+    <string name="notes_info">Click to show</string>
+    <string name="notes_placeholder">Write something…</string>
+    <string name="turns">turns</string>
+    <plurals name="years">
+        <item quantity="one">year</item>
+        <item quantity="other">years</item>
+    </plurals>
+    <string name="in">in</string>
+    <plurals name="days">
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <string name="today">Today</string>
+
+    <!-- Adding and Editing Window -->
+    <string name="adding_event">Adding event</string>
+    <string name="editing_event">Editing event</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="consider_the_year">Consider the year</string>
+    <string name="select_date">Select date</string>
+    <string name="selected">Selected</string>
+    <string name="notes">Notes</string>
+    <string name="my_contact">My contact</string>
+    <string name="my_contact_error">You don\'t have contacts or permission to read them is disabled</string>
+    <string name="perm_to_read_contact_title">Permission to read contacts</string>
+    <string name="perm_to_read_contact_text">The app needs permission to read contacts from your phone book</string>
+    <string name="no_number">No number</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+
+    <!-- Deleting event, dialog -->
+    <string name="deleting_event_title">Deleting event</string>
+    <string name="deleting_event_text_part1">Are you sure want to</string>
+    <string name="deleting_event_text_highlight">delete</string>
+    <string name="deleting_event_text_part2">the event?</string>
+    <string name="delete">Delete</string>
+    <string name="delete_all_title">Delete all events</string>
+    <string name="deleting_all_event_text_part1">Are you sure want to</string>
+    <string name="deleting_all_event_text_highlight">delete</string>
+    <string name="deleting_all_event_text_part2">all event?</string>
+
+    <!-- Settings Window -->
     <string name="preferences">Preferences</string>
     <string name="notification">Notification</string>
     <string name="notification_info">Receive reminders</string>
+        <!-- Notification perm dialog-->
+    <string name="title_notification_dialog">Permission for notifications</string>
+    <string name="text_notification_dialog_part1">Notifications in the app are</string>
+    <string name="text_notification_dialog_highlight_on">turn on</string>
+    <string name="text_notification_dialog_highlight_off">turn off</string>
+    <string name="text_notification_dialog_part2">. Are you sure you want to turn off them?
+        Permission to send notifications allows you to be notified about calendar events.
+        If notifications still don\'t arrive, check your settings</string>
     <string name="time_notification">Time notification</string>
+    <string name="time_notifications">Time notifications</string>
     <string name="time_notification_info">Set time notification</string>
+        <!-- Time notification Window -->
+    <string name="notification_number">Notification %d</string>
+    <plurals name="notification_time_format">
+        <item quantity="one">%1$d day before the event at %2$s</item>
+        <item quantity="other">%1$d days before the event at %2$s</item>
+    </plurals>
+    <plurals name="days_number">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
     <string name="theme">Theme</string>
     <string name="theme_info">Select theme app</string>
+        <!-- App theme dialog -->
+    <string name="theme_title_dialog">App theme</string>
+    <string name="theme_text_1">System</string>
+    <string name="theme_text_2">Light</string>
+    <string name="theme_text_3">Dark</string>
     <string name="type_event">Type event</string>
     <string name="type_event_info">Select event types</string>
+        <!-- Languages dialog -->
+    <string name="language_title_dialog">App language</string>
+    <string name="language_text_1">System</string>
+    <string name="language_text_2">English</string>
+    <string name="language_text_3">Russian</string>
+    <string name="language_text_4">Belarusian</string>
+    <string name="language">Language</string>
+    <string name="language_info">Select language</string>
+        <!-- Types events dialog -->
+    <string name="types_events_title_dialog">Select types</string>
+    <string name="type_event_show_text">Show</string>
+    <string name="type_events_1">Birthdays</string>
+    <string name="type_events_2">Anniversaries</string>
+    <string name="type_events_3">Others</string>
+        <!-- Sign -->
     <string name="zodiac_sign">Zodiac sign</string>
     <string name="chinese_sign">Chinese sign</string>
     <string name="sign_info">Show sign</string>
+        <!-- Export and Import -->
     <string name="export_and_import">Export and import</string>
     <string name="import_events">Import events</string>
     <string name="import_events_info">Import events from contacts</string>
@@ -61,17 +236,46 @@
     <string name="cloud_export_info">Export events to the firestore</string>
     <string name="cloud_import">Cloud import events</string>
     <string name="cloud_import_info">Import events from the firestore</string>
+        <!-- Data -->
     <string name="data">Data</string>
     <string name="sign_in_with_google">Sign-in with google</string>
-    <string name="sign_in_with_google_ingo">Auth pls</string>
+    <string name="sign_in_with_google_info">Auth pls</string>
     <string name="total_events">Total events</string>
     <plurals name="total_events_count">
         <item quantity="one">%d event</item>
         <item quantity="other">%d events</item>
     </plurals>
-    <string name="About_app">About birthday reminder</string>
-    <string name="About_app_info">Version %s</string>
+    <string name="about_app">About birthday reminder</string>
+    <string name="about_app_info">Version %s</string>
     <string name="clear_events">Clear events</string>
 
+    <!-- Toast, export and import -->
+    <string name="export_json_success">Successfully exported JSON file</string>
+    <string name="export_json_fail">Failed to export JSON file</string>
+
+    <string name="export_csv_success">Successfully exported CSV file</string>
+    <string name="export_csv_fail">Failed to export CSV file</string>
+
+    <string name="import_zero_events">0 imported events</string>
+
+    <string name="sign_in_error">Error signing in</string>
+    <string name="sign_in_success">Successfully signed in to %1$s</string>
+    <string name="sign_out_success">Successfully signed out from %1$s</string>
+
+    <string name="remote_sign_in_required">You should sign in with Google</string>
+    <string name="no_remote_backup">You don\'t have backups on remote storage</string>
+
+    <string name="backup_time">Time of this backup is %1$s</string>
+
+    <string name="upload_zero_events">You have 0 events!</string>
+    <string name="upload_success">Successfully uploaded from %1$s</string>
+    <string name="upload_fail">Failed to upload from %1$s</string>
+
+    <string name="event_add_success">Successfully added event</string>
+    <string name="event_add_error">Error adding event</string>
+    <string name="events_import_result">%1$s imported events. %2$s added events</string>
+    <string name="events_deleted">%1$s events deleted</string>
+
+    <string name="you_have_events">You have %1$s events</string>
 
 </resources>

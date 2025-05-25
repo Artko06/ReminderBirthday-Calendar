@@ -37,6 +37,8 @@ import com.example.domain.models.date.MonthYear
 import com.example.domain.util.extensionFunc.calculateDaysLeft
 import com.example.domain.util.extensionFunc.calculateNextAge
 import com.example.domain.util.extensionFunc.nextEvent
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.evetns.DaysLeftButton
@@ -58,6 +60,7 @@ fun EventsScreen(
     eventsViewModel: EventsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val localizedContext = LocalizedContext.current
 
     val eventState = eventsViewModel.eventState.collectAsState().value
     val stateLazyColumn = rememberLazyListState()
@@ -81,7 +84,10 @@ fun EventsScreen(
         eventsSharedFlow.collect { sharedFlow ->
             when(sharedFlow){
                 is EventsSharedFlow.ShowToast -> {
-                    Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
+                    val message = localizedContext
+                        .getString(sharedFlow.messageResId, *sharedFlow.formatArgs.toTypedArray())
+
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -107,7 +113,8 @@ fun EventsScreen(
             value = eventState.searchStr,
             onValueChange = { newStr ->
                 eventsViewModel.onEvent(event = EventsEvent.UpdateSearchLine(newStr))
-            }
+            },
+            placeholder = LocalizedContext.current.getString(R.string.search_placeholder)
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -124,6 +131,7 @@ fun EventsScreen(
             contentAlignment = Alignment.CenterEnd
         ){
             DaysLeftButton(
+                text = LocalizedContext.current.getString(R.string.days_before_events),
                 onClick = { eventsViewModel.onEvent(event = EventsEvent.ChangeStatusViewDaysLeft) },
                 isActive = eventState.isViewDaysLeft
             )
@@ -152,7 +160,7 @@ fun EventsScreen(
                 Spacer(modifier = Modifier.height(36.dp))
 
                 Text(
-                    text = "Event list is empty",
+                    text = LocalizedContext.current.getString(R.string.event_list_is_empty),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center
@@ -161,7 +169,7 @@ fun EventsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Import events from contacts, file or add manually",
+                    text = LocalizedContext.current.getString(R.string.event_list_is_empty_info),
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
@@ -180,7 +188,7 @@ fun EventsScreen(
                         )
 
                         Text(
-                            text = "Import events",
+                            text = LocalizedContext.current.getString(R.string.import_events),
                             fontSize = 14.sp,
                             modifier = Modifier.padding(start = 8.dp)
                         )

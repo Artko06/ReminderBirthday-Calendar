@@ -21,6 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.domain.models.event.EventType
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 
 @Composable
 fun SortEventTypeDialog(
@@ -35,98 +38,71 @@ fun SortEventTypeDialog(
 ){
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Select types") },
+        title = { Text(
+            text = LocalizedContext.current.getString(R.string.types_events_title_dialog)
+        ) },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(enabled = true, onClick = { changeStatusShowBirthday() }),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(checked = statusShowBirthday, onCheckedChange = { changeStatusShowBirthday() })
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = buildAnnotatedString {
-                            append("Show ")
+                EventType.entries.forEach { type ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(enabled = true, onClick = {
+                                when (type) {
+                                    EventType.BIRTHDAY -> changeStatusShowBirthday()
+                                    EventType.ANNIVERSARY -> changeStatusShowAnniversary()
+                                    EventType.OTHER -> changeStatusShowOther()
+                                }
+                            }),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = when (type) {
+                                EventType.BIRTHDAY -> statusShowBirthday
+                                EventType.ANNIVERSARY -> statusShowAnniversary
+                                EventType.OTHER -> statusShowOther
+                            },
+                            onCheckedChange = {
+                                when (type) {
+                                    EventType.BIRTHDAY -> changeStatusShowBirthday()
+                                    EventType.ANNIVERSARY -> changeStatusShowAnniversary()
+                                    EventType.OTHER -> changeStatusShowOther()
+                                }
+                            })
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = buildAnnotatedString {
+                                append(LocalizedContext.current.getString(R.string.type_event_show_text) + " ")
 
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic,
-                                    fontSize = 16.sp
-                                )
-                            ) {
-                                append("Birthday")
-                            }
-
-                            append(" event")
-                        },
-                        fontSize = 14.sp
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(enabled = true, onClick = { changeStatusShowAnniversary() }),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(checked = statusShowAnniversary, onCheckedChange = { changeStatusShowAnniversary() })
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = buildAnnotatedString {
-                            append("Show ")
-
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic,
-                                    fontSize = 16.sp
-                                )
-                            ) {
-                                append("Anniversary")
-                            }
-
-                            append(" event")
-                        },
-                        fontSize = 14.sp
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(enabled = true, onClick = { changeStatusShowOther() }),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(checked = statusShowOther, onCheckedChange = { changeStatusShowOther() })
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = buildAnnotatedString {
-                            append("Show ")
-
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic,
-                                    fontSize = 16.sp
-                                )
-                            ) {
-                                append("Other")
-                            }
-
-                            append(" event")
-                        },
-                        fontSize = 14.sp
-                    )
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontWeight = FontWeight.Bold,
+                                        fontStyle = FontStyle.Italic
+                                    )
+                                ) {
+                                    append(when (type) {
+                                        EventType.BIRTHDAY -> LocalizedContext.current.getString(R.string.type_events_1)
+                                        EventType.ANNIVERSARY -> LocalizedContext.current.getString(
+                                            R.string.type_events_2
+                                        )
+                                        EventType.OTHER -> LocalizedContext.current.getString(R.string.type_events_3)
+                                    })
+                                }
+                            },
+                            fontSize = 14.sp
+                        )
+                    }
                 }
             }
         },
         confirmButton = { },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Close")
+                Text(
+                    text = LocalizedContext.current.getString(R.string.close)
+                )
             }
         }
     )

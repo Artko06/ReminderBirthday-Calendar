@@ -22,10 +22,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.event.SortTypeEvent
+import com.example.domain.models.settings.ThemeType
+import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.ui.theme.backgroundBlueAzure
 import com.example.reminderbirthday_calendar.ui.theme.backgroundDarkGreen
 import com.example.reminderbirthday_calendar.ui.theme.backgroundDarkPurple
 import com.example.reminderbirthday_calendar.ui.theme.backgroundDarkRed
+import com.example.reminderbirthday_calendar.ui.theme.backgroundLightBlueAzure
+import com.example.reminderbirthday_calendar.ui.theme.backgroundLightGreen
+import com.example.reminderbirthday_calendar.ui.theme.backgroundLightPurple
+import com.example.reminderbirthday_calendar.ui.theme.backgroundLightRed
+import com.example.reminderbirthday_calendar.ui.theme.backgroundLightYellow
 import com.example.reminderbirthday_calendar.ui.theme.backgroundYellow
 import com.example.reminderbirthday_calendar.ui.theme.blueAzure
 import com.example.reminderbirthday_calendar.ui.theme.darkGreen
@@ -47,7 +56,13 @@ fun SelectorSortEventTypeForAdd(
             key = { it.name }
         ) { sortType ->
             SortTypeButton(
-                text = sortType.name.lowercase().replaceFirstChar { it.uppercase() },
+                text = when(sortType){
+                    SortTypeEvent.FAMILY -> LocalizedContext.current.getString(R.string.sort_type_event_family)
+                    SortTypeEvent.RELATIVE -> LocalizedContext.current.getString(R.string.sort_type_event_relative)
+                    SortTypeEvent.FRIEND -> LocalizedContext.current.getString(R.string.sort_type_event_friend)
+                    SortTypeEvent.COLLEAGUE -> LocalizedContext.current.getString(R.string.sort_type_event_colleague)
+                    SortTypeEvent.OTHER -> LocalizedContext.current.getString(R.string.sort_type_event_other)
+                },
                 isSelected = selectedSortType == sortType,
                 sortTypeEvent = sortType,
                 onClick = { onClick(sortType) }
@@ -80,22 +95,32 @@ fun SortTypeButton(
             }
             else {
                 when(sortTypeEvent){
-                    SortTypeEvent.FAMILY -> backgroundDarkRed
-                    SortTypeEvent.RELATIVE -> backgroundYellow
-                    SortTypeEvent.FRIEND -> backgroundBlueAzure
-                    SortTypeEvent.COLLEAGUE -> backgroundDarkGreen
-                    SortTypeEvent.OTHER -> backgroundDarkPurple
+                    SortTypeEvent.FAMILY -> if (LocalTheme.current == ThemeType.DARK) backgroundDarkRed
+                        else backgroundLightRed
+                    SortTypeEvent.RELATIVE -> if (LocalTheme.current == ThemeType.DARK) backgroundYellow
+                        else backgroundLightYellow
+                    SortTypeEvent.FRIEND -> if (LocalTheme.current == ThemeType.DARK) backgroundBlueAzure
+                        else backgroundLightBlueAzure
+                    SortTypeEvent.COLLEAGUE -> if (LocalTheme.current == ThemeType.DARK) backgroundDarkGreen
+                        else backgroundLightGreen
+                    SortTypeEvent.OTHER -> if (LocalTheme.current == ThemeType.DARK) backgroundDarkPurple
+                        else backgroundLightPurple
                 }
             }
         ),
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = when(sortTypeEvent){
-                SortTypeEvent.FAMILY -> backgroundDarkRed
-                SortTypeEvent.RELATIVE -> backgroundYellow
-                SortTypeEvent.FRIEND -> backgroundBlueAzure
-                SortTypeEvent.COLLEAGUE -> backgroundDarkGreen
-                SortTypeEvent.OTHER -> backgroundDarkPurple
+                SortTypeEvent.FAMILY -> if (LocalTheme.current == ThemeType.DARK) backgroundDarkRed
+                    else backgroundLightRed
+                SortTypeEvent.RELATIVE -> if (LocalTheme.current == ThemeType.DARK) backgroundYellow
+                    else backgroundLightYellow
+                SortTypeEvent.FRIEND -> if (LocalTheme.current == ThemeType.DARK) backgroundBlueAzure
+                    else backgroundLightBlueAzure
+                SortTypeEvent.COLLEAGUE -> if (LocalTheme.current == ThemeType.DARK) backgroundDarkGreen
+                    else backgroundLightGreen
+                SortTypeEvent.OTHER -> if (LocalTheme.current == ThemeType.DARK) backgroundDarkPurple
+                    else backgroundLightPurple
             },
             contentColor = when(sortTypeEvent){
                 SortTypeEvent.FAMILY -> darkRed

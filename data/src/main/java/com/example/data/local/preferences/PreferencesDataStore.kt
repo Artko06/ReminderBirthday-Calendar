@@ -73,14 +73,14 @@ object PreferencesDataStore {
     }
 
     // Zodiac
-    fun getStatusZodiacWestern(context: Context): Flow<Boolean> {
+    fun getStatusZodiacSign(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { prefs ->
-            prefs[ZODIAC_WESTERN_ENABLE_KEY] ?: false
+            prefs[ZODIAC_SIGN_ENABLE_KEY] ?: false
         }
     }
 
     suspend fun setStatusZodiacWestern(context: Context, activeStatus: Boolean) {
-        context.dataStore.edit { it[ZODIAC_WESTERN_ENABLE_KEY] = activeStatus }
+        context.dataStore.edit { it[ZODIAC_SIGN_ENABLE_KEY] = activeStatus }
     }
 
     fun getStatusZodiacChinese(context: Context): Flow<Boolean> {

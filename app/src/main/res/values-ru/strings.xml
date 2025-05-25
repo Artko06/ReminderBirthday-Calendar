@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Месяцы -->
     <string-array name="months">
@@ -28,6 +28,17 @@
         <item>Воскресенье</item>
     </string-array>
 
+    <!-- Дни недели, коротко -->
+    <string-array name="days_of_week_short">
+        <item>Пн</item>
+        <item>Вт</item>
+        <item>Ср</item>
+        <item>Чт</item>
+        <item>Пт</item>
+        <item>Сб</item>
+        <item>Вс</item>
+    </string-array>
+
     <!-- Тип сортировки событий -->
     <string name="sort_type_event_all">Все</string>
     <string name="sort_type_event_family">Семья</string>
@@ -36,19 +47,192 @@
     <string name="sort_type_event_colleague">Коллеги</string>
     <string name="sort_type_event_other">Другие</string>
 
-    <!-- Settings -->
+    <!-- Типы событитий -->
+    <string name="birthday">День рождения</string>
+    <string name="anniversary">Годовщина</string>
+    <string name="other">Другое</string>
+    <string name="event">Событие</string>
+
+    <!-- Зодиакальные знаки -->
+    <string name="zodiac_aquarius">Водолей</string>
+    <string name="zodiac_pisces">Рыбы</string>
+    <string name="zodiac_aries">Овен</string>
+    <string name="zodiac_taurus">Телец</string>
+    <string name="zodiac_gemini">Близнецы</string>
+    <string name="zodiac_cancer">Рак</string>
+    <string name="zodiac_leo">Лев</string>
+    <string name="zodiac_virgo">Дева</string>
+    <string name="zodiac_libra">Весы</string>
+    <string name="zodiac_scorpio">Скорпион</string>
+    <string name="zodiac_sagittarius">Стрелец</string>
+    <string name="zodiac_capricorn">Козерог</string>
+
+    <!-- Китайские знаки -->
+    <string-array name="chinese_zodiac_animals">
+        <item>Обезьяна</item>
+        <item>Петух</item>
+        <item>Собака</item>
+        <item>Свинья</item>
+        <item>Крыса</item>
+        <item>Бык</item>
+        <item>Тигр</item>
+        <item>Кролик</item>
+        <item>Дракон</item>
+        <item>Змея</item>
+        <item>Лошадь</item>
+        <item>Коза</item>
+    </string-array>
+
+    <!-- Элемент события -->
+    <string name="left">до</string>
+    <string name="ago">назад</string>
+
+    <!-- Общие -->
+    <string name="close">Закрыть</string>
+    <string name="cancel">Отмена</string>
+    <string name="select">Выбрать</string>
+    <string name="to_settings">В настройки</string>
+    <string name="search_placeholder">Поиск…</string>
+
+    <!-- Навигационная панель -->
+    <string name="navbar_events">События</string>
+    <string name="navbar_calendar">Календарь</string>
+    <string name="navbar_settings">Настройки</string>
+
+    <!-- Окна разрешения на отправку уведомлений -->
+    <string name="notification_perm_window_title">Разрешение на отправку уведомлений</string>
+    <string name="notification_perm_window_text">Разрешение на отправку уведомлений позволит вам
+        получать уведомления о событиях календаря (разрешение всегда можно отключить в настройках)</string>
+    <string name="allow">Разрешить</string>
+
+    <!-- Окно событий -->
+    <string name="days_before_events">Дней до события</string>
+    <string name="event_list_is_empty">Список событий пуст</string>
+    <string name="event_list_is_empty_info">Импортируйте события из контактов, файла или добавьте вручную</string>
+
+    <!-- Окно календаря -->
+    <string name="events_on">События на</string>
+    <string-array name="months_with_num">
+        <item>%d Января</item>
+        <item>%d Февраля</item>
+        <item>%d Марта</item>
+        <item>%d Апреля</item>
+        <item>%d Мая</item>
+        <item>%d Июня</item>
+        <item>%d Июля</item>
+        <item>%d Августа</item>
+        <item>%d Сентября</item>
+        <item>%d Октября</item>
+        <item>%d Ноября</item>
+        <item>%d Декабря</item>
+    </string-array>
+
+    <!-- Окно детальной информации о событии -->
+    <string name="tag">Тег</string>
+    <string name="notes_info">Нажмите, чтобы показать</string>
+    <string name="notes_placeholder">Напишите что-нибудь…</string>
+    <string name="turns">исполнится</string>
+    <plurals name="years">
+        <item quantity="one" tools:ignore="ImpliedQuantity">год</item>
+        <item quantity="few">года</item>
+        <item quantity="many">лет</item>
+        <item quantity="other">лет</item>
+    </plurals>
+    <string name="in">через</string>
+    <plurals name="days">
+        <item quantity="one" tools:ignore="ImpliedQuantity">день</item>
+        <item quantity="few">дня</item>
+        <item quantity="many">дней</item>
+        <item quantity="other">дней</item>
+    </plurals>
+    <string name="today">Сегодня</string>
+
+    <!-- Окно добавления и редактирования событий -->
+    <string name="adding_event">Добавление</string>
+    <string name="editing_event">Редактирование</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="select_date">Выберите дату</string>
+    <string name="selected">Выбрано</string>
+    <string name="consider_the_year">Учитывать год</string>
+    <string name="notes">Заметки</string>
+    <string name="my_contact">Мои контакты</string>
+    <string name="my_contact_error">У вас нет контактов или разрешение на их чтение отключено</string>
+    <string name="perm_to_read_contact_title">Разрешение на чтение контактов</string>
+    <string name="perm_to_read_contact_text">Приложению необходимо разрешение на чтение контактов
+        из вашей телефонной книги</string>
+    <string name="no_number">Нет номера</string>
+    <string name="add">Добавить</string>
+    <string name="save">Сохранить</string>
+
+    <!-- Удаление события, диалоговое окно -->
+    <string name="deleting_event_title">Удаление события</string>
+    <string name="deleting_event_text_part1">Вы действительно хотите </string>
+    <string name="deleting_event_text_highlight">удалить</string>
+    <string name="deleting_event_text_part2"> это событие?</string>
+    <string name="delete">Удалить</string>
+    <string name="delete_all_title">Удаление событий</string>
+    <string name="deleting_all_event_text_part1">Вы действительно хотите</string>
+    <string name="deleting_all_event_text_highlight">удалить</string>
+    <string name="deleting_all_event_text_part2">все события?</string>
+
+    <!-- Окно настроек -->
     <string name="preferences">Предпочтения</string>
     <string name="notification">Уведомления</string>
     <string name="notification_info">Получать напоминания</string>
+        <!-- Разрешение на уведомления, диалоговое окно -->
+    <string name="title_notification_dialog">Разрешение на уведомления</string>
+    <string name="text_notification_dialog_part1">Уведомления в приложении </string>
+    <string name="text_notification_dialog_highlight_on">включены</string>
+    <string name="text_notification_dialog_highlight_off">выключены</string>
+    <string name="text_notification_dialog_part2">. Разрешение на отправку уведомлений позволяет
+        вам получать уведомления о событиях календаря.
+        Если уведомления все еще не приходят, проверьте настройки</string>
     <string name="time_notification">Время уведомления</string>
+    <string name="time_notifications">Время уведомлений</string>
     <string name="time_notification_info">Установить время уведомлений</string>
+        <!-- Окно веремени уведомлений -->
+    <string name="notification_number">Уведомление %d</string>
+    <plurals name="notification_time_format">
+        <item quantity="one">За %1$d день до события в %2$s</item>
+        <item quantity="few">За %1$d дня до события в %2$s</item>
+        <item quantity="many">За %1$d дней до события в %2$s</item>
+        <item quantity="other">За %1$d дней до события в %2$s</item>
+    </plurals>
+    <plurals name="days_number">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="many">%d дней</item>
+        <item quantity="other">%d дней</item>
+    </plurals>
     <string name="theme">Тема</string>
     <string name="theme_info">Выберите тему приложения</string>
+        <!-- Тема прилоложения, диалоговое окно -->
+    <string name="theme_title_dialog">Тема приложения</string>
+    <string name="theme_text_1">Системная</string>
+    <string name="theme_text_2">Светлая</string>
+    <string name="theme_text_3">Тёмная</string>
     <string name="type_event">Типы событий</string>
     <string name="type_event_info">Выберите типы событий</string>
-    <string name="zodiac_sign">Знак зодиака</string>
+    <!-- Язык приложения, диалоговое окно -->
+    <string name="language_title_dialog">Язык приложения</string>
+    <string name="language_text_1">Системный</string>
+    <string name="language_text_2">Английский</string>
+    <string name="language_text_3">Русский</string>
+    <string name="language_text_4">Белорусский</string>
+    <string name="language">Язык приложения</string>
+    <string name="language_info">Выберите язык</string>
+        <!-- Tипы событий, диалоговое окно -->
+    <string name="types_events_title_dialog">Выберите типы</string>
+    <string name="type_event_show_text">Показывать</string>
+    <string name="type_events_1">Дни рожедния</string>
+    <string name="type_events_2">Годовщины</string>
+    <string name="type_events_3">Другие</string>
+        <!-- Знаки -->
+    <string name="zodiac_sign">Зодиакальный знак</string>
     <string name="chinese_sign">Китайский знак</string>
     <string name="sign_info">Показывать знак</string>
+        <!-- Экспорт и импорт -->
     <string name="export_and_import">Экспорт и импорт</string>
     <string name="import_events">Импорт событий</string>
     <string name="import_events_info">Импорт событий из контактов</string>
@@ -61,9 +245,10 @@
     <string name="cloud_export_info">Экспорт событий в firestore</string>
     <string name="cloud_import">Облачный импорт событий</string>
     <string name="cloud_import_info">Импорт событий из firestore</string>
-    <string name="data">Data</string>
+        <!-- Данные -->
+    <string name="data">Данные</string>
     <string name="sign_in_with_google">Вход с помощью google</string>
-    <string name="sign_in_with_google_ingo">Авторизуйтесь пж</string>
+    <string name="sign_in_with_google_info">Авторизуйтесь пж</string>
     <string name="total_events">Всего событий</string>
     <plurals name="total_events_count">
         <item quantity="one">%d событие</item>
@@ -71,9 +256,38 @@
         <item quantity="many">%d событий</item>
         <item quantity="other">%d событий</item>
     </plurals>
-    <string name="About_app">О приложении</string>
-    <string name="About_app_info">Версия %s</string>
-    <string name="clear_events">Очистить события</string>
+    <string name="about_app">О приложении</string>
+    <string name="about_app_info">Версия %s</string>
+    <string name="clear_events">Удалить события</string>
+
+    <!-- Высплывающие сообщения, экспорт и импорт -->
+    <string name="export_json_success">JSON-файл успешно экспортирован</string>
+    <string name="export_json_fail">Не удалось экспортировать JSON-файл</string>
+
+    <string name="export_csv_success">CSV-файл успешно экспортирован</string>
+    <string name="export_csv_fail">Не удалось экспортировать CSV-файл</string>
+
+    <string name="import_zero_events">Импортировано 0 событий</string>
+
+    <string name="sign_in_error">Ошибка входа</string>
+    <string name="sign_in_success">Вы успешно вошли в аккаунт %1$s</string>
+    <string name="sign_out_success">Вы вышли из аккаунта %1$s</string>
+
+    <string name="remote_sign_in_required">Необходимо выполнить вход через Google</string>
+    <string name="no_remote_backup">Нет резервных копий в облачном хранилище</string>
+
+    <string name="backup_time">Дата этой резервной копии: %1$s</string>
+
+    <string name="upload_zero_events">У вас нет событий для отправки</string>
+    <string name="upload_success">Успешно загружено из аккаунта %1$s</string>
+    <string name="upload_fail">Ошибка загрузки из аккаунта %1$s</string>
+
+    <string name="event_add_success">Событие успешно добавлено</string>
+    <string name="event_add_error">Ошибка при добавлении события</string>
+    <string name="events_import_result">Импортировано событий: %1$s. Добавлено: %2$s</string>
+    <string name="events_deleted">Удалено событий: %1$s</string>
+
+    <string name="you_have_events">У вас событий: %1$s</string>
 
 
 </resources>

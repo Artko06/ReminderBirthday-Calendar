@@ -1,6 +1,8 @@
 package com.example.reminderbirthday_calendar
 
 import android.app.Activity
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
@@ -17,16 +19,24 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.models.mappers.toLocale
 import com.example.domain.models.settings.ThemeType
 import com.example.reminderbirthday_calendar.presentation.navigation.NavigationScreen
 import com.example.reminderbirthday_calendar.presentation.viewModel.MainActivityViewModel
 import com.example.reminderbirthday_calendar.ui.theme.ReminderBirthday_CalendarTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 val LocalTheme = compositionLocalOf { ThemeType.DARK }
+val LocalizedContext = compositionLocalOf<Context> { error("LocalizedContext not provided") }
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,14 +44,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             val mainActivityViewModel: MainActivityViewModel = hiltViewModel()
             val theme = mainActivityViewModel.themeType.collectAsState().value
-
+            val language = mainActivityViewModel.languageType.collectAsState().value
+            
             val isDarkTheme = when (theme) {
                 ThemeType.DARK -> true
                 ThemeType.LIGHT -> false
                 ThemeType.SYSTEM -> isSystemInDarkTheme()
             }
 
-            CompositionLocalProvider(LocalTheme provides if (isDarkTheme) ThemeType.DARK else ThemeType.LIGHT) {
+            val localizedContext = updateLocale(
+                context = this,
+                locale = language.toLocale()
+            )
+
+            CompositionLocalProvider(
+                LocalTheme provides if (isDarkTheme) ThemeType.DARK else ThemeType.LIGHT,
+                LocalizedContext provides localizedContext
+                ) {
                 ReminderBirthday_CalendarTheme(
                     darkTheme = isDarkTheme
                 ) {
@@ -78,3 +97,10 @@ fun updateSystemColors(
         isAppearanceLightNavigationBars = !isDarkTheme
     }
 }
+
+fun updateLocale(context: Context, locale: Locale): Context {
+    val config = Configuration(context.resources.configuration)
+    config.setLocale(locale)
+    return context.createConfigurationContext(config)
+}
+

@@ -6,11 +6,11 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.event.EventType
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
 import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.example.domain.useCase.calendar.event.UpsertEventUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.event.AddEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.AddEventSharedFlow.ShowToast
@@ -178,15 +178,13 @@ class AddEventViewModel @Inject constructor(
                         }
                         _addEventSharedFlow.emit(
                             value = ShowToast(
-                                message = "Successfully added " +
-                                        EventType.BIRTHDAY.name.lowercase() + " event"
+                                messageResId = R.string.event_add_success,
                             )
                         )
                     } else {
                         _addEventSharedFlow.emit(
                             value = ShowToast(
-                                message = "Error added " +
-                                        EventType.BIRTHDAY.name.lowercase() + " event"
+                                messageResId = R.string.event_add_error,
                             )
                         )
                     }

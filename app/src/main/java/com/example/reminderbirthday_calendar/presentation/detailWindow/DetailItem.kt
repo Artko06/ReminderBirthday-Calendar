@@ -1,5 +1,6 @@
 package com.example.reminderbirthday_calendar.presentation.detailWindow
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,9 +40,13 @@ fun DetailItem(
     colorIcon: Color,
     text: String,
     aboutText: String,
+    onClick: (() -> Unit)? = null
 ){
     Card(
-        modifier = Modifier.then(modifier),
+        modifier = Modifier.then(modifier).clickable(
+            enabled = onClick != null,
+            onClick = { if (onClick != null) onClick() }
+        ),
         colors = CardDefaults.cardColors(
             containerColor = if (LocalTheme.current == ThemeType.DARK) veryDarkGray else ghostlyWhite
         ),

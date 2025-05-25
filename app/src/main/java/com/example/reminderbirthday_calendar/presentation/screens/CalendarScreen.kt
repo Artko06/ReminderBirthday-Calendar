@@ -36,6 +36,8 @@ import com.example.domain.models.settings.ThemeType
 import com.example.domain.util.extensionFunc.calculateAgeInYear
 import com.example.domain.util.extensionFunc.calculateDaysLeftWithMyYear
 import com.example.reminderbirthday_calendar.LocalTheme
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.calendar.CalendarGrid
 import com.example.reminderbirthday_calendar.presentation.calendar.MonthYearText
 import com.example.reminderbirthday_calendar.presentation.calendar.RowDaysOfWeek
@@ -142,14 +144,20 @@ fun CalendarScreen(
         }
 
         Text(
-            text = "Events for ${
+            text = LocalizedContext.current.getString(R.string.events_on) + " " +
                 calendarState.selectDate.let {
-                    if (it == null) "" else it.dayOfMonth.toString() + " "
-                }
-            }" +
-                    calendarState.currentMonth.plusMonths(pagerState.currentPage.toLong()).let {
-                        it.month.name + " " + it.year.toString()
-                    },
+                    if (it == null) {
+                        calendarState.currentMonth.plusMonths(pagerState.currentPage.toLong()).let {
+                            LocalizedContext.current.resources.getStringArray(R.array.months)[it.month.value - 1] +
+                            ", " + it.year
+                        }
+                    } else {
+                        val monthsArray = LocalizedContext.current.resources.getStringArray(R.array.months_with_num)
+                        val text = String.format(monthsArray[it.month.value - 1], it.dayOfMonth)
+                        
+                        text + ", " + it.year
+                    }
+                },
             fontFamily = FontFamily.Serif,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 8.dp)

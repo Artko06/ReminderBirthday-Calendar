@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.ColorLens
 import androidx.compose.material.icons.outlined.CrueltyFree
 import androidx.compose.material.icons.outlined.DriveFileMoveRtl
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.MarkEmailRead
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.SaveAs
@@ -40,10 +41,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reminderbirthday_calendar.LocalizedContext
+import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
 import com.example.reminderbirthday_calendar.intents.settingsNotification.settingsNotificationIntent
 import com.example.reminderbirthday_calendar.intents.shareIntent.shareFileIntent
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteAllEventsDialog
+import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.LanguagesDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.NotificationPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.SortEventTypeDialog
@@ -61,6 +65,7 @@ import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExpor
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.ImportExportViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.PreferencesViewModel
+import com.example.reminderbirthday_calendar.util.getAppVersion
 
 
 @Composable
@@ -72,6 +77,7 @@ fun SettingsScreen(
     eventsViewModel: EventsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val localizedContext = LocalizedContext.current
 
     val listState = rememberLazyListState()
     var lazyKey = 0
@@ -98,7 +104,10 @@ fun SettingsScreen(
         importExportSharedFlow.collect { sharedFlow ->
             when (sharedFlow) {
                 is ImportExportSharedFlow.ShowToast -> {
-                    Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
+                    val message = localizedContext
+                        .getString(sharedFlow.messageResId, *sharedFlow.formatArgs.toTypedArray())
+
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
 
                 is ImportExportSharedFlow.ShowShareView -> {
@@ -123,7 +132,10 @@ fun SettingsScreen(
         eventsSharedFlow.collect { sharedFlow ->
             when (sharedFlow) {
                 is EventsSharedFlow.ShowToast -> {
-                    Toast.makeText(context, sharedFlow.message, Toast.LENGTH_SHORT).show()
+                    val message = localizedContext
+                        .getString(sharedFlow.messageResId, *sharedFlow.formatArgs.toTypedArray())
+
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -189,9 +201,21 @@ fun SettingsScreen(
                 preferencesViewModel.onEvent(event = PreferencesEvent.CloseAppThemeDialog)
             },
             selectedTheme = preferencesState.selectedTheme,
-            onSelectTheme = {
-                theme -> preferencesViewModel.onEvent(event = PreferencesEvent.ChangeAppTheme(theme))
+            onSelectTheme = { theme ->
+                preferencesViewModel.onEvent(event = PreferencesEvent.ChangeAppTheme(theme))
             }
+        )
+    }
+
+    if (preferencesState.isShowAppLanguageDialog){
+        LanguagesDialog(
+            onDismiss = {
+                preferencesViewModel.onEvent(event = PreferencesEvent.CloseAppLanguageDialog)
+            },
+            selectedLanguage = preferencesState.selectedLanguage,
+            onSelectLanguage = { language ->
+                preferencesViewModel.onEvent(event = PreferencesEvent.ChangeAppLanguage(language))
+            },
         )
     }
 
@@ -204,7 +228,7 @@ fun SettingsScreen(
     ) {
         stickyHeader(key = lazyKey++) {
             Text(
-                text = "Preferences",
+                text = LocalizedContext.current.getString(R.string.preferences),
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
@@ -218,8 +242,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.NotificationsActive,
-                title = "Notification",
-                subtitle = "Receive birthday reminders",
+                title = LocalizedContext.current.getString(R.string.notification),
+                subtitle = LocalizedContext.current.getString(R.string.notification_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -232,8 +256,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.Alarm,
-                title = "Time reminder",
-                subtitle = "Set time notification",
+                title = LocalizedContext.current.getString(R.string.time_notifications),
+                subtitle = LocalizedContext.current.getString(R.string.time_notification_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -244,8 +268,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.ColorLens,
-                title = "Theme",
-                subtitle = "Select theme app",
+                title = LocalizedContext.current.getString(R.string.theme),
+                subtitle = LocalizedContext.current.getString(R.string.theme_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -255,23 +279,25 @@ fun SettingsScreen(
             )
         }
 
-//        item(key = lazyKey++) {
-//            SettingsItem(
-//                icon = Icons.Outlined.Language,
-//                title = "Language",
-//                subtitle = "Select language app",
-//                hasSwitch = false,
-//                isSwitchChecked = false,
-//                onSwitchChange = {},
-//                onClick = {}
-//            )
-//        }
+        item(key = lazyKey++) {
+            SettingsItem(
+                icon = Icons.Outlined.Language,
+                title = LocalizedContext.current.getString(R.string.language),
+                subtitle = LocalizedContext.current.getString(R.string.language_info),
+                hasSwitch = false,
+                isSwitchChecked = false,
+                onSwitchChange = {},
+                onClick = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ShowAppLanguageDialog)
+                }
+            )
+        }
 
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.Cake,
-                title = "Type event",
-                subtitle = "Select types of events",
+                title = LocalizedContext.current.getString(R.string.type_event),
+                subtitle = LocalizedContext.current.getString(R.string.type_event_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -282,15 +308,15 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.AutoAwesome,
-                title = "Western zodiac",
-                subtitle = "Enable zodiac",
+                title = LocalizedContext.current.getString(R.string.zodiac_sign),
+                subtitle = LocalizedContext.current.getString(R.string.sign_info),
                 hasSwitch = true,
-                isSwitchChecked = preferencesState.isEnableWesternZodiac,
+                isSwitchChecked = preferencesState.isEnableZodiacSign,
                 onSwitchChange = {
-                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeWesternZodiacStatus)
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeZodiacSignStatus)
                 },
                 onClick = {
-                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeWesternZodiacStatus)
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeZodiacSignStatus)
                 }
             )
         }
@@ -298,8 +324,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.CrueltyFree,
-                title = "Chinese zodiac",
-                subtitle = "Enable zodiac",
+                title = LocalizedContext.current.getString(R.string.chinese_sign),
+                subtitle = LocalizedContext.current.getString(R.string.sign_info),
                 hasSwitch = true,
                 isSwitchChecked = preferencesState.isEnableChineseZodiac,
                 onSwitchChange = {
@@ -313,7 +339,7 @@ fun SettingsScreen(
 
         stickyHeader(key = lazyKey++) {
             Text(
-                text = "Export and import",
+                text = LocalizedContext.current.getString(R.string.export_and_import),
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
@@ -327,8 +353,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.SaveAs,
-                title = "Reimport events",
-                subtitle = "Import events from contacts app",
+                title = LocalizedContext.current.getString(R.string.import_events),
+                subtitle = LocalizedContext.current.getString(R.string.import_events_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -340,8 +366,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.UploadFile,
-                title = "Export events and share (JSON)",
-                subtitle = "Share events with other apps",
+                title = LocalizedContext.current.getString(R.string.export_event_json),
+                subtitle = LocalizedContext.current.getString(R.string.export_event_file_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -355,8 +381,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.UploadFile,
-                title = "Export events and share (CSV)",
-                subtitle = "Share events with other apps",
+                title = LocalizedContext.current.getString(R.string.export_event_csv),
+                subtitle = LocalizedContext.current.getString(R.string.export_event_file_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -370,8 +396,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.DriveFileMoveRtl,
-                title = "Import events (JSON or CSV)",
-                subtitle = "Import events from your file system",
+                title = LocalizedContext.current.getString(R.string.import_events_file),
+                subtitle = LocalizedContext.current.getString(R.string.import_events_file_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -385,8 +411,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.CloudUpload,
-                title = "Cloud export events",
-                subtitle = "Export events to the firebase",
+                title = LocalizedContext.current.getString(R.string.cloud_export),
+                subtitle = LocalizedContext.current.getString(R.string.cloud_export_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -400,8 +426,8 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.CloudDownload,
-                title = "Cloud import events",
-                subtitle = "Import events from the firebase",
+                title = LocalizedContext.current.getString(R.string.cloud_import),
+                subtitle = LocalizedContext.current.getString(R.string.cloud_import_info),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -414,7 +440,7 @@ fun SettingsScreen(
 
         stickyHeader(key = lazyKey++) {
             Text(
-                text = "Data",
+                text = LocalizedContext.current.getString(R.string.data),
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
@@ -428,8 +454,9 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.MarkEmailRead,
-                title = "Sign-in with google",
-                subtitle = importExportState.googleAuthEmail ?: "Auth pls \uD83E\uDD7A",
+                title = LocalizedContext.current.getString(R.string.sign_in_with_google),
+                subtitle = importExportState.googleAuthEmail ?: (LocalizedContext.current.getString(
+                    R.string.sign_in_with_google_info) + " \uD83E\uDD7A"),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
@@ -441,15 +468,17 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.CalendarMonth,
-                title = "Total events",
-                subtitle = "${eventsState.events.size} events",
+                title = LocalizedContext.current.getString(R.string.total_events),
+                subtitle = eventsState.events.size.let {
+                    LocalizedContext.current.resources.getQuantityString(R.plurals.total_events_count, it, it)
+                },
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
                 onClick = {
                     Toast.makeText(
                         context,
-                        "You have ${eventsState.events.size} events",
+                        localizedContext.getString(R.string.you_have_events, eventsState.events.size.toString()),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -459,18 +488,12 @@ fun SettingsScreen(
         item(key = lazyKey++) {
             SettingsItem(
                 icon = Icons.Outlined.Info,
-                title = "About birthday reminder",
-                subtitle = "Version 1.0.0",
+                title = LocalizedContext.current.getString(R.string.about_app),
+                subtitle = LocalizedContext.current.getString(R.string.about_app_info, getAppVersion(context = context)),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {
-                    Toast.makeText(
-                        context,
-                        "Version this app is 1.0.0",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                onClick = {}
             )
         }
 
@@ -480,6 +503,7 @@ fun SettingsScreen(
                 contentAlignment = Alignment.Center
             ) {
                 RedClearButton(
+                    text = LocalizedContext.current.getString(R.string.clear_events),
                     onClear = {
                         eventsViewModel.onEvent(event = ShowDeleteAllEventsDialog)
                     }

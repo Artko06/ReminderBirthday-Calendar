@@ -2,7 +2,7 @@ package com.example.reminderbirthday_calendar.presentation.state
 
 import com.example.domain.models.event.Event
 import com.example.domain.models.zodiac.ChineseZodiac
-import com.example.domain.models.zodiac.WesternZodiac
+import com.example.domain.models.zodiac.ZodiacSign
 import java.time.LocalDate
 
 data class EventDetailState(
@@ -16,9 +16,9 @@ data class EventDetailState(
 
     val isShowDeleteDialog: Boolean = false,
 
-    val statusWesternZodiac: Boolean = false,
+    val statusZodiacSign: Boolean = false,
     val statusChineseZodiac: Boolean = false,
-    val westernZodiac: WesternZodiac = WesternZodiac.AQUARIUS,
+    val zodiacSign: ZodiacSign = ZodiacSign.AQUARIUS,
     val chineseZodiac: ChineseZodiac = ChineseZodiac.MONKEY,
 
     val isShowNotesDialog: Boolean = false,
