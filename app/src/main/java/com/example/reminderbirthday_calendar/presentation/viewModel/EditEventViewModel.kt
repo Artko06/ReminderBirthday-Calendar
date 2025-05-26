@@ -160,6 +160,7 @@ class EditEventViewModel @Inject constructor(
 
             is EditEvent.OnSelectContact -> {
                 _editEventState.update { it.copy(
+                    idContact = event.contact.id,
                     name = event.contact.name,
                     surname = event.contact.surname,
                     pickedPhoto = event.contact.image,

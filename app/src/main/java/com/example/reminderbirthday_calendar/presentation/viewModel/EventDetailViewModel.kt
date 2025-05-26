@@ -109,10 +109,10 @@ class EventDetailViewModel @Inject constructor(
     fun onEvent(event: DetailInfoEvent){
         when(event){
             DetailInfoEvent.DeleteEvent -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
+                    cancelNotifyAllEventUseCase()
                     deleteEventUseCase.invoke(idEvent = _eventDetailState.value.event.id)
 
-                    cancelNotifyAllEventUseCase()
                     scheduleAllEventsUseCase()
                 }
             }

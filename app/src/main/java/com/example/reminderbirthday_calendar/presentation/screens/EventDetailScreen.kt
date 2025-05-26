@@ -219,10 +219,10 @@ fun EventDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                if (eventDetailState.event.yearMatter) {
-                    Text(
-                        text = eventDetailState.event.originalDate.let {
-                            buildAnnotatedString {
+                Text(
+                    text = eventDetailState.event.originalDate.let {
+                        buildAnnotatedString {
+                            if (eventDetailState.event.yearMatter) {
                                 append(LocalizedContext.current.getString(R.string.turns) + " ")
                                 withStyle(
                                     style = SpanStyle(
@@ -233,32 +233,44 @@ fun EventDetailScreen(
                                 ) {
                                     append(it.calculateNextAge().toString())
                                 }
-                                append(" " + LocalizedContext.current.resources
-                                    .getQuantityString(R.plurals.years, it.calculateNextAge(), it.calculateNextAge()) + " ")
-                                if (it.calculateDaysLeft() != 0)
-                                    append(LocalizedContext.current.getString(R.string.`in`) + " ")
-                                withStyle(
-                                    style = SpanStyle(
-                                        fontStyle = FontStyle.Italic,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Normal
-                                    )
-                                ) {
-                                    if (it.calculateDaysLeft() == 0)
-                                        append(LocalizedContext.current.getString(R.string.today))
-                                    else
-                                        append(it.calculateDaysLeft().toString())
-                                }
-                                if (it.calculateDaysLeft() != 0){
-                                    append(" " + LocalizedContext.current.resources
-                                        .getQuantityString(R.plurals.days, it.calculateDaysLeft(), it.calculateDaysLeft()))
-                                }
+                                append(
+                                    " " + LocalizedContext.current.resources
+                                        .getQuantityString(
+                                            R.plurals.years,
+                                            it.calculateNextAge(),
+                                            it.calculateNextAge()
+                                        ) + " "
+                                )
                             }
-                        },
-                        fontWeight = FontWeight.Light,
-                        fontSize = 16.sp
-                    )
-                }
+                            if (it.calculateDaysLeft() != 0)
+                                append(LocalizedContext.current.getString(R.string.`in`) + " ")
+                            withStyle(
+                                style = SpanStyle(
+                                    fontStyle = FontStyle.Italic,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            ) {
+                                if (it.calculateDaysLeft() == 0)
+                                    append(LocalizedContext.current.getString(R.string.today))
+                                else
+                                    append(it.calculateDaysLeft().toString())
+                            }
+                            if (it.calculateDaysLeft() != 0) {
+                                append(
+                                    " " + LocalizedContext.current.resources
+                                        .getQuantityString(
+                                            R.plurals.days,
+                                            it.calculateDaysLeft(),
+                                            it.calculateDaysLeft()
+                                        )
+                                )
+                            }
+                        }
+                    },
+                    fontWeight = FontWeight.Light,
+                    fontSize = 16.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(36.dp))
@@ -274,23 +286,24 @@ fun EventDetailScreen(
                     icon = Icons.Outlined.Cake,
                     colorIcon = MaterialTheme.colorScheme.primary,
                     text = eventDetailState.event.originalDate.let {
-                        val arrayWithDate = LocalizedContext.current.resources.getStringArray(R.array.months_with_num)
+                        val arrayWithDate =
+                            LocalizedContext.current.resources.getStringArray(R.array.months_with_num)
                         val text = String.format(arrayWithDate[it.month.value - 1], it.dayOfMonth)
 
                         text + if (eventDetailState.event.yearMatter) ", " + it.year.toString() else ""
                     },
                     aboutText = when (eventDetailState.event.eventType) {
-                                EventType.BIRTHDAY -> LocalizedContext.current.getString(R.string.birthday)
-                                EventType.ANNIVERSARY -> LocalizedContext.current.getString(R.string.anniversary)
-                                EventType.OTHER -> LocalizedContext.current.getString(R.string.other)
-                            }
+                        EventType.BIRTHDAY -> LocalizedContext.current.getString(R.string.birthday)
+                        EventType.ANNIVERSARY -> LocalizedContext.current.getString(R.string.anniversary)
+                        EventType.OTHER -> LocalizedContext.current.getString(R.string.other)
+                    }
                 )
 
                 DetailItem(
                     modifier = Modifier.fillMaxWidth(),
                     icon = Icons.Outlined.StarRate,
                     colorIcon = MaterialTheme.colorScheme.primary,
-                    text = when(eventDetailState.event.sortTypeEvent){
+                    text = when (eventDetailState.event.sortTypeEvent) {
                         SortTypeEvent.FAMILY -> LocalizedContext.current.getString(R.string.sort_type_event_family)
                         SortTypeEvent.RELATIVE -> LocalizedContext.current.getString(R.string.sort_type_event_relative)
                         SortTypeEvent.FRIEND -> LocalizedContext.current.getString(R.string.sort_type_event_friend)
@@ -322,7 +335,7 @@ fun EventDetailScreen(
                             }
                         ),
                         colorIcon = MaterialTheme.colorScheme.primary,
-                        text = when(eventDetailState.zodiacSign){
+                        text = when (eventDetailState.zodiacSign) {
                             ZodiacSign.AQUARIUS -> LocalizedContext.current.getString(R.string.zodiac_aquarius)
                             ZodiacSign.PISCES -> LocalizedContext.current.getString(R.string.zodiac_pisces)
                             ZodiacSign.ARIES -> LocalizedContext.current.getString(R.string.zodiac_aries)

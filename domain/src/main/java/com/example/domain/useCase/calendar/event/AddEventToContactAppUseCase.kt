@@ -13,7 +13,7 @@ class AddEventToContactAppUseCase(private val repository: ContactAppRepository) 
     ): Boolean = repository.addEvent(
         contactId = contactId,
         eventDate = if (yearMatter) eventDate.toString() // "yyyy-MM-dd"
-            else eventDate.toString().substring(4), // "-MM-dd"
+            else "-" + eventDate.toString().substring(4), // "--MM-dd"
         eventType = eventType
     )
 }
