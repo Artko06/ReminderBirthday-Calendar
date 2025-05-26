@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.reminderbirthday_calendar.R
-import com.example.reminderbirthday_calendar.di.AlarmEventReceiverEntryPoint
+import com.example.reminderbirthday_calendar.di.reseiver.AlarmEventReceiverEntryPoint
 import com.example.reminderbirthday_calendar.intents.openApp.pendingIntent
 import com.example.reminderbirthday_calendar.notification.common.EXTRA_DAYS_BEFORE_EVENT
 import com.example.reminderbirthday_calendar.notification.common.EXTRA_DAY_NOTIFICATION
@@ -18,27 +18,11 @@ import com.example.reminderbirthday_calendar.notification.common.EXTRA_NAMES_ALA
 import com.example.reminderbirthday_calendar.notification.common.EXTRA_NUMBER_NOTIFICATION
 import com.example.reminderbirthday_calendar.notification.common.NOTIFICATION_EVENT_CHANNEL_ID
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class AlarmEventReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null) return
-
-        if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
-            println("Hello from BroadcastReceiver (Boot device)")
-
-            val scheduleAllEventsUseCase = EntryPointAccessors.fromApplication(
-                context = context.applicationContext,
-                entryPoint = AlarmEventReceiverEntryPoint::class.java
-            ).scheduleAllEventsUseCase()
-
-            CoroutineScope(Dispatchers.IO).launch {
-                scheduleAllEventsUseCase()
-            }
-        }
 
         val namesAlarmEvent = intent?.getStringExtra(EXTRA_NAMES_ALARM_EVENT) ?: return
         val idEvent = intent.getLongExtra(EXTRA_ID_EVENT, -1)

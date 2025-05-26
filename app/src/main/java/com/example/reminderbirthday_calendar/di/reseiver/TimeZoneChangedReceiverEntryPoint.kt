@@ -1,6 +1,5 @@
-package com.example.reminderbirthday_calendar.di
+package com.example.reminderbirthday_calendar.di.reseiver
 
-import com.example.domain.useCase.settings.notification.ScheduleAlarmItemUseCase
 import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -8,7 +7,6 @@ import dagger.hilt.components.SingletonComponent
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
-interface AlarmEventReceiverEntryPoint {
-    fun scheduleAlarmItemUseCase(): ScheduleAlarmItemUseCase
+interface TimeZoneChangedReceiverEntryPoint {
     fun scheduleAllEventsUseCase(): ScheduleAllEventsUseCase
 }

@@ -12,7 +12,7 @@
     <!-- android:allowBackup="false" - only for developing -->
     <application
         android:name=".CalendarApp"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -27,8 +27,23 @@
             android:name=".notification.receiver.AlarmEventReceiver"
             android:exported="false"
             android:enabled="true">
+        </receiver>
+
+        <receiver
+            android:name=".notification.receiver.BootCompletedReceiver"
+            android:exported="false"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".notification.receiver.TimeZoneChangedReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
 
