@@ -1,7 +1,7 @@
 package com.example.reminderbirthday_calendar.di
 
 import android.content.Context
-import com.example.domain.repository.AlarmEventScheduler
+import com.example.domain.repository.local.AlarmEventScheduler
 import com.example.reminderbirthday_calendar.notification.schedulerImpl.AlarmEventSchedulerImpl
 import dagger.Module
 import dagger.Provides

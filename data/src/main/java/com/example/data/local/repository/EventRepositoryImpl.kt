@@ -1,10 +1,10 @@
-package com.example.data.repository
+package com.example.data.local.repository
 
 import com.example.data.local.entity.event.toData
 import com.example.data.local.entity.event.toDomain
 import com.example.data.local.roomDb.dao.EventDao
 import com.example.domain.models.event.Event
-import com.example.domain.repository.EventRepository
+import com.example.domain.repository.local.EventRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

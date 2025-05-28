@@ -185,23 +185,23 @@ class ImportExportViewModel @Inject constructor(
             }
 
             ImportExportEvent.ImportEventsFromContacts -> {
-                _importExportState.update { it.copy(
-                    isLoadingReimportEvent = true
-                ) }
-
-                var permissionReadState =
-                    ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
-                            PackageManager.PERMISSION_GRANTED
-
-                if (!permissionReadState){
-                    _importExportState.update { it.copy(
-                        isShowReadContactPermDialog = true,
-                        isLoadingReimportEvent = false
-                    ) }
-                    return
-                }
-
                 viewModelScope.launch(Dispatchers.IO) {
+                    _importExportState.update { it.copy(
+                        isLoadingReimportEvent = true
+                    ) }
+
+                    var permissionReadState =
+                        ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
+                                PackageManager.PERMISSION_GRANTED
+
+                    if (!permissionReadState){
+                        _importExportState.update { it.copy(
+                            isShowReadContactPermDialog = true,
+                            isLoadingReimportEvent = false
+                        ) }
+                        return@launch
+                    }
+
                     val importedEvents = importEventsFromContactsUseCase.invoke()
 
                     if (importedEvents.isEmpty()){

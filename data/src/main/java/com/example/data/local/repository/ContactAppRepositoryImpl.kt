@@ -1,4 +1,4 @@
-package com.example.data.repository
+package com.example.data.local.repository
 
 import android.Manifest
 import android.content.ContentProviderOperation
@@ -15,7 +15,7 @@ import com.example.domain.models.event.ContactInfo
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
 import com.example.domain.models.event.ImportedEvent
-import com.example.domain.repository.ContactAppRepository
+import com.example.domain.repository.local.ContactAppRepository
 import java.time.LocalDate
 
 class ContactAppRepositoryImpl(

@@ -1,4 +1,4 @@
-package com.example.domain.repository
+package com.example.domain.repository.remote
 
 import com.example.domain.models.event.Event
 

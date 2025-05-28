@@ -2,7 +2,7 @@ package com.example.domain.usecase
 
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
-import com.example.domain.repository.EventRepository
+import com.example.domain.repository.local.EventRepository
 import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -31,6 +31,7 @@ class UpsertEventsUseCaseTest {
         val events = listOf(
             Event(
                 id = 0,
+                idContact = null,
                 eventType = EventType.BIRTHDAY,
                 nameContact = "Alice",
                 surnameContact = "Doe",
@@ -41,6 +42,7 @@ class UpsertEventsUseCaseTest {
             ),
             Event(
                 id = 0,
+                idContact = null,
                 eventType = EventType.ANNIVERSARY,
                 nameContact = "Bob",
                 surnameContact = null,

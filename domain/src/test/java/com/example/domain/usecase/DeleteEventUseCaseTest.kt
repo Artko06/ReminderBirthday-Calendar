@@ -2,7 +2,7 @@ package com.example.domain.usecase
 
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
-import com.example.domain.repository.EventRepository
+import com.example.domain.repository.local.EventRepository
 import com.example.domain.useCase.calendar.event.DeleteEventUseCase
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -31,6 +31,7 @@ class DeleteEventUseCaseTest {
 
     private val mockEvent = Event(
         id = 42,
+        idContact = null,
         eventType = EventType.BIRTHDAY,
         nameContact = "Test",
         surnameContact = null,

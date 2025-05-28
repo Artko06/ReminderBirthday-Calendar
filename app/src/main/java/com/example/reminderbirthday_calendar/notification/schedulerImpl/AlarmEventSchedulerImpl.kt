@@ -5,7 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.example.domain.models.notification.AlarmEventItem
-import com.example.domain.repository.AlarmEventScheduler
+import com.example.domain.repository.local.AlarmEventScheduler
 import com.example.reminderbirthday_calendar.notification.common.*
 import com.example.reminderbirthday_calendar.notification.receiver.AlarmEventReceiver
 import java.time.ZoneId

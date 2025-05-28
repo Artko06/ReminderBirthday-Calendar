@@ -1,7 +1,7 @@
 package com.example.domain.useCase.settings.notification
 
 import com.example.domain.models.notification.NotificationEvent
-import com.example.domain.repository.SettingsRepository
+import com.example.domain.repository.local.SettingsRepository
 
 class UpsertNotificationEventUseCase(private val repository: SettingsRepository) {
     suspend operator fun invoke(hour: Int, minute: Int, daysBeforeEvent: Int, statusOn: Boolean) =

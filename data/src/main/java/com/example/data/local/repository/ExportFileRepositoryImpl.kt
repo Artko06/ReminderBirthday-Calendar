@@ -1,10 +1,10 @@
-package com.example.data.repository
+package com.example.data.local.repository
 
 import android.content.Context
 import com.example.data.local.roomDb.dao.EventDao
 import com.example.data.local.util.serialization.Serialization
 import com.example.data.local.util.serialization.toEventSerializable
-import com.example.domain.repository.ExportFileRepository
+import com.example.domain.repository.local.ExportFileRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 

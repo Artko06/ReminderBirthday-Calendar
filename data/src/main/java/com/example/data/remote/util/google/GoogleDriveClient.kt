@@ -1,7 +1,10 @@
-package com.example.data.local.util.google
+package com.example.data.remote.util.google
 
 import com.example.data.local.entity.event.EventEntity
 import com.example.data.local.roomDb.dao.EventDao
+import com.example.data.remote.entity.firestoreMapToEventEntity
+import com.example.data.remote.entity.toFirestoreMap
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -123,38 +126,10 @@ class GoogleDriveClient(
         }
     }
 
-    fun com.google.firebase.Timestamp?.toLocalDateTime(): LocalDateTime? {
+    private fun Timestamp?.toLocalDateTime(): LocalDateTime? {
         return this?.toDate()
             ?.toInstant()
             ?.atZone(ZoneId.systemDefault())
             ?.toLocalDateTime()
-    }
-
-    private fun EventEntity.toFirestoreMap(): Map<String, Any?> {
-        return mapOf(
-            "id" to id,
-            "eventType" to eventType,
-            "sortTypeEvent" to sortType,
-            "nameContact" to nameContact,
-            "surnameContact" to surnameContact,
-            "originalDate" to originalDate,
-            "yearMatter" to yearMatter,
-            "notes" to notes,
-        )
-    }
-
-    private fun firestoreMapToEventEntity(event: Map<String, Any?>): EventEntity {
-        return EventEntity(
-            id = (event["id"] as Long),
-            idContact = event["idContact"] as? String,
-            eventType = event["eventType"] as String,
-            sortType = event["sortTypeEvent"] as String,
-            nameContact = event["nameContact"] as String,
-            surnameContact = event["surnameContact"] as? String,
-            originalDate = event["originalDate"] as String,
-            yearMatter = event["yearMatter"] as Boolean,
-            notes = event["notes"] as? String,
-            image = null
-        )
     }
 }

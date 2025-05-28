@@ -2,7 +2,7 @@ package com.example.domain.usecase
 
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
-import com.example.domain.repository.ContactAppRepository
+import com.example.domain.repository.local.ContactAppRepository
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -32,6 +32,7 @@ class ImportEventUseCaseTest {
         val mockEvents = listOf(
             Event(
                 id = 1,
+                idContact = null,
                 eventType = EventType.BIRTHDAY,
                 nameContact = "Alice",
                 surnameContact = null,
@@ -42,6 +43,7 @@ class ImportEventUseCaseTest {
             ),
             Event(
                 id = 2,
+                idContact = null,
                 eventType = EventType.ANNIVERSARY,
                 nameContact = "Bob",
                 surnameContact = "Smith",

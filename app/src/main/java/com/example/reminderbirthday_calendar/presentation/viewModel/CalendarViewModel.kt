@@ -2,9 +2,13 @@ package com.example.reminderbirthday_calendar.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.event.EventType
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.GetEventsByDateUseCase
 import com.example.domain.useCase.calendar.event.GetEventsByMonthUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowAnniversaryEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowBirthdayEventUseCase
+import com.example.domain.useCase.settings.showTypeEvent.GetStatusShowOtherEventUseCase
 import com.example.domain.util.extensionFunc.sortByClosestDate
 import com.example.reminderbirthday_calendar.presentation.event.CalendarEvent
 import com.example.reminderbirthday_calendar.presentation.state.CalendarState
@@ -20,7 +24,11 @@ import javax.inject.Inject
 class CalendarViewModel @Inject constructor(
     private val getAllEventUseCase: GetAllEventUseCase,
     private val getEventsByDateUseCase: GetEventsByDateUseCase,
-    private val getEventsByMonthUseCase: GetEventsByMonthUseCase
+    private val getEventsByMonthUseCase: GetEventsByMonthUseCase,
+
+    private val getStatusShowAnniversaryEventUseCase: GetStatusShowAnniversaryEventUseCase,
+    private val getStatusShowBirthdayEventUseCase: GetStatusShowBirthdayEventUseCase,
+    private val getStatusShowOtherEventUseCase: GetStatusShowOtherEventUseCase,
 ): ViewModel() {
     private val _calendarState = MutableStateFlow(CalendarState())
 
@@ -31,18 +39,51 @@ class CalendarViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
+    private val _birthdayVisible = getStatusShowBirthdayEventUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = true
+        )
+
+    private val _anniversaryVisible = getStatusShowAnniversaryEventUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = true
+        )
+
+    private val _otherVisible = getStatusShowOtherEventUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = true
+        )
+
     val calendarState = combine(
         _allEventsDatabase,
-        _calendarState
-    ) { allEventsDatabase, calendarState ->
+        _calendarState,
+        _birthdayVisible,
+        _anniversaryVisible,
+        _otherVisible
+    ) { allEventsDatabase, calendarState, birthdayVisible, anniversaryVisible, otherVisible   ->
+
+        val typeVisibilityMap = mapOf(
+            EventType.BIRTHDAY to birthdayVisible,
+            EventType.ANNIVERSARY to anniversaryVisible,
+            EventType.OTHER to otherVisible
+        )
+
+        val visibleAllEvents = allEventsDatabase.filter { typeVisibilityMap[it.eventType] == true }
+
         _calendarState.value.copy(
-            events = allEventsDatabase,
+            events = visibleAllEvents,
             eventsInDate = if (calendarState.selectDate != null){
                 getEventsByDateUseCase
-                    .invoke(events = allEventsDatabase, date = calendarState.selectDate)
+                    .invoke(events = visibleAllEvents, date = calendarState.selectDate)
                     .sortByClosestDate()
             } else getEventsByMonthUseCase(
-                events = allEventsDatabase,
+                events = visibleAllEvents,
                 month = calendarState.currentMonth.plusMonths(calendarState.calendarPage.toLong()).month.value
             ).sortByClosestDate()
         )

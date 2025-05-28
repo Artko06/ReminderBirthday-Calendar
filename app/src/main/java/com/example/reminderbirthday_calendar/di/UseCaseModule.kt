@@ -1,12 +1,12 @@
 package com.example.reminderbirthday_calendar.di
 
-import com.example.domain.repository.AlarmEventScheduler
-import com.example.domain.repository.ContactAppRepository
-import com.example.domain.repository.EventRepository
-import com.example.domain.repository.ExportFileRepository
-import com.example.domain.repository.GoogleClientRepository
-import com.example.domain.repository.ImportFileRepository
-import com.example.domain.repository.SettingsRepository
+import com.example.domain.repository.local.AlarmEventScheduler
+import com.example.domain.repository.local.ContactAppRepository
+import com.example.domain.repository.local.EventRepository
+import com.example.domain.repository.local.ExportFileRepository
+import com.example.domain.repository.remote.GoogleClientRepository
+import com.example.domain.repository.local.ImportFileRepository
+import com.example.domain.repository.local.SettingsRepository
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
 import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase

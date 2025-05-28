@@ -1,6 +1,6 @@
 package com.example.domain.useCase.google
 
-import com.example.domain.repository.GoogleClientRepository
+import com.example.domain.repository.remote.GoogleClientRepository
 
 class GoogleIsSignInUseCase(
     private val repository: GoogleClientRepository

@@ -32,7 +32,7 @@ fun NotesDialog(
     onConfirm: () -> Unit
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {},
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -71,7 +71,9 @@ fun NotesDialog(
 
                 Text(
                     text = "${text.length}/500",
-                    modifier = Modifier.align(Alignment.End).padding(horizontal = 8.dp),
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(horizontal = 8.dp),
                     fontWeight = FontWeight.Light,
                 )
             }

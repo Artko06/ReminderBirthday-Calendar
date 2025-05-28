@@ -1,4 +1,4 @@
-package com.example.data.local.util.google
+package com.example.data.remote.util.google
 
 import android.content.Context
 import androidx.credentials.ClearCredentialStateRequest

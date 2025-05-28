@@ -1,4 +1,4 @@
-package com.example.domain.repository
+package com.example.domain.repository.local
 
 import com.example.domain.models.notification.AlarmEventItem
 

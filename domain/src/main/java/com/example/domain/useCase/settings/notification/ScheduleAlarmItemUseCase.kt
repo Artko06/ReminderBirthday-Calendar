@@ -1,7 +1,7 @@
 package com.example.domain.useCase.settings.notification
 
 import com.example.domain.models.notification.AlarmEventItem
-import com.example.domain.repository.AlarmEventScheduler
+import com.example.domain.repository.local.AlarmEventScheduler
 import java.time.LocalDateTime
 
 class ScheduleAlarmItemUseCase(

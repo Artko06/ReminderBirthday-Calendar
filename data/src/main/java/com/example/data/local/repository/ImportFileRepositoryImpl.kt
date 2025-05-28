@@ -1,4 +1,4 @@
-package com.example.data.repository
+package com.example.data.local.repository
 
 import android.content.Context
 import androidx.core.net.toUri
@@ -6,7 +6,7 @@ import com.example.data.local.entity.event.toDomain
 import com.example.data.local.util.serialization.Deserialization
 import com.example.data.local.util.serialization.toEventEntity
 import com.example.domain.models.event.Event
-import com.example.domain.repository.ImportFileRepository
+import com.example.domain.repository.local.ImportFileRepository
 import javax.inject.Inject
 
 

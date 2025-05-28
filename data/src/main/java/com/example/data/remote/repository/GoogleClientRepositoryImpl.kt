@@ -1,10 +1,10 @@
-package com.example.data.repository
+package com.example.data.remote.repository
 
 import com.example.data.local.entity.event.toDomain
-import com.example.data.local.util.google.GoogleAuthClient
-import com.example.data.local.util.google.GoogleDriveClient
+import com.example.data.remote.util.google.GoogleAuthClient
+import com.example.data.remote.util.google.GoogleDriveClient
 import com.example.domain.models.event.Event
-import com.example.domain.repository.GoogleClientRepository
+import com.example.domain.repository.remote.GoogleClientRepository
 import javax.inject.Inject
 
 class GoogleClientRepositoryImpl @Inject constructor(

@@ -1,6 +1,6 @@
 package com.example.domain.useCase.settings.showTypeEvent
 
-import com.example.domain.repository.SettingsRepository
+import com.example.domain.repository.local.SettingsRepository
 
 class SetStatusShowAnniversaryEventUseCase(
     private val repository: SettingsRepository

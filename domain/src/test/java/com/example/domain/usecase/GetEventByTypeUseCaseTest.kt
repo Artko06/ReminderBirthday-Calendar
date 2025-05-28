@@ -2,7 +2,7 @@ package com.example.domain.usecase
 
 import com.example.domain.models.event.Event
 import com.example.domain.models.event.EventType
-import com.example.domain.repository.EventRepository
+import com.example.domain.repository.local.EventRepository
 import com.example.domain.useCase.calendar.event.GetEventByTypeUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -33,6 +33,7 @@ class GetEventByTypeUseCaseTest {
         val mockEvents = listOf(
             Event(
                 id = 1,
+                idContact = null,
                 eventType = eventType,
                 nameContact = "Alice",
                 surnameContact = null,

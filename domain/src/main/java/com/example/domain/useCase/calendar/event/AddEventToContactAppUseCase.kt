@@ -1,7 +1,7 @@
 package com.example.domain.useCase.calendar.event
 
 import com.example.domain.models.event.EventType
-import com.example.domain.repository.ContactAppRepository
+import com.example.domain.repository.local.ContactAppRepository
 import java.time.LocalDate
 
 class AddEventToContactAppUseCase(private val repository: ContactAppRepository) {

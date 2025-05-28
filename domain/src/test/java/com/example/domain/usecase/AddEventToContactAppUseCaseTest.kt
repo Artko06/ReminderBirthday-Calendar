@@ -1,7 +1,7 @@
 package com.example.domain.usecase
 
 import com.example.domain.models.event.EventType
-import com.example.domain.repository.ContactAppRepository
+import com.example.domain.repository.local.ContactAppRepository
 import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -30,11 +30,12 @@ class AddEventToContactAppUseCaseTest {
         val contactId = "123"
         val eventDate = LocalDate.of(2025, 4, 20)
         val eventType = EventType.BIRTHDAY
+        val yearMatter = true
 
         whenever(repository.addEvent(contactId, eventDate.toString(), eventType)).thenReturn(true)
 
         // when
-        val result = useCase(contactId, eventDate, eventType)
+        val result = useCase.invoke(contactId, eventDate, eventType, yearMatter)
 
         // then
         assertTrue(result)
@@ -47,11 +48,12 @@ class AddEventToContactAppUseCaseTest {
         val contactId = "456"
         val eventDate = LocalDate.of(2024, 12, 25)
         val eventType = EventType.ANNIVERSARY
+        val yearMatter = true
 
         whenever(repository.addEvent(contactId, eventDate.toString(), eventType)).thenReturn(false)
 
         // when
-        val result = useCase(contactId, eventDate, eventType)
+        val result = useCase(contactId, eventDate, eventType, yearMatter)
 
         // then
         assertFalse(result)

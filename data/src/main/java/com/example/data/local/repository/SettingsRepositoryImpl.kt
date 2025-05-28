@@ -1,4 +1,4 @@
-package com.example.data.repository
+package com.example.data.local.repository
 
 import android.content.Context
 import com.example.data.local.entity.settings.notification.toData
@@ -8,7 +8,7 @@ import com.example.data.local.roomDb.dao.SettingsDao
 import com.example.domain.models.notification.NotificationEvent
 import com.example.domain.models.settings.LanguageType
 import com.example.domain.models.settings.ThemeType
-import com.example.domain.repository.SettingsRepository
+import com.example.domain.repository.local.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

@@ -1,7 +1,7 @@
 package com.example.domain.useCase.importFile
 
 import com.example.domain.models.event.Event
-import com.example.domain.repository.ImportFileRepository
+import com.example.domain.repository.local.ImportFileRepository
 
 class ImportEventsFromCsvUseCase(
     private val repository: ImportFileRepository

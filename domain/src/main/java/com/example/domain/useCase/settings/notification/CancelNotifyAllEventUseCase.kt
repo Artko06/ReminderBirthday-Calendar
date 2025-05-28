@@ -1,9 +1,9 @@
 package com.example.domain.useCase.settings.notification
 
 import com.example.domain.models.mappers.toAlarmEventItem
-import com.example.domain.repository.AlarmEventScheduler
-import com.example.domain.repository.EventRepository
-import com.example.domain.repository.SettingsRepository
+import com.example.domain.repository.local.AlarmEventScheduler
+import com.example.domain.repository.local.EventRepository
+import com.example.domain.repository.local.SettingsRepository
 import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 

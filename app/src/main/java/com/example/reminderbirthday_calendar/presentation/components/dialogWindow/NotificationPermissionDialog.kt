@@ -30,19 +30,23 @@ fun NotificationPermissionDialog(
                 text = buildAnnotatedString {
                     append(LocalizedContext.current.getString(R.string.text_notification_dialog_part1) + " ")
 
-                    withStyle(
-                        style = SpanStyle(
-                            color = Color.Green,
-                            fontWeight = FontWeight.Bold
-                        )
-                    ) {
-                        statusNotification.let {
-                            if (it) {
-                                append(LocalizedContext.current.getString(R.string.text_notification_dialog_highlight_on))
-                            } else {
-                                append(LocalizedContext.current.getString(R.string.text_notification_dialog_highlight_off))
-                            }
-
+                    if (statusNotification) {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Green,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            append(LocalizedContext.current.getString(R.string.text_notification_dialog_highlight_on))
+                        }
+                    } else{
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Red,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            append(LocalizedContext.current.getString(R.string.text_notification_dialog_highlight_off))
                         }
                     }
 

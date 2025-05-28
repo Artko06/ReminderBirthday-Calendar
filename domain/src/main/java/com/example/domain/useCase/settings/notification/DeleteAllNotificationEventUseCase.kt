@@ -1,6 +1,6 @@
 package com.example.domain.useCase.settings.notification
 
-import com.example.domain.repository.SettingsRepository
+import com.example.domain.repository.local.SettingsRepository
 
 class DeleteAllNotificationEventUseCase(
     private val repository: SettingsRepository
