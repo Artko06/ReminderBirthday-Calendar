@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.example.data.local.entity.settings.event.EventEntity
+import com.example.data.local.entity.event.EventEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

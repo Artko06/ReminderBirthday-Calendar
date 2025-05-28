@@ -1,6 +1,6 @@
 package com.example.data.local.util.serialization
 
-import com.example.data.local.entity.settings.event.EventEntity
+import com.example.data.local.entity.event.EventEntity
 
 fun EventSerializable.toEventEntity() = EventEntity(
     id = id,

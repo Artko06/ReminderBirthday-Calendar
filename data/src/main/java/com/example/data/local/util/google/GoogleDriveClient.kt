@@ -1,6 +1,6 @@
 package com.example.data.local.util.google
 
-import com.example.data.local.entity.settings.event.EventEntity
+import com.example.data.local.entity.event.EventEntity
 import com.example.data.local.roomDb.dao.EventDao
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue

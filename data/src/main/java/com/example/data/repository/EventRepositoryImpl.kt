@@ -1,7 +1,7 @@
 package com.example.data.repository
 
-import com.example.data.local.entity.settings.event.toData
-import com.example.data.local.entity.settings.event.toDomain
+import com.example.data.local.entity.event.toData
+import com.example.data.local.entity.event.toDomain
 import com.example.data.local.roomDb.dao.EventDao
 import com.example.domain.models.event.Event
 import com.example.domain.repository.EventRepository

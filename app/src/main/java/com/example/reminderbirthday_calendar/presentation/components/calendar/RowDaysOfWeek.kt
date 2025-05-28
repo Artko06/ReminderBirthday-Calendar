@@ -1,4 +1,4 @@
-package com.example.reminderbirthday_calendar.presentation.calendar
+package com.example.reminderbirthday_calendar.presentation.components.calendar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

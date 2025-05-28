@@ -1,6 +1,6 @@
 package com.example.data.repository
 
-import com.example.data.local.entity.settings.event.toDomain
+import com.example.data.local.entity.event.toDomain
 import com.example.data.local.util.google.GoogleAuthClient
 import com.example.data.local.util.google.GoogleDriveClient
 import com.example.domain.models.event.Event

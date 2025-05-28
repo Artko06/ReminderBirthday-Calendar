@@ -38,9 +38,9 @@ import com.example.domain.util.extensionFunc.calculateDaysLeftWithMyYear
 import com.example.reminderbirthday_calendar.LocalTheme
 import com.example.reminderbirthday_calendar.LocalizedContext
 import com.example.reminderbirthday_calendar.R
-import com.example.reminderbirthday_calendar.presentation.calendar.CalendarGrid
-import com.example.reminderbirthday_calendar.presentation.calendar.MonthYearText
-import com.example.reminderbirthday_calendar.presentation.calendar.RowDaysOfWeek
+import com.example.reminderbirthday_calendar.presentation.components.calendar.CalendarGrid
+import com.example.reminderbirthday_calendar.presentation.components.calendar.MonthYearText
+import com.example.reminderbirthday_calendar.presentation.components.calendar.RowDaysOfWeek
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
 import com.example.reminderbirthday_calendar.presentation.event.CalendarEvent
 import com.example.reminderbirthday_calendar.presentation.viewModel.CalendarViewModel

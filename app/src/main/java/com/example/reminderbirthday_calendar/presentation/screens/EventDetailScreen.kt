@@ -57,7 +57,7 @@ import com.example.reminderbirthday_calendar.LocalizedContext
 import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.DeleteEventDialog
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.NotesDialog
-import com.example.reminderbirthday_calendar.presentation.detailWindow.DetailItem
+import com.example.reminderbirthday_calendar.presentation.components.detailWindow.DetailItem
 import com.example.reminderbirthday_calendar.presentation.event.DetailInfoEvent
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventDetailViewModel
 import com.example.reminderbirthday_calendar.ui.theme.blueAzure
