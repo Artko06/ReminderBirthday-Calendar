@@ -39,7 +39,9 @@ fun NavigationScreen(
                     onNavigateToMainScreen = {
                         navigationViewModel.onEvent(event = NavigationEvent.OnChangeIsFirstLaunch)
 
-                        navController.navigate(Screen.MainScreen.route)
+                        navController.navigate(Screen.MainScreen.route){
+                            popUpTo(Screen.NotificationPermissionScreen.route) { inclusive = true }
+                        }
                     }
                 )
             }

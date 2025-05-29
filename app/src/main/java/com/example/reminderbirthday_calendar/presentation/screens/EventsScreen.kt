@@ -157,12 +157,12 @@ fun EventsScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(36.dp))
+                Spacer(modifier = Modifier.height(28.dp))
 
                 Text(
                     text = LocalizedContext.current.getString(R.string.event_list_is_empty),
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     textAlign = TextAlign.Center
                 )
 
@@ -181,7 +181,10 @@ fun EventsScreen(
                     onClick = { eventsViewModel.onEvent(event = EventsEvent.ImportEventsFromContacts) },
                     modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
                 ) {
-                    Row {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.ImportContacts,
                             contentDescription = "Import events",
