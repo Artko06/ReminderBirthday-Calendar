@@ -57,7 +57,6 @@ import com.example.reminderbirthday_calendar.presentation.components.settings.Se
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ClearEvents
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.CloseDeleteAllEventsDialog
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.ShowDeleteAllEventsDialog
-import com.example.reminderbirthday_calendar.presentation.event.EventsEvent.UpdateEvents
 import com.example.reminderbirthday_calendar.presentation.event.ImportExportEvent
 import com.example.reminderbirthday_calendar.presentation.event.PreferencesEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
@@ -117,10 +116,6 @@ fun SettingsScreen(
                             context = context
                         )
                     )
-                }
-
-                is ImportExportSharedFlow.UpdateEventsAfterImport -> {
-                    eventsViewModel.onEvent(event = UpdateEvents(events = sharedFlow.events))
                 }
             }
         }

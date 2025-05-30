@@ -1,5 +1,6 @@
 package com.example.reminderbirthday_calendar.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,8 +45,10 @@ import com.example.reminderbirthday_calendar.presentation.components.calendar.Mo
 import com.example.reminderbirthday_calendar.presentation.components.calendar.RowDaysOfWeek
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
 import com.example.reminderbirthday_calendar.presentation.event.CalendarEvent
+import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.CalendarViewModel
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
+import com.example.reminderbirthday_calendar.presentation.viewModel.ImportExportViewModel
 import com.example.reminderbirthday_calendar.ui.theme.platinum
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
@@ -54,8 +58,12 @@ fun CalendarScreen(
     modifier: Modifier = Modifier,
     onNavigateToEventDetailScreen: (Long) -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
-    eventsViewModel: EventsViewModel = hiltViewModel()
+    eventsViewModel: EventsViewModel = hiltViewModel(),
+    importExportViewModel: ImportExportViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val localizedContext = LocalizedContext.current
+
     val calendarState = calendarViewModel.calendarState.collectAsState().value
     val eventState = eventsViewModel.eventState.collectAsState().value
 
@@ -68,6 +76,22 @@ fun CalendarScreen(
     LaunchedEffect(pagerState.currentPage) {
         calendarViewModel.onEvent(event = CalendarEvent.SelectDate(null))
         calendarViewModel.onEvent(event = CalendarEvent.ChangeCalendarPage(pagerState.currentPage))
+    }
+
+    val importExportSharedFlow = importExportViewModel.importExportSharedFlow
+
+    LaunchedEffect(Unit) {
+        importExportSharedFlow.collect { sharedFlow ->
+            when(sharedFlow){
+                is ImportExportSharedFlow.ShowShareView -> {}
+                is ImportExportSharedFlow.ShowToast -> {
+                    val message = localizedContext
+                        .getString(sharedFlow.messageResId, *sharedFlow.formatArgs.toTypedArray())
+
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     Column(

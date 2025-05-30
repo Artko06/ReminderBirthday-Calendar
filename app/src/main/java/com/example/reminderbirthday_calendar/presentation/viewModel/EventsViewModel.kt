@@ -222,39 +222,6 @@ class EventsViewModel @Inject constructor(
                 _searchLine.value = event.newValue
             }
 
-            is EventsEvent.UpdateEvents -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val importEvents = event.events
-
-                    val importEventsId0 = importEvents.map { event ->
-                        event.copy(id = 0)
-                    }
-
-                    val eventsDbBeforeAdding = getAllEventUseCase.invoke().first()
-
-                    upsertEventUseCase(events = importEventsId0)
-
-                    val eventsDbAfterAdding = getAllEventUseCase.invoke().first()
-
-                    scheduleAllEventsUseCase()
-
-                    _eventsState.update {
-                        it.copy(
-                            events = eventsDbAfterAdding.sortByClosestDate()
-                        )
-                    }
-
-                    _eventsSharedFlow.emit(
-                        value = ShowToast(
-                            messageResId = R.string.events_import_result,
-                            formatArgs = listOf(
-                                importEvents.size.toString(),
-                                (eventsDbAfterAdding.size - eventsDbBeforeAdding.size).toString()
-                            )
-                    ))
-                }
-            }
-
             EventsEvent.ClearEvents -> {
                 _eventsState.update {
                     it.copy(

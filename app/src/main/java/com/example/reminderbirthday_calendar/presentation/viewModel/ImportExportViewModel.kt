@@ -6,8 +6,10 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.event.Event
 import com.example.domain.useCase.calendar.event.GetAllEventUseCase
 import com.example.domain.useCase.calendar.event.ImportEventsFromContactsUseCase
+import com.example.domain.useCase.calendar.event.UpsertEventsUseCase
 import com.example.domain.useCase.exportFile.ExportEventsToCsvToExternalDirUseCase
 import com.example.domain.useCase.exportFile.ExportEventsToJsonToExternalDirUseCase
 import com.example.domain.useCase.google.GetAuthGoogleEmailUseCase
@@ -19,13 +21,13 @@ import com.example.domain.useCase.google.GoogleSignOutUseCase
 import com.example.domain.useCase.google.UploadEventsToRemoteUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.example.domain.useCase.importFile.ImportEventsFromJsonUseCase
+import com.example.domain.useCase.settings.notification.ScheduleAllEventsUseCase
 import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.intents.shareIntent.TypeShareFile
 import com.example.reminderbirthday_calendar.presentation.event.ImportExportEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow.ShowShareView
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow.ShowToast
-import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow.UpdateEventsAfterImport
 import com.example.reminderbirthday_calendar.presentation.state.ImportExportState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -57,6 +59,8 @@ class ImportExportViewModel @Inject constructor(
     private val uploadEventsToRemoteUseCase: UploadEventsToRemoteUseCase,
 
     private val getAllEventUseCase: GetAllEventUseCase,
+    private val upsertEventsUseCase: UpsertEventsUseCase,
+    private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
     @ApplicationContext private val appContext: Context
 ): ViewModel() {
     private val _importExportState = MutableStateFlow(ImportExportState())
@@ -156,7 +160,7 @@ class ImportExportViewModel @Inject constructor(
                         )
                         )
                     } else {
-                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
+                        updateEventsAfterImport(events = importedEvents)
                     }
                 }
             }
@@ -179,7 +183,7 @@ class ImportExportViewModel @Inject constructor(
                         )
                         )
                     } else {
-                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
+                        updateEventsAfterImport(events = importedEvents)
                     }
                 }
             }
@@ -217,7 +221,7 @@ class ImportExportViewModel @Inject constructor(
                             isLoadingReimportEvent = false
                         ) }
 
-                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedEvents))
+                        updateEventsAfterImport(events = importedEvents)
                     }
                 }
             }
@@ -341,7 +345,7 @@ class ImportExportViewModel @Inject constructor(
                         )
                         )
 
-                        _importExportSharedFlow.emit(value = UpdateEventsAfterImport(events = importedRemoteEvents))
+                        updateEventsAfterImport(events = importedRemoteEvents)
                     }
                 }
             }
@@ -418,4 +422,30 @@ class ImportExportViewModel @Inject constructor(
 
         }
     }
+
+    private fun updateEventsAfterImport(events: List<Event>){
+        viewModelScope.launch(Dispatchers.IO) {
+            val importEventsId0 = events.map { event ->
+                event.copy(id = 0)
+            }
+
+            val eventsDbBeforeAdding = getAllEventUseCase.invoke().first()
+
+            upsertEventsUseCase(events = importEventsId0)
+
+            val eventsDbAfterAdding = getAllEventUseCase.invoke().first()
+
+            scheduleAllEventsUseCase()
+
+            _importExportSharedFlow.emit(value = ShowToast(
+                messageResId = R.string.events_import_result,
+                formatArgs = listOf(
+                    events.size.toString(),
+                    (eventsDbAfterAdding.size - eventsDbBeforeAdding.size).toString()
+                )
+            ))
+        }
+    }
+
+
 }

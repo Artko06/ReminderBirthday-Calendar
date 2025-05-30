@@ -48,7 +48,9 @@ import com.example.reminderbirthday_calendar.presentation.components.evetns.Sear
 import com.example.reminderbirthday_calendar.presentation.components.evetns.SelectorSortEventType
 import com.example.reminderbirthday_calendar.presentation.event.EventsEvent
 import com.example.reminderbirthday_calendar.presentation.sharedFlow.EventsSharedFlow
+import com.example.reminderbirthday_calendar.presentation.sharedFlow.ImportExportSharedFlow
 import com.example.reminderbirthday_calendar.presentation.viewModel.EventsViewModel
+import com.example.reminderbirthday_calendar.presentation.viewModel.ImportExportViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import java.time.format.DateTimeFormatter
@@ -57,7 +59,8 @@ import java.time.format.DateTimeFormatter
 fun EventsScreen(
     modifier: Modifier = Modifier,
     onNavigateToEventDetailScreen: (Long) -> Unit,
-    eventsViewModel: EventsViewModel = hiltViewModel()
+    eventsViewModel: EventsViewModel = hiltViewModel(),
+    importExportViewModel: ImportExportViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val localizedContext = LocalizedContext.current
@@ -66,6 +69,7 @@ fun EventsScreen(
     val stateLazyColumn = rememberLazyListState()
 
     val eventsSharedFlow = eventsViewModel.eventsSharedFlow
+    val importExportSharedFlow = importExportViewModel.importExportSharedFlow
 
     @OptIn(ExperimentalPermissionsApi::class)
     val permissionsReadWriteContactsState = rememberMultiplePermissionsState(
@@ -84,6 +88,20 @@ fun EventsScreen(
         eventsSharedFlow.collect { sharedFlow ->
             when(sharedFlow){
                 is EventsSharedFlow.ShowToast -> {
+                    val message = localizedContext
+                        .getString(sharedFlow.messageResId, *sharedFlow.formatArgs.toTypedArray())
+
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        importExportSharedFlow.collect { sharedFlow ->
+            when(sharedFlow){
+                is ImportExportSharedFlow.ShowShareView -> {}
+                is ImportExportSharedFlow.ShowToast -> {
                     val message = localizedContext
                         .getString(sharedFlow.messageResId, *sharedFlow.formatArgs.toTypedArray())
 
