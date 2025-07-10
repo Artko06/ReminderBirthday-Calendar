@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- android:allowBackup="false" - only for developing -->
     <application
         android:name=".CalendarApp"
         android:allowBackup="true"
@@ -39,6 +38,15 @@
         </receiver>
 
         <receiver
+            android:name=".notification.receiver.DateTimeChangedReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".notification.receiver.TimeZoneChangedReceiver"
             android:exported="false"
             android:enabled="true">
@@ -49,8 +57,10 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
-            android:theme="@style/Theme.ReminderBirthday_Calendar">
+            android:theme="@style/Theme.ReminderBirthday_Calendar"
+            tools:ignore="DiscouragedApi, LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

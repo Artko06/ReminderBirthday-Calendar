@@ -9,11 +9,13 @@ class AddEventToContactAppUseCase(private val repository: ContactAppRepository) 
         contactId: String,
         eventDate: LocalDate,
         eventType: EventType,
-        yearMatter: Boolean
+        yearMatter: Boolean,
+        customLabel: String?
     ): Boolean = repository.addEvent(
         contactId = contactId,
         eventDate = if (yearMatter) eventDate.toString() // "yyyy-MM-dd"
             else "-" + eventDate.toString().substring(4), // "--MM-dd"
-        eventType = eventType
+        eventType = eventType,
+        customLabel = customLabel
     )
 }

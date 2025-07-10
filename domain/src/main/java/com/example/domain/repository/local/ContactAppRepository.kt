@@ -10,6 +10,7 @@ interface ContactAppRepository {
     suspend fun addEvent(
         contactId: String,
         eventDate: String,
-        eventType: EventType
+        eventType: EventType,
+        customLabel: String?
     ): Boolean
 }

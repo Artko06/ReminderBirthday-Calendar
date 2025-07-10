@@ -17,14 +17,11 @@ import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Cake
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.CloudDownload
-import androidx.compose.material.icons.outlined.CloudUpload
 import androidx.compose.material.icons.outlined.ColorLens
 import androidx.compose.material.icons.outlined.CrueltyFree
 import androidx.compose.material.icons.outlined.DriveFileMoveRtl
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.MarkEmailRead
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.SaveAs
 import androidx.compose.material.icons.outlined.UploadFile
@@ -230,7 +227,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(start = 4.dp, bottom = 8.dp)
+                    .padding(start = 4.dp, bottom = 8.dp, top = 4.dp)
             )
         }
 
@@ -341,7 +338,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(start = 4.dp, bottom = 8.dp, top = 8.dp)
+                    .padding(start = 4.dp, bottom = 8.dp, top = 4.dp)
             )
         }
 
@@ -403,35 +400,35 @@ fun SettingsScreen(
             )
         }
 
-        item(key = lazyKey++) {
-            SettingsItem(
-                icon = Icons.Outlined.CloudUpload,
-                title = LocalizedContext.current.getString(R.string.cloud_export),
-                subtitle = LocalizedContext.current.getString(R.string.cloud_export_info),
-                hasSwitch = false,
-                isSwitchChecked = false,
-                onSwitchChange = {},
-                onClick = {
-                    importExportViewModel.onEvent(event = ImportExportEvent.UploadEventsToRemote)
-                },
-                isLoadingStatus = importExportState.isLoadingRemoteExport
-            )
-        }
-
-        item(key = lazyKey++) {
-            SettingsItem(
-                icon = Icons.Outlined.CloudDownload,
-                title = LocalizedContext.current.getString(R.string.cloud_import),
-                subtitle = LocalizedContext.current.getString(R.string.cloud_import_info),
-                hasSwitch = false,
-                isSwitchChecked = false,
-                onSwitchChange = {},
-                onClick = {
-                    importExportViewModel.onEvent(event = ImportExportEvent.GetEventsFromRemote)
-                },
-                isLoadingStatus = importExportState.isLoadingRemoteImport
-            )
-        }
+//        item(key = lazyKey++) {
+//            SettingsItem(
+//                icon = Icons.Outlined.CloudUpload,
+//                title = LocalizedContext.current.getString(R.string.cloud_export),
+//                subtitle = LocalizedContext.current.getString(R.string.cloud_export_info),
+//                hasSwitch = false,
+//                isSwitchChecked = false,
+//                onSwitchChange = {},
+//                onClick = {
+//                    importExportViewModel.onEvent(event = ImportExportEvent.UploadEventsToRemote)
+//                },
+//                isLoadingStatus = importExportState.isLoadingRemoteExport
+//            )
+//        }
+//
+//        item(key = lazyKey++) {
+//            SettingsItem(
+//                icon = Icons.Outlined.CloudDownload,
+//                title = LocalizedContext.current.getString(R.string.cloud_import),
+//                subtitle = LocalizedContext.current.getString(R.string.cloud_import_info),
+//                hasSwitch = false,
+//                isSwitchChecked = false,
+//                onSwitchChange = {},
+//                onClick = {
+//                    importExportViewModel.onEvent(event = ImportExportEvent.GetEventsFromRemote)
+//                },
+//                isLoadingStatus = importExportState.isLoadingRemoteImport
+//            )
+//        }
 
         stickyHeader(key = lazyKey++) {
             Text(
@@ -442,23 +439,23 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(start = 4.dp, bottom = 8.dp, top = 8.dp)
+                    .padding(start = 4.dp, bottom = 8.dp, top = 4.dp)
             )
         }
 
-        item(key = lazyKey++) {
-            SettingsItem(
-                icon = Icons.Outlined.MarkEmailRead,
-                title = LocalizedContext.current.getString(R.string.sign_in_with_google),
-                subtitle = importExportState.googleAuthEmail ?: (LocalizedContext.current.getString(
-                    R.string.sign_in_with_google_info) + " \uD83E\uDD7A"),
-                hasSwitch = false,
-                isSwitchChecked = false,
-                onSwitchChange = {},
-                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.GoogleSignInOrOut) },
-                isLoadingStatus = importExportState.isLoadingSignInWithGoogle
-            )
-        }
+//        item(key = lazyKey++) {
+//            SettingsItem(
+//                icon = Icons.Outlined.MarkEmailRead,
+//                title = LocalizedContext.current.getString(R.string.sign_in_with_google),
+//                subtitle = importExportState.googleAuthEmail ?: (LocalizedContext.current.getString(
+//                    R.string.sign_in_with_google_info) + " \uD83E\uDD7A"),
+//                hasSwitch = false,
+//                isSwitchChecked = false,
+//                onSwitchChange = {},
+//                onClick = { importExportViewModel.onEvent(event = ImportExportEvent.GoogleSignInOrOut) },
+//                isLoadingStatus = importExportState.isLoadingSignInWithGoogle
+//            )
+//        }
 
         item(key = lazyKey++) {
             SettingsItem(

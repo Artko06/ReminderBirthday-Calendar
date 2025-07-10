@@ -35,13 +35,15 @@ class ContactAppRepositoryImpl(
     override suspend fun addEvent(
         contactId: String,
         eventDate: String,
-        eventType: EventType
+        eventType: EventType,
+        customLabel: String?
     ): Boolean {
         return addEventToContact(
             resolver = contentResolver,
             contactId = contactId,
             eventDate = eventDate,
-            eventType = eventType
+            eventType = eventType,
+            customLabel = customLabel
         )
     }
 
@@ -50,86 +52,91 @@ class ContactAppRepositoryImpl(
         resolver: ContentResolver,
         contactId: String,
         eventDate: String,
-        eventType: EventType
+        eventType: EventType,
+        customLabel: String?
     ): Boolean {
+        if (eventType == EventType.OTHER) return false // func in developing
         val operations = ArrayList<ContentProviderOperation>()
 
-        // 1. get rawContactId by contactId
-        val rawContactIdCursor = resolver.query(
+        // 1. Получаем все raw_contact_id по contactId
+        val rawContactIds = mutableListOf<Long>()
+        resolver.query(
             ContactsContract.RawContacts.CONTENT_URI,
             arrayOf(ContactsContract.RawContacts._ID),
             "${ContactsContract.RawContacts.CONTACT_ID} = ?",
             arrayOf(contactId),
             null
-        )
+        )?.use { cursor ->
+            while (cursor.moveToNext()) {
+                rawContactIds.add(cursor.getLong(0))
+            }
+        }
 
-        val rawContactId = rawContactIdCursor?.use {
-            if (it.moveToFirst()) it.getLong(0) else null
-        } ?: return false
+        if (rawContactIds.isEmpty()) return false
 
-        // 2. Type event Android
+        // 2. Преобразуем тип события в Android-тип
         val androidEventType = when (eventType) {
             EventType.BIRTHDAY -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
             EventType.ANNIVERSARY -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
-            EventType.OTHER -> ContactsContract.CommonDataKinds.Event.TYPE_OTHER
+            EventType.OTHER -> if (customLabel != null) ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM
+                else ContactsContract.CommonDataKinds.Event.TYPE_OTHER
         }
 
-        // 3. Check: Type event Android exist?
-        val existingEventCursor = resolver.query(
-            ContactsContract.Data.CONTENT_URI,
-            arrayOf(ContactsContract.Data._ID),
-            "${ContactsContract.Data.RAW_CONTACT_ID} = ? AND " +
-                    "${ContactsContract.Data.MIMETYPE} = ? AND " +
-                    "${ContactsContract.CommonDataKinds.Event.TYPE} = ?",
-            arrayOf(
-                rawContactId.toString(),
-                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
-                androidEventType.toString()
-            ),
-            null
-        )
-
-        val eventExists = existingEventCursor?.use {
-            it.moveToFirst()
-        } == true
-
-        if (eventExists) {
-            // 4a. Update event
-            val eventId = resolver.query(
-                ContactsContract.Data.CONTENT_URI,
-                arrayOf(ContactsContract.Data._ID),
-                "${ContactsContract.Data.RAW_CONTACT_ID} = ? AND " +
-                        "${ContactsContract.Data.MIMETYPE} = ? AND " +
-                        "${ContactsContract.CommonDataKinds.Event.TYPE} = ?",
-                arrayOf(
-                    rawContactId.toString(),
-                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
-                    androidEventType.toString()
-                ),
-                null
-            )?.use { cursor ->
-                if (cursor.moveToFirst()) cursor.getLong(0) else null
-            }
-
-            if (eventId != null) {
-                val updateOp = ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
-                    .withSelection("${ContactsContract.Data._ID} = ?", arrayOf(eventId.toString()))
-                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, eventDate)
-                operations.add(updateOp.build())
+        // 3. Удаляем все события нужного типа у всех raw_contact_id
+        if (eventType == EventType.OTHER && customLabel != null) {
+            for (rawContactId in rawContactIds) {
+                val deleteOp = ContentProviderOperation.newDelete(ContactsContract.Data.CONTENT_URI)
+                    .withSelection(
+                        "${ContactsContract.Data.RAW_CONTACT_ID} = ? AND " +
+                                "${ContactsContract.Data.MIMETYPE} = ? AND " +
+                                "${ContactsContract.CommonDataKinds.Event.TYPE} = ? AND " +
+                                "${ContactsContract.CommonDataKinds.Event.LABEL} = ?",
+                        arrayOf(
+                            rawContactId.toString(),
+                            ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                            ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM.toString(),
+                            customLabel
+                        )
+                    )
+                operations.add(deleteOp.build())
             }
         } else {
-            // 4b. Insert New Event
-            val insertOp = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawContactId)
-                .withValue(
-                    ContactsContract.Data.MIMETYPE,
-                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-                )
-                .withValue(ContactsContract.CommonDataKinds.Event.TYPE, androidEventType)
-                .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, eventDate)
-            operations.add(insertOp.build())
+            for (rawContactId in rawContactIds) {
+                val deleteOp = ContentProviderOperation.newDelete(ContactsContract.Data.CONTENT_URI)
+                    .withSelection(
+                        "${ContactsContract.Data.RAW_CONTACT_ID} = ? AND " +
+                                "${ContactsContract.Data.MIMETYPE} = ? AND " +
+                                "${ContactsContract.CommonDataKinds.Event.TYPE} = ?",
+                        arrayOf(
+                            rawContactId.toString(),
+                            ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                            androidEventType.toString()
+                        )
+                    )
+                operations.add(deleteOp.build())
+            }
         }
 
+        // 4. Добавляем новое событие только к первому rawContactId
+        val insertOp = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+            .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawContactIds.first())
+            .withValue(
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
+            )
+            .withValue(ContactsContract.CommonDataKinds.Event.TYPE, androidEventType)
+            .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, eventDate)
+
+        if (eventType == EventType.OTHER && customLabel != null) {
+            insertOp.withValue(
+                /* key = */ ContactsContract.CommonDataKinds.Event.LABEL,
+                /* value = */ customLabel
+            )
+        }
+
+        operations.add(insertOp.build())
+
+        // 5. Применяем изменения
         return try {
             resolver.applyBatch(ContactsContract.AUTHORITY, operations)
             true
@@ -138,7 +145,6 @@ class ContactAppRepositoryImpl(
             false
         }
     }
-
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     private fun getPhoneNumber(resolver: ContentResolver, contactId: String): String {
@@ -217,27 +223,12 @@ class ContactAppRepositoryImpl(
                 val birthdayFirstName = "$prefix $firstName $middleName".replace(',', ' ').trim()
                 val birthdayLastName = "$lastName $suffix".replace(',', ' ').trim()
 
-                // Get the image, if any, and convert it to byte array
-                val imageStream = ContactsContract.Contacts.openContactPhotoInputStream(
-                    /* cr = */ resolver,
-                    /* contactUri = */ ContentUris.withAppendedId(
-                        ContactsContract.Contacts.CONTENT_URI,
-                        id.toLong()
-                    ),
-                    /* preferHighres = */ true
-                )
-                val bitmap = BitmapFactory.decodeStream(imageStream)
-                var image: ByteArray? = null
-                if (bitmap != null) {
-                    image = bitmapToByteArray(bitmap).compressImageWithResize()
-                }
-
                 val contactInfo = ContactInfo(
                     id = id,
                     name = birthdayFirstName,
                     surname = birthdayLastName,
                     phone = phone,
-                    image = image,
+                    image = null,
                 )
                 contactsInfo.add(contactInfo)
                 idsSet.add(id)
@@ -252,6 +243,30 @@ class ContactAppRepositoryImpl(
         cursor?.close()
         return contactsInfo
     }
+
+
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    private fun loadContactPhoto(contactId: String, resolver: ContentResolver): ByteArray? {
+        return try {
+            val uri = ContentUris.withAppendedId(
+                ContactsContract.Contacts.CONTENT_URI,
+                contactId.toLong()
+            )
+
+            val imageStream = ContactsContract.Contacts.openContactPhotoInputStream(
+                resolver,
+                uri,
+                true
+            )
+
+            val bitmap = BitmapFactory.decodeStream(imageStream)
+            imageStream?.close()
+            bitmap?.let { bitmapToByteArray(it).compressImageWithResize() }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
 
     private fun getEventsForContact(
         contactInfo: ContactInfo,
@@ -311,9 +326,11 @@ class ContactAppRepositoryImpl(
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     private fun getContactEvents(resolver: ContentResolver): List<ImportedEvent> {
-        return getContacts(resolver).asSequence()
-            .flatMap { getEventsForContact(it, resolver) }
-            .toList()
+        return getContacts(resolver).flatMap { getEventsForContact(it, resolver) }.map {
+            it.copy(
+                image = loadContactPhoto(it.id, resolver)
+            )
+        }.toList()
     }
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)

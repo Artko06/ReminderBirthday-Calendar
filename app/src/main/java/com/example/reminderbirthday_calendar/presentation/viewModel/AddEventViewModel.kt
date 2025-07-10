@@ -171,7 +171,8 @@ class AddEventViewModel @Inject constructor(
                                 contactId = _addEventState.value.idSelectedContact!!,
                                 eventDate = _addEventState.value.date!!,
                                 eventType = _addEventState.value.eventType,
-                                yearMatter = _addEventState.value.yearMatter
+                                yearMatter = _addEventState.value.yearMatter,
+                                customLabel = _addEventState.value.notes
                             )
 
                             println("isSuccessWriteToContact: $isSuccessWriteToContact")

@@ -208,19 +208,15 @@ class ImportExportViewModel @Inject constructor(
 
                     val importedEvents = importEventsFromContactsUseCase.invoke()
 
-                    if (importedEvents.isEmpty()){
-                        _importExportState.update { it.copy(
-                            isLoadingReimportEvent = false
-                        ) }
+                    _importExportState.update { it.copy(
+                        isLoadingReimportEvent = false
+                    ) }
 
+                    if (importedEvents.isEmpty()){
                         _importExportSharedFlow.emit(value = ShowToast(
                             messageResId = R.string.import_zero_events
                         ))
                     } else{
-                        _importExportState.update { it.copy(
-                            isLoadingReimportEvent = false
-                        ) }
-
                         updateEventsAfterImport(events = importedEvents)
                     }
                 }

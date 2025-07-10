@@ -51,6 +51,8 @@ fun NotificationPermissionScreen(
         if (notificationPermState.requestPermission) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                onNavigateToMainScreen()
             }
         }
     }

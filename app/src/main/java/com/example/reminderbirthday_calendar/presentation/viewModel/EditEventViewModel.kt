@@ -220,7 +220,8 @@ class EditEventViewModel @Inject constructor(
                                 contactId = _editEventState.value.idContact!!,
                                 eventDate = _editEventState.value.date,
                                 eventType = _editEventState.value.eventType,
-                                yearMatter = _editEventState.value.yearMatter
+                                yearMatter = _editEventState.value.yearMatter,
+                                customLabel = null
                             )
                         }
                     }
