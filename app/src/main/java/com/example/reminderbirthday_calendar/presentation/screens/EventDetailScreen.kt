@@ -212,18 +212,20 @@ fun EventDetailScreen(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = eventDetailState.event.originalDate.let {
                         buildAnnotatedString {
                             if (eventDetailState.event.yearMatter) {
-                                append(LocalizedContext.current.getString(R.string.turns) + " ")
+                                if(it.calculateDaysLeft() != 0) {
+                                    append(LocalizedContext.current.getString(R.string.turns) + " ")
+                                }
                                 withStyle(
                                     style = SpanStyle(
                                         fontStyle = FontStyle.Italic,
@@ -269,7 +271,8 @@ fun EventDetailScreen(
                         }
                     },
                     fontWeight = FontWeight.Light,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
                 )
             }
 

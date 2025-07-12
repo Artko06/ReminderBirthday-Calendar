@@ -9,8 +9,8 @@ fun getAppVersion(context: Context): String {
         context.packageManager.getPackageInfo(
             context.packageName,
             PackageManager.PackageInfoFlags.of(0)
-        ).versionName ?: "1.0.0"
+        ).versionName ?: "1.0"
     } else {
-        context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "1.0.0"
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "1.0"
     }
 }

@@ -11,15 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ImportContacts
-import androidx.compose.material.icons.filled.SentimentVeryDissatisfied
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +41,7 @@ import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
 import com.example.reminderbirthday_calendar.presentation.components.dialogWindow.ReadContactsPermissionDialog
 import com.example.reminderbirthday_calendar.presentation.components.evetns.DaysLeftButton
+import com.example.reminderbirthday_calendar.presentation.components.evetns.EmptyEmoji
 import com.example.reminderbirthday_calendar.presentation.components.evetns.EventItem
 import com.example.reminderbirthday_calendar.presentation.components.evetns.MonthYearText
 import com.example.reminderbirthday_calendar.presentation.components.evetns.SearchLine
@@ -67,6 +67,7 @@ fun EventsScreen(
 
     val eventState = eventsViewModel.eventState.collectAsState().value
     val stateLazyColumn = rememberLazyListState()
+    val stateEmpty = rememberScrollState()
 
     val eventsSharedFlow = eventsViewModel.eventsSharedFlow
     val importExportSharedFlow = importExportViewModel.importExportSharedFlow
@@ -159,23 +160,16 @@ fun EventsScreen(
 
         if (eventState.events.isEmpty()) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().verticalScroll(state = stateEmpty),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (eventState.isLoadingImportEvents){
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(100.dp)
-                    )
-                } else{
-                    Icon(
-                        imageVector = Icons.Filled.SentimentVeryDissatisfied,
-                        contentDescription = "No events icon",
-                        modifier = Modifier.size(100.dp)
-                    )
-                }
+                EmptyEmoji(
+                    isLoadingImportEvents = eventState.isLoadingImportEvents,
+                    sortTypeEvent = eventState.sortTypeEvent
+                )
 
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(modifier = Modifier.height(22.dp))
 
                 Text(
                     text = LocalizedContext.current.getString(R.string.event_list_is_empty),
@@ -195,24 +189,26 @@ fun EventsScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = { eventsViewModel.onEvent(event = EventsEvent.ImportEventsFromContacts) },
-                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                if (eventState.sortTypeEvent == null){
+                    Button(
+                        onClick = { eventsViewModel.onEvent(event = EventsEvent.ImportEventsFromContacts) },
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.ImportContacts,
-                            contentDescription = "Import events",
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ImportContacts,
+                                contentDescription = "Import events",
+                            )
 
-                        Text(
-                            text = LocalizedContext.current.getString(R.string.import_events),
-                            fontSize = 14.sp,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
+                            Text(
+                                text = LocalizedContext.current.getString(R.string.import_events),
+                                fontSize = 14.sp,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
                     }
                 }
             }

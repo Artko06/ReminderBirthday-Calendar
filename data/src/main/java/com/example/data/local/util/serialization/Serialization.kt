@@ -1,7 +1,6 @@
 package com.example.data.local.util.serialization
 
 import android.content.Context
-import android.util.Base64
 import java.io.File
 
 object Serialization {
@@ -21,8 +20,11 @@ object Serialization {
             strBuilder.append(" ".repeat(4) + "\"originalDate\": \"${event.originalDate}\",\n")
             strBuilder.append(" ".repeat(4) + "\"yearMatter\": ${event.yearMatter},\n")
             strBuilder.append(" ".repeat(4) + "\"notes\": \"${event.notes ?: ""}\",\n")
-            val imageBase64 = event.image?.let { Base64.encodeToString(it, Base64.NO_WRAP) } ?: ""
-            strBuilder.append(" ".repeat(4) + "\"image\": \"${imageBase64}\"\n")
+
+            val image = ""
+            // val imageBase64 = event.image?.let { Base64.encodeToString(it, Base64.NO_WRAP) } ?: ""
+            // without image
+            strBuilder.append(" ".repeat(4) + "\"image\": \"${image}\"\n")
             strBuilder.append(" ".repeat(2) + "}")
             if (index != events.lastIndex) strBuilder.append(",")
             strBuilder.append("\n")
@@ -51,7 +53,9 @@ object Serialization {
         )
 
         for (event in events) {
-            val base64Image = event.image?.let { Base64.encodeToString(it, Base64.NO_WRAP) } ?: ""
+            val image = ""
+            // val base64Image = event.image?.let { Base64.encodeToString(it, Base64.NO_WRAP) } ?: ""
+            // without image
 
             val line = listOf(
                 event.id,
@@ -63,7 +67,7 @@ object Serialization {
                 event.originalDate,
                 event.yearMatter,
                 event.notes ?: "",
-                base64Image
+                image
             ).joinToString(separator = ",")
 
             csvBuilder.appendLine(line)

@@ -209,7 +209,9 @@ fun EditEventScreen(
                 isLoadingTrailingIcon = editEventState.isLoadingContactList,
                 textValue = editEventState.name,
                 onValueChanged = { name ->
-                    editEventViewModel.onEvent(event = EditEvent.ChangeValueName(name))
+                    if (name.length <= 20){
+                        editEventViewModel.onEvent(event = EditEvent.ChangeValueName(name))
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -227,7 +229,9 @@ fun EditEventScreen(
                 },
                 isLoadingTrailingIcon = editEventState.isLoadingContactList,
                 onValueChanged = { surname ->
-                    editEventViewModel.onEvent(event = EditEvent.ChangeValueSurname(surname))
+                    if (surname.length <= 20) {
+                        editEventViewModel.onEvent(event = EditEvent.ChangeValueSurname(surname))
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

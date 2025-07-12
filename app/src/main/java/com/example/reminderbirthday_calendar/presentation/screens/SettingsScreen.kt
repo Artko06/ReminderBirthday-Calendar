@@ -74,6 +74,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val localizedContext = LocalizedContext.current
+    val versionApp = getAppVersion(context = context)
 
     val listState = rememberLazyListState()
     var lazyKey = 0
@@ -481,11 +482,17 @@ fun SettingsScreen(
             SettingsItem(
                 icon = Icons.Outlined.Info,
                 title = LocalizedContext.current.getString(R.string.about_app),
-                subtitle = LocalizedContext.current.getString(R.string.about_app_info, getAppVersion(context = context)),
+                subtitle = LocalizedContext.current.getString(R.string.about_app_info, versionApp),
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
-                onClick = {}
+                onClick = {
+                    Toast.makeText(
+                        context,
+                        localizedContext.getString(R.string.about_app_info, versionApp),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
         }
 

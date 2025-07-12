@@ -57,7 +57,7 @@ fun SettingsItem(
             .clip(shape = RoundedCornerShape(percent = 35))
             .fillMaxWidth()
             .clickable(enabled = onClick != null) { onClick?.invoke() }
-            .padding(horizontal = 18.dp, vertical = 14.dp),
+            .padding(horizontal = 18.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (isLoadingStatus){
@@ -83,15 +83,17 @@ fun SettingsItem(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
+                lineHeight = 20.sp,
                 color = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
             )
 
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = subtitle,
                 fontWeight = FontWeight.Light,
                 fontSize = 12.sp,
+                lineHeight = 14.sp,
                 color = if (LocalTheme.current == ThemeType.DARK) Color.LightGray else Color.DarkGray
             )
         }
