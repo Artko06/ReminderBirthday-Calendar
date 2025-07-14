@@ -13,4 +13,5 @@ interface ContactAppRepository {
         eventType: EventType,
         customLabel: String?
     ): Boolean
+    suspend fun getContactInfoById(contactId: String): ContactInfo?
 }

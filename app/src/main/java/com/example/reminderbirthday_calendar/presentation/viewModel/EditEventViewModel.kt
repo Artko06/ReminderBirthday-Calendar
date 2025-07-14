@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.useCase.calendar.contact.GetContactByIdUseCase
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
 import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.example.domain.useCase.calendar.event.GetEventByIdUseCase
@@ -38,8 +39,9 @@ class EditEventViewModel @Inject constructor(
     private val importContactsUseCase: ImportContactsUseCase,
     private val getEventByIdUseCase: GetEventByIdUseCase,
     private val addEventToContactAppUseCase: AddEventToContactAppUseCase,
+    private val getContactByIdUseCase: GetContactByIdUseCase,
     @ApplicationContext private val appContext: Context
-): ViewModel() {
+) : ViewModel() {
     private val _editEventState = MutableStateFlow(EditEventState())
     private val _isSaveButtonEnabled = _editEventState.asStateFlow()
         .map { state ->
@@ -47,7 +49,8 @@ class EditEventViewModel @Inject constructor(
             else if (state.yearMatter && state.date.year > LocalDate.now().year) false
             else if (state.yearMatter &&
                 state.date.year == LocalDate.now().year &&
-                state.date.dayOfYear > LocalDate.now().dayOfYear) false
+                state.date.dayOfYear > LocalDate.now().dayOfYear
+            ) false
             else true
         }
         .stateIn(
@@ -76,25 +79,27 @@ class EditEventViewModel @Inject constructor(
             val gotEvent =
                 (if (eventId != null) getEventByIdUseCase.invoke(eventId).first() else null)
 
-            if (gotEvent != null){
-                _editEventState.update { it.copy(
-                    id = gotEvent.id,
-                    idContact = gotEvent.idContact,
-                    eventType = gotEvent.eventType,
-                    sortType = gotEvent.sortTypeEvent,
-                    name = gotEvent.nameContact,
-                    surname = gotEvent.surnameContact,
-                    date = gotEvent.originalDate,
-                    yearMatter = gotEvent.yearMatter,
-                    pickedPhoto = gotEvent.image,
-                    notes = gotEvent.notes
-                ) }
+            if (gotEvent != null) {
+                _editEventState.update {
+                    it.copy(
+                        id = gotEvent.id,
+                        idContact = gotEvent.idContact,
+                        eventType = gotEvent.eventType,
+                        sortType = gotEvent.sortTypeEvent,
+                        name = gotEvent.nameContact,
+                        surname = gotEvent.surnameContact,
+                        date = gotEvent.originalDate,
+                        yearMatter = gotEvent.yearMatter,
+                        pickedPhoto = gotEvent.image,
+                        notes = gotEvent.notes
+                    )
+                }
             }
         }
     }
 
-    fun onEvent(event: EditEvent){
-        when(event){
+    fun onEvent(event: EditEvent) {
+        when (event) {
             is EditEvent.ChangeDate -> {
                 _editEventState.update {
                     it.copy(
@@ -144,10 +149,12 @@ class EditEventViewModel @Inject constructor(
             }
 
             EditEvent.CloseListContacts -> {
-                _editEventState.update { it.copy(
-                    isShowListContacts = false,
-                    isLoadingContactList = false
-                ) }
+                _editEventState.update {
+                    it.copy(
+                        isShowListContacts = false,
+                        isLoadingContactList = false
+                    )
+                }
             }
 
             is EditEvent.OnPickPhoto -> {
@@ -159,14 +166,16 @@ class EditEventViewModel @Inject constructor(
             }
 
             is EditEvent.OnSelectContact -> {
-                _editEventState.update { it.copy(
-                    idContact = event.contact.id,
-                    name = event.contact.name,
-                    surname = event.contact.surname,
-                    pickedPhoto = event.contact.image,
-                    isShowListContacts = false,
-                    isLoadingContactList = false
-                ) }
+                _editEventState.update {
+                    it.copy(
+                        idContact = event.contact.id,
+                        name = event.contact.name,
+                        surname = event.contact.surname,
+                        pickedPhoto = event.contact.image,
+                        isShowListContacts = false,
+                        isLoadingContactList = false
+                    )
+                }
             }
 
             EditEvent.ShowDatePickerDialog -> {
@@ -179,21 +188,28 @@ class EditEventViewModel @Inject constructor(
 
             EditEvent.ShowListContacts -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    _editEventState.update { it.copy(
-                        isLoadingContactList = true
-                    ) }
+                    _editEventState.update {
+                        it.copy(
+                            isLoadingContactList = true
+                        )
+                    }
 
                     val permissionReadState =
-                        ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_CONTACTS) ==
+                        ContextCompat.checkSelfPermission(
+                            appContext,
+                            Manifest.permission.READ_CONTACTS
+                        ) ==
                                 PackageManager.PERMISSION_GRANTED
 
                     val contacts = if (permissionReadState) importContactsUseCase() else emptyList()
 
-                    _editEventState.update { it.copy(
-                        listContacts = contacts,
-                        isShowListContacts = true,
-                        isLoadingContactList = false
-                    ) }
+                    _editEventState.update {
+                        it.copy(
+                            listContacts = contacts,
+                            isShowListContacts = true,
+                            isLoadingContactList = false
+                        )
+                    }
                 }
             }
 
@@ -215,14 +231,21 @@ class EditEventViewModel @Inject constructor(
                     if (isSuccess) {
                         scheduleAllEventsUseCase()
 
-                        if (!_editEventState.value.idContact.isNullOrBlank()){
-                            addEventToContactAppUseCase.invoke(
-                                contactId = _editEventState.value.idContact!!,
-                                eventDate = _editEventState.value.date,
-                                eventType = _editEventState.value.eventType,
-                                yearMatter = _editEventState.value.yearMatter,
-                                customLabel = null
-                            )
+                        if (!_editEventState.value.idContact.isNullOrBlank()) {
+                            val importContact = getContactByIdUseCase
+                                .invoke(contactId = _editEventState.value.idContact!!)
+
+                            if (importContact.name == _editEventState.value.name &&
+                                importContact.surname == _editEventState.value.surname
+                            ) {
+                                addEventToContactAppUseCase.invoke(
+                                    contactId = _editEventState.value.idContact!!,
+                                    eventDate = _editEventState.value.date,
+                                    eventType = _editEventState.value.eventType,
+                                    yearMatter = _editEventState.value.yearMatter,
+                                    customLabel = null
+                                )
+                            }
                         }
                     }
                 }

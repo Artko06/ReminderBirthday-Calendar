@@ -31,6 +31,59 @@ class ContactAppRepositoryImpl(
         return getEventsFromContacts(resolver = contentResolver)
     }
 
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    override suspend fun getContactInfoById(contactId: String): ContactInfo? {
+        val projection = arrayOf(
+            ContactsContract.CommonDataKinds.StructuredName.PREFIX,
+            ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
+            ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME,
+            ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME,
+            ContactsContract.CommonDataKinds.StructuredName.SUFFIX
+        )
+
+        val cursor = contentResolver.query(
+            ContactsContract.Data.CONTENT_URI,
+            projection,
+            "${ContactsContract.Data.MIMETYPE} = ? AND ${ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID} = ?",
+            arrayOf(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE, contactId),
+            null
+        )
+
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val prefix =
+                    it.getStringOrNull(it.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PREFIX))
+                        ?: ""
+                val firstName =
+                    it.getStringOrNull(it.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME))
+                        ?: "??"
+                val middleName =
+                    it.getStringOrNull(it.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME))
+                        ?: ""
+                val lastName =
+                    it.getStringOrNull(it.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME))
+                        ?: ""
+                val suffix =
+                    it.getStringOrNull(it.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.SUFFIX))
+                        ?: ""
+
+                val fullName = "$prefix $firstName $middleName".replace(",", " ").trim()
+                val fullSurname = "$lastName $suffix".replace(",", " ").trim()
+
+                return ContactInfo(
+                    id = contactId,
+                    name = fullName,
+                    surname = fullSurname,
+                    phone = "NO INFO",
+                    image = null
+                )
+            }
+        }
+
+        return null
+    }
+
+
     @RequiresPermission(allOf = [Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS])
     override suspend fun addEvent(
         contactId: String,
@@ -79,7 +132,7 @@ class ContactAppRepositoryImpl(
             EventType.BIRTHDAY -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
             EventType.ANNIVERSARY -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
             EventType.OTHER -> if (customLabel != null) ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM
-                else ContactsContract.CommonDataKinds.Event.TYPE_OTHER
+            else ContactsContract.CommonDataKinds.Event.TYPE_OTHER
         }
 
         // 3. Удаляем все события нужного типа у всех raw_contact_id

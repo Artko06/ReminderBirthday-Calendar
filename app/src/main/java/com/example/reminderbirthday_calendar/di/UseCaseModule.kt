@@ -7,6 +7,7 @@ import com.example.domain.repository.local.ExportFileRepository
 import com.example.domain.repository.remote.GoogleClientRepository
 import com.example.domain.repository.local.ImportFileRepository
 import com.example.domain.repository.local.SettingsRepository
+import com.example.domain.useCase.calendar.contact.GetContactByIdUseCase
 import com.example.domain.useCase.calendar.contact.ImportContactsUseCase
 import com.example.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.example.domain.useCase.calendar.event.DeleteAllEventsUseCase
@@ -410,5 +411,11 @@ object UseCaseModule {
     @Singleton
     fun provideSetLanguageUseCase(settingsRepository: SettingsRepository): SetLanguageUseCase{
         return SetLanguageUseCase(repository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetContactByIdUseCase(contactAppRepository: ContactAppRepository): GetContactByIdUseCase {
+        return GetContactByIdUseCase(repository = contactAppRepository)
     }
 }
