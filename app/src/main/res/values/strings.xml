@@ -277,6 +277,7 @@
     <string name="events_deleted">%1$s events deleted</string>
 
     <string name="you_have_events">You have %1$s events</string>
+    <string name="you_have_events_type">You have %1$s events of the type \"%2$s\"</string>
 
     <!-- Notification -->
     <string name="congratulate">Congratulate</string>

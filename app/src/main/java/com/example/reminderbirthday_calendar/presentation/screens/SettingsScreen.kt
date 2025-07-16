@@ -1,7 +1,6 @@
 package com.example.reminderbirthday_calendar.presentation.screens
 
 import android.net.Uri
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,6 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.data.local.util.serialization.Deserialization
+import com.example.domain.models.event.SortTypeEvent
 import com.example.reminderbirthday_calendar.LocalizedContext
 import com.example.reminderbirthday_calendar.R
 import com.example.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
@@ -87,9 +88,11 @@ fun SettingsScreen(
         contract = ActivityResultContracts.GetContent()
     ) { selectedUri: Uri? ->
         selectedUri?.let { uri ->
-            if (MimeTypeMap.getFileExtensionFromUrl(uri.toString()) == "json")
+            val exception = Deserialization.getFileExtensionFromUri(context, uri)
+
+            if (exception == "json")
                 importExportViewModel.onEvent(ImportExportEvent.ImportEventsFromJson(uri = uri))
-            else if (MimeTypeMap.getFileExtensionFromUrl(uri.toString()) == "csv")
+            else if (exception == "csv")
                 importExportViewModel.onEvent(ImportExportEvent.ImportEventsFromCsv(uri = uri))
             else Toast.makeText(context, "Incorrect extension file", Toast.LENGTH_SHORT).show()
         }
@@ -462,18 +465,43 @@ fun SettingsScreen(
             SettingsItem(
                 icon = Icons.Outlined.CalendarMonth,
                 title = LocalizedContext.current.getString(R.string.total_events),
-                subtitle = eventsState.events.size.let {
+                subtitle = eventsState.allEventsSize.let {
                     LocalizedContext.current.resources.getQuantityString(R.plurals.total_events_count, it, it)
                 },
                 hasSwitch = false,
                 isSwitchChecked = false,
                 onSwitchChange = {},
                 onClick = {
-                    Toast.makeText(
-                        context,
-                        localizedContext.getString(R.string.you_have_events, eventsState.events.size.toString()),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    eventsState.sortTypeEvent.let {
+                        if (it == null) {
+                            Toast.makeText(
+                                context,
+                                localizedContext.getString(
+                                    R.string.you_have_events,
+                                    eventsState.allEventsSize.toString()
+                                ),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                localizedContext.getString(
+                                    R.string.you_have_events_type,
+                                    eventsState.events.size.toString(),
+                                    when(eventsState.sortTypeEvent!!){
+                                        SortTypeEvent.FAMILY -> localizedContext.getString(R.string.sort_type_event_family)
+                                        SortTypeEvent.RELATIVE -> localizedContext.getString(R.string.sort_type_event_relative)
+                                        SortTypeEvent.FRIEND -> localizedContext.getString(R.string.sort_type_event_friend)
+                                        SortTypeEvent.COLLEAGUE -> localizedContext.getString(R.string.sort_type_event_colleague)
+                                        SortTypeEvent.OTHER -> localizedContext.getString(R.string.sort_type_event_other)
+                                    }
+                                ),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+
                 }
             )
         }

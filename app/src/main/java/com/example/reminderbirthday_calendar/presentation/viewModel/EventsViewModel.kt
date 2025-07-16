@@ -138,6 +138,7 @@ class EventsViewModel @Inject constructor(
 
         eventState.copy(
             events = sortAllEvents.sortByClosestDate(),
+            allEventsSize = allEvents.size,
             filterEvents = sortFilterEvents.sortByClosestDate(),
             searchStr = searchLine
         )

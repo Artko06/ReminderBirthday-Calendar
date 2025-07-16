@@ -5,6 +5,7 @@ import com.example.domain.models.event.SortTypeEvent
 
 data class EventsState(
     val events: List<Event> = emptyList<Event>(),
+    val allEventsSize: Int = 0,
     val sortTypeEvent: SortTypeEvent? = null,
     val filterEvents: List<Event> = emptyList<Event>(),
     val searchStr: String = "",

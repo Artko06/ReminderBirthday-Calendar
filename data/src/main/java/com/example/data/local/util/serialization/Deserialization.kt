@@ -2,17 +2,32 @@ package com.example.data.local.util.serialization
 
 import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
 import android.util.Base64
-import android.webkit.MimeTypeMap
+import android.util.Log
 import java.io.FileNotFoundException
 
 object Deserialization {
+    fun getFileExtensionFromUri(context: Context, uri: Uri): String? {
+        val contentResolver = context.contentResolver
+        val returnCursor = contentResolver.query(uri, null, null, null, null)
+        returnCursor?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (cursor.moveToFirst() && nameIndex != -1) {
+                val fileName = cursor.getString(nameIndex)
+                return fileName.substringAfterLast('.', "")
+            }
+        }
+        return null
+    }
+
     fun importEventsFromJson(context: Context, uri: Uri): List<EventSerializable> {
         return try {
             val inputStream = context.contentResolver.openInputStream(uri)
                 ?: throw FileNotFoundException("Unable to open InputStream for Uri")
 
-            val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+            val extension = getFileExtensionFromUri(context, uri)
+            Log.d("TYPE", extension ?: "null")
             if (extension != "json") {
                 throw IllegalArgumentException("Invalid file extension: expected .json")
             }
@@ -50,7 +65,9 @@ object Deserialization {
                         surnameContact = mapEvent["surnameContact"],
                         originalDate = mapEvent["originalDate"]!!,
                         yearMatter = mapEvent["yearMatter"]!!.toBoolean(),
-                        notes = mapEvent["notes"],
+                        notes = if (mapEvent["notes"] != null) {
+                            mapEvent["notes"]!!.take(500)
+                        } else { mapEvent["notes"] },
                         image = imageBytes
                     )
                 )
@@ -61,6 +78,7 @@ object Deserialization {
             e.printStackTrace()
             emptyList()
         }
+        return emptyList()
     }
 
     fun importEventsFromCsv(context: Context, uri: Uri): List<EventSerializable> {
@@ -68,7 +86,7 @@ object Deserialization {
             val inputStream = context.contentResolver.openInputStream(uri)
                 ?: throw FileNotFoundException("Unable to open InputStream for Uri")
 
-            val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+            val extension = getFileExtensionFromUri(context, uri)
             if (extension != "csv") {
                 throw IllegalArgumentException("Invalid file extension: expected .csv")
             }
@@ -91,7 +109,7 @@ object Deserialization {
                 val surnameContact = tokens[5]
                 val originalDate = tokens[6]
                 val yearMatter = tokens[7].toBoolean()
-                val notes = tokens[8]
+                val notes = tokens[8].take(500)
                 val imageBase64 = tokens[9]
                 val imageBytes = if (imageBase64.isNotBlank()) Base64.decode(imageBase64, Base64.NO_WRAP) else null
 

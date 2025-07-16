@@ -53,25 +53,25 @@ class AlarmEventReceiver: BroadcastReceiver() {
                 else context.getString(R.string.congratulate).uppercase()
             )
 
-            append(" $namesAlarmEvent ")
-
             if (daysBeforeEvent != 0)
-                append(context.getString(R.string.`in`) + " ")
+                append(" " + context.getString(R.string.`in`) + " ")
 
             if (daysBeforeEvent == 0)
-                append(context.getString(R.string.today).lowercase())
+                append(" " + context.getString(R.string.today).lowercase())
             else{
                 append(daysBeforeEvent.toString())
-                append(" " + context.resources
-                    .getQuantityString(R.plurals.days, daysBeforeEvent, daysBeforeEvent))
+                append(" " + context.resources.getQuantityString(R.plurals.days, daysBeforeEvent, daysBeforeEvent))
             }
+
+            append(": $namesAlarmEvent")
         }
 
         val notificationManager = context.getSystemService(NotificationManager::class.java) as NotificationManager
         val notificationEvent = NotificationCompat.Builder(context, NOTIFICATION_EVENT_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_stat_birthday_2)
+            .setSmallIcon(R.drawable.ic_stat_birthday)
             .setContentTitle("Birthday Reminder")
             .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setContentIntent(pendingIntent(context = context))
             .setAutoCancel(true)
             .build()

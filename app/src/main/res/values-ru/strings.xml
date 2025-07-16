@@ -288,6 +288,7 @@
     <string name="events_deleted">Удалено событий: %1$s</string>
 
     <string name="you_have_events">У вас событий: %1$s</string>
+    <string name="you_have_events_type">У вас событий типа \"%2$s\": %1$s</string>
 
     <!-- Уведомления -->
     <string name="congratulate">Поздравьте</string>

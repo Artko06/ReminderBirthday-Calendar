@@ -344,7 +344,9 @@ fun AddEventScreen(
                 leadingIcon = Icons.Filled.NoteAlt,
                 textValue = addEventState.notes,
                 onValueChanged = { notes ->
-                    addEventViewModel.onEvent(event = AddEvent.ChangeNotes(notes))
+                    if(notes.length <= 500){
+                        addEventViewModel.onEvent(event = AddEvent.ChangeNotes(notes))
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

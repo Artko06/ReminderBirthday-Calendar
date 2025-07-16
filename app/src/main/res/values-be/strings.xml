@@ -262,6 +262,7 @@
     <string name="events_deleted">Выдалена падзей: %1$s</string>
 
     <string name="you_have_events">У вас падзей: %1$s</string>
+    <string name="you_have_events_type">У вас падзей тыпу \"%2$s\": %1$s</string>
 
     <!-- Паведамлення -->
     <string name="congratulate">Павіншуйце</string>
