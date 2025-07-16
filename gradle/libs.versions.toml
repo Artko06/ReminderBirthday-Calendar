@@ -35,8 +35,6 @@ kotlinSerialization = "2.1.20"
 
 jetpackComposePerm = "0.37.2"
 
-splashScreen = "1.0.1"
-
 coilCompose = "2.1.0"
 
 [libraries]
@@ -65,8 +63,6 @@ googleid = { module = "com.google.android.libraries.identity.googleid:googleid",
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
-
-androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 

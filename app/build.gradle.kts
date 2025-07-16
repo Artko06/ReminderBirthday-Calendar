@@ -14,7 +14,7 @@ plugins {
 
 android {
     namespace = "com.example.reminderbirthday_calendar"
-    compileSdk = 35
+    compileSdk = 36
 
     signingConfigs {
         create("release") {
@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId = "com.example.reminderbirthday_calendar"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -100,9 +100,6 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
-
-    // Splash screen
-    implementation(libs.androidx.core.splashscreen) // Not release yet
 
     // For pick photos from gallery
     implementation(libs.coil.kt.compose)
