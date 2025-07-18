@@ -1,6 +1,6 @@
 ## Screenshots
 
-# English
+### English
 
 <p align='center'>
   <img src='docs/screenshots/eng/Events.png' width='19%'/>
@@ -15,7 +15,7 @@
   <img src='docs/screenshots/eng/SelectLanguage.png' width='19%'/>
 </p>
 
-# Русский
+### Русский
 
 <p align='center'>
   <img src='docs/screenshots/ru/EventsRu.png' width='19%'/>
@@ -29,11 +29,11 @@
   <img src='docs/screenshots/ru/SelectLanguageRu.png' width='19%'/>
 </p>
 
-# Беларускi
+### Беларускi
 
 <p align='center'>
   <img src='docs/screenshots/bel/EventsBel.png' width='19%'/>
-  <img src='docs/screenshots/bel/SearchEventsBel.png' width='19%'/>
+  <img src='docs/screenshots/bel/SearchEventBel.png' width='19%'/>
   <img src='docs/screenshots/bel/CalendarBel.png' width='19%'/>
   <img src='docs/screenshots/bel/DetailInfoBel.png' width='19%'/>
   <img src='docs/screenshots/bel/EditEventBel.png' width='19%'/>
