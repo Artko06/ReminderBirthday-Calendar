@@ -43,3 +43,7 @@
   <img src='docs/screenshots/bel/SelectLanguageBel.png' width='19%'/>
 </p>
 
+# Private policy
+
+[Show private policy](docs/private_policy/private_policy.md)
+
