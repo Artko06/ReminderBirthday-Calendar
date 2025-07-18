@@ -1,4 +1,4 @@
-<img width="1350" height="2400" alt="SearchEventsRu" src="https://github.com/user-attachments/assets/f94872d5-6a7b-4381-b943-8b7ba2a5324f" />## Screenshots
+## Screenshots
 
 # English
 
