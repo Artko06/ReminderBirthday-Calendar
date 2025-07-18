@@ -66,7 +66,7 @@ class EventsViewModel @Inject constructor(
     private val _allEventsDatabase = getAllEventUseCase()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
 
@@ -75,28 +75,28 @@ class EventsViewModel @Inject constructor(
     }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
 
     private val _birthdayVisible = getStatusShowBirthdayEventUseCase()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = true
         )
 
     private val _anniversaryVisible = getStatusShowAnniversaryEventUseCase()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = true
         )
 
     private val _otherVisible = getStatusShowOtherEventUseCase()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = true
         )
 
@@ -144,7 +144,7 @@ class EventsViewModel @Inject constructor(
         )
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
+        started = SharingStarted.Eagerly,
         initialValue = EventsState()
     )
 
@@ -156,8 +156,6 @@ class EventsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _eventsState.update {
                 it.copy(
-                    events = getAllEventUseCase.invoke().first()
-                        .sortByClosestDate(), // From database
                     isViewDaysLeft = getStatusViewDaysLeftUseCase.invoke().first() // From DataStore
                 )
             }

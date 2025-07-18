@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.models.event.EventType
 import com.example.domain.models.event.SortTypeEvent
 import com.example.domain.models.settings.ThemeType
@@ -68,7 +69,7 @@ import com.example.reminderbirthday_calendar.ui.theme.yellow
 
 @Composable
 fun EventDetailScreen(
-    eventDetailViewModel: EventDetailViewModel,
+    eventDetailViewModel: EventDetailViewModel = hiltViewModel(),
     onBackFromDetailScreen: () -> Unit,
     onNavigateToEditEventScreen: (Long) -> Unit
 ) {
