@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.reminderbirthday_calendar"
+    namespace = "com.artkotlindev.reminderbirthday_calendar"
     compileSdk = 36
 
     signingConfigs {
@@ -26,7 +26,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.reminderbirthday_calendar"
+        applicationId = "com.artkotlindev.reminderbirthday_calendar"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -39,7 +39,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // Enables code-related app optimization.
+            isMinifyEnabled = true
+
+            // Enables resource shrinking.
+            isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

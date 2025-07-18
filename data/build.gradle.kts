@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.artkotlindev.data"
     compileSdk = 36
 
     defaultConfig {
@@ -21,7 +21,9 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // Enables code-related app optimization.
+            isMinifyEnabled = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
