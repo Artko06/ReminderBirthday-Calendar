@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.artkotlindev.domain.useCase.calendar.contact.GetContactByIdUseCase
 import com.artkotlindev.domain.useCase.calendar.contact.ImportContactsUseCase
+import com.artkotlindev.domain.useCase.calendar.contact.LoadImageToContactUseCase
 import com.artkotlindev.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.artkotlindev.domain.useCase.calendar.event.GetEventByIdUseCase
 import com.artkotlindev.domain.useCase.calendar.event.UpsertEventUseCase
@@ -40,6 +41,7 @@ class EditEventViewModel @Inject constructor(
     private val getEventByIdUseCase: GetEventByIdUseCase,
     private val addEventToContactAppUseCase: AddEventToContactAppUseCase,
     private val getContactByIdUseCase: GetContactByIdUseCase,
+    private val loadImageToContactUseCase: LoadImageToContactUseCase,
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _editEventState = MutableStateFlow(EditEventState())
@@ -166,15 +168,19 @@ class EditEventViewModel @Inject constructor(
             }
 
             is EditEvent.OnSelectContact -> {
-                _editEventState.update {
-                    it.copy(
-                        idContact = event.contact.id,
-                        name = event.contact.name,
-                        surname = event.contact.surname,
-                        pickedPhoto = event.contact.image,
-                        isShowListContacts = false,
-                        isLoadingContactList = false
-                    )
+                viewModelScope.launch(Dispatchers.IO) {
+                    val image = loadImageToContactUseCase.invoke(contactId = event.contact.id)
+
+                    _editEventState.update {
+                        it.copy(
+                            idContact = event.contact.id,
+                            name = event.contact.name,
+                            surname = event.contact.surname,
+                            pickedPhoto = image,
+                            isShowListContacts = false,
+                            isLoadingContactList = false
+                        )
+                    }
                 }
             }
 

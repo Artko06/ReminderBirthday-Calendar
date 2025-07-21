@@ -29,12 +29,16 @@ android {
         applicationId = "com.artkotlindev.reminderbirthday_calendar"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 102
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         signingConfig = signingConfigs.getByName("release")
+    }
+
+    androidResources {
+        localeFilters.addAll(listOf("en", "ru", "be"))
     }
 
     buildTypes {

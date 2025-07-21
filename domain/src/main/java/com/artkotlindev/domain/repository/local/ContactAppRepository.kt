@@ -14,4 +14,5 @@ interface ContactAppRepository {
         customLabel: String?
     ): Boolean
     suspend fun getContactInfoById(contactId: String): ContactInfo?
+    suspend fun loadImageToContact(contactId: String): ByteArray?
 }

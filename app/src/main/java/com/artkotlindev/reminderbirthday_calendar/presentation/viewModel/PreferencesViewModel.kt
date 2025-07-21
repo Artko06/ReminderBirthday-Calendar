@@ -206,11 +206,13 @@ class PreferencesViewModel @Inject constructor(
                     setLanguageUseCase.invoke(language = event.language)
                 }
             }
+
             PreferencesEvent.CloseAppLanguageDialog -> {
                 _preferencesState.update { it.copy(
                     isShowAppLanguageDialog = false
                 ) }
             }
+
             PreferencesEvent.ShowAppLanguageDialog -> {
                 viewModelScope.launch {
                     val language = getLanguageUseCase.invoke().first()

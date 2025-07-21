@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.artkotlindev.domain.useCase.calendar.contact.ImportContactsUseCase
+import com.artkotlindev.domain.useCase.calendar.contact.LoadImageToContactUseCase
 import com.artkotlindev.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.artkotlindev.domain.useCase.calendar.event.UpsertEventUseCase
 import com.artkotlindev.domain.useCase.settings.notification.ScheduleAllEventsUseCase
@@ -37,6 +38,7 @@ class AddEventViewModel @Inject constructor(
     private val addEventToContactAppUseCase: AddEventToContactAppUseCase,
     private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
     private val importContactsUseCase: ImportContactsUseCase,
+    private val loadImageToContactUseCase: LoadImageToContactUseCase,
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _addEventState = MutableStateFlow(AddEventState())
@@ -210,17 +212,21 @@ class AddEventViewModel @Inject constructor(
             }
 
             is AddEvent.OnSelectContact -> {
-                _addEventState.update {
-                    it.copy(
-                        idSelectedContact = event.contact.id,
-                        readNameContact = event.contact.name,
-                        readSurnameContact = event.contact.surname,
-                        valueName = event.contact.name,
-                        valueSurname = event.contact.surname,
-                        pickedPhoto = event.contact.image,
-                        isShowListContacts = false,
-                        isLoadingContactList = false
-                    )
+                viewModelScope.launch(Dispatchers.IO) {
+                    val image = loadImageToContactUseCase.invoke(contactId = event.contact.id)
+
+                    _addEventState.update {
+                        it.copy(
+                            idSelectedContact = event.contact.id,
+                            readNameContact = event.contact.name,
+                            readSurnameContact = event.contact.surname,
+                            valueName = event.contact.name,
+                            valueSurname = event.contact.surname,
+                            pickedPhoto = image,
+                            isShowListContacts = false,
+                            isLoadingContactList = false
+                        )
+                    }
                 }
             }
 

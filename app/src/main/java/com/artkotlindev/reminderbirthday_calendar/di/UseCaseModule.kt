@@ -9,6 +9,7 @@ import com.artkotlindev.domain.repository.local.SettingsRepository
 import com.artkotlindev.domain.repository.remote.GoogleClientRepository
 import com.artkotlindev.domain.useCase.calendar.contact.GetContactByIdUseCase
 import com.artkotlindev.domain.useCase.calendar.contact.ImportContactsUseCase
+import com.artkotlindev.domain.useCase.calendar.contact.LoadImageToContactUseCase
 import com.artkotlindev.domain.useCase.calendar.event.AddEventToContactAppUseCase
 import com.artkotlindev.domain.useCase.calendar.event.DeleteAllEventsUseCase
 import com.artkotlindev.domain.useCase.calendar.event.DeleteEventUseCase
@@ -417,5 +418,11 @@ object UseCaseModule {
     @Singleton
     fun provideGetContactByIdUseCase(contactAppRepository: ContactAppRepository): GetContactByIdUseCase {
         return GetContactByIdUseCase(repository = contactAppRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoadImageToContactUseCase(contactAppRepository: ContactAppRepository): LoadImageToContactUseCase{
+        return LoadImageToContactUseCase(repository = contactAppRepository)
     }
 }

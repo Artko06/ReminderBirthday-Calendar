@@ -299,6 +299,12 @@ class ContactAppRepositoryImpl(
 
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    override suspend fun loadImageToContact(contactId: String): ByteArray? {
+        return loadContactPhoto(resolver = contentResolver, contactId = contactId)
+    }
+
+
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
     private fun loadContactPhoto(contactId: String, resolver: ContentResolver): ByteArray? {
         return try {
             val uri = ContentUris.withAppendedId(
