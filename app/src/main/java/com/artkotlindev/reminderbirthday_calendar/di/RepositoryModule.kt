@@ -2,20 +2,16 @@ package com.artkotlindev.reminderbirthday_calendar.di
 
 import android.content.ContentResolver
 import android.content.Context
-import com.artkotlindev.data.local.roomDb.dao.EventDao
-import com.artkotlindev.data.local.roomDb.dao.SettingsDao
-import com.artkotlindev.data.remote.util.google.GoogleAuthClient
-import com.artkotlindev.data.remote.util.google.GoogleDriveClient
 import com.artkotlindev.data.local.repository.ContactAppRepositoryImpl
 import com.artkotlindev.data.local.repository.EventRepositoryImpl
 import com.artkotlindev.data.local.repository.ExportFileRepositoryImpl
-import com.artkotlindev.data.remote.repository.GoogleClientRepositoryImpl
 import com.artkotlindev.data.local.repository.ImportFileRepositoryImpl
 import com.artkotlindev.data.local.repository.SettingsRepositoryImpl
+import com.artkotlindev.data.local.roomDb.dao.EventDao
+import com.artkotlindev.data.local.roomDb.dao.SettingsDao
 import com.artkotlindev.domain.repository.local.ContactAppRepository
 import com.artkotlindev.domain.repository.local.EventRepository
 import com.artkotlindev.domain.repository.local.ExportFileRepository
-import com.artkotlindev.domain.repository.remote.GoogleClientRepository
 import com.artkotlindev.domain.repository.local.ImportFileRepository
 import com.artkotlindev.domain.repository.local.SettingsRepository
 import com.artkotlindev.domain.util.zodiac.ZodiacCalculator
@@ -73,17 +69,6 @@ object RepositoryModule {
     ): ImportFileRepository{
         return ImportFileRepositoryImpl(
             context = context
-        )
-    }
-
-    @Provides
-    fun provideGoogleClientRepository(
-        googleAuthClient: GoogleAuthClient,
-        googleDriveClient: GoogleDriveClient
-    ): GoogleClientRepository{
-        return GoogleClientRepositoryImpl(
-            googleAuthClient = googleAuthClient,
-            googleDriveClient = googleDriveClient
         )
     }
 

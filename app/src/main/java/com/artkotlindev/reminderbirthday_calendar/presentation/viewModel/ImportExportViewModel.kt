@@ -12,13 +12,6 @@ import com.artkotlindev.domain.useCase.calendar.event.ImportEventsFromContactsUs
 import com.artkotlindev.domain.useCase.calendar.event.UpsertEventsUseCase
 import com.artkotlindev.domain.useCase.exportFile.ExportEventsToCsvToExternalDirUseCase
 import com.artkotlindev.domain.useCase.exportFile.ExportEventsToJsonToExternalDirUseCase
-import com.artkotlindev.domain.useCase.google.GetAuthGoogleEmailUseCase
-import com.artkotlindev.domain.useCase.google.GetEventsFromRemoteUseCase
-import com.artkotlindev.domain.useCase.google.GetTimeLastUploadToRemoteUseCase
-import com.artkotlindev.domain.useCase.google.GoogleIsSignInUseCase
-import com.artkotlindev.domain.useCase.google.GoogleSignInUseCase
-import com.artkotlindev.domain.useCase.google.GoogleSignOutUseCase
-import com.artkotlindev.domain.useCase.google.UploadEventsToRemoteUseCase
 import com.artkotlindev.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.artkotlindev.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.artkotlindev.domain.useCase.settings.notification.ScheduleAllEventsUseCase
@@ -49,15 +42,6 @@ class ImportExportViewModel @Inject constructor(
     private val importEventsFromCsvUseCase: ImportEventsFromCsvUseCase,
     private val importEventsFromContactsUseCase: ImportEventsFromContactsUseCase,
 
-    private val googleSignInUseCase: GoogleSignInUseCase,
-    private val googleIsSignInUseCase: GoogleIsSignInUseCase,
-    private val googleSignOutUseCase: GoogleSignOutUseCase,
-    private val getAuthGoogleEmailUseCase: GetAuthGoogleEmailUseCase,
-
-    private val getEventsFromRemoteUseCase: GetEventsFromRemoteUseCase,
-    private val getTimeLastUploadToRemoteUseCase: GetTimeLastUploadToRemoteUseCase,
-    private val uploadEventsToRemoteUseCase: UploadEventsToRemoteUseCase,
-
     private val getAllEventUseCase: GetAllEventUseCase,
     private val upsertEventsUseCase: UpsertEventsUseCase,
     private val scheduleAllEventsUseCase: ScheduleAllEventsUseCase,
@@ -68,12 +52,6 @@ class ImportExportViewModel @Inject constructor(
 
     private val _importExportSharedFlow = MutableSharedFlow<ImportExportSharedFlow>()
     val importExportSharedFlow = _importExportSharedFlow.asSharedFlow()
-
-    init {
-        _importExportState.update { it.copy(
-            googleAuthEmail = getAuthGoogleEmailUseCase()
-        ) }
-    }
 
     fun onEvent(event: ImportExportEvent){
         when(event){
@@ -218,187 +196,6 @@ class ImportExportViewModel @Inject constructor(
                         ))
                     } else{
                         updateEventsAfterImport(events = importedEvents)
-                    }
-                }
-            }
-
-            ImportExportEvent.GoogleSignInOrOut -> {
-                _importExportState.update { it.copy(
-                    isLoadingSignInWithGoogle = true
-                ) }
-
-                if (!googleIsSignInUseCase()){
-                    viewModelScope.launch {
-                        val isSignIn = googleSignInUseCase()
-
-                        if (!isSignIn) {
-                            _importExportState.update { it.copy(
-                                isLoadingSignInWithGoogle = false
-                            ) }
-
-                            _importExportSharedFlow.emit(value = ShowToast(
-                                messageResId = R.string.sign_in_error
-                            )
-                            )
-                        }
-                        else{
-                            val email = getAuthGoogleEmailUseCase()
-
-                            _importExportState.update { it.copy(
-                                googleAuthEmail = email,
-                                isLoadingSignInWithGoogle = false
-                            ) }
-
-                            _importExportSharedFlow.emit(
-                                value = ShowToast(
-                                    messageResId = R.string.sign_in_success,
-                                    formatArgs = if (email != null) listOf(email) else emptyList()
-                                )
-                            )
-                        }
-                    }
-                } else {
-                    val email = getAuthGoogleEmailUseCase()
-
-                    viewModelScope.launch {
-                        googleSignOutUseCase()
-
-                        _importExportState.update { it.copy(
-                            googleAuthEmail = null,
-                            isLoadingSignInWithGoogle = false
-                        ) }
-
-                        _importExportSharedFlow.emit(
-                            value = ShowToast(
-                                messageResId = R.string.sign_out_success,
-                                formatArgs = if (email != null) listOf(email) else emptyList()
-                            )
-                        )
-                    }
-                }
-            }
-
-            ImportExportEvent.GetEventsFromRemote -> {
-                _importExportState.update { it.copy(
-                    isLoadingRemoteImport = true
-                ) }
-
-                viewModelScope.launch(Dispatchers.IO) {
-                    if (!googleIsSignInUseCase()){
-                        _importExportState.update { it.copy(
-                            isLoadingRemoteImport = false
-                        ) }
-
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.remote_sign_in_required
-                        )
-                        )
-                    }
-                }
-
-                viewModelScope.launch(Dispatchers.IO) {
-                    if (!googleIsSignInUseCase()) {
-                        _importExportState.update { it.copy(
-                            isLoadingRemoteImport = false
-                        ) }
-
-                        return@launch
-                    }
-
-                    if (getTimeLastUploadToRemoteUseCase() == null){
-                        _importExportState.update { it.copy(
-                            isLoadingRemoteImport = false
-                        ) }
-
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.no_remote_backup
-                        )
-                        )
-
-                        return@launch
-                    }
-
-                    val importedRemoteEvents = getEventsFromRemoteUseCase()
-                    val backupTime = getTimeLastUploadToRemoteUseCase()
-
-                    if (importedRemoteEvents.isEmpty()){
-                        _importExportState.update { it.copy(
-                            isLoadingRemoteImport = false
-                        ) }
-
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.import_zero_events
-                        )
-                        )
-                    } else{
-                        _importExportState.update { it.copy(
-                            isLoadingRemoteImport = false
-                        ) }
-
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.backup_time,
-                            formatArgs = if (backupTime != null) listOf(backupTime) else emptyList()
-                        )
-                        )
-
-                        updateEventsAfterImport(events = importedRemoteEvents)
-                    }
-                }
-            }
-
-            ImportExportEvent.UploadEventsToRemote -> {
-                _importExportState.update { it.copy(
-                    isLoadingRemoteExport = true
-                ) }
-
-                viewModelScope.launch(Dispatchers.IO) {
-                    if (!googleIsSignInUseCase()){
-                        _importExportState.update { it.copy(
-                            isLoadingRemoteExport = false
-                        ) }
-
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.remote_sign_in_required
-                        )
-                        )
-                    }
-                }
-                if (!googleIsSignInUseCase()) return
-
-                val email = getAuthGoogleEmailUseCase()
-
-                viewModelScope.launch(Dispatchers.IO) {
-                    if (getAllEventUseCase.invoke().first().isEmpty()){
-                        _importExportState.update { it.copy(
-                            isLoadingRemoteExport = false
-                        ) }
-
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.upload_zero_events
-                        )
-                        )
-
-                        return@launch
-                    }
-
-                    val statusUpload = uploadEventsToRemoteUseCase.invoke()
-
-                    _importExportState.update { it.copy(
-                        isLoadingRemoteExport = false
-                    ) }
-
-                    if(statusUpload){
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.upload_success,
-                            formatArgs = if (email != null) listOf(email) else emptyList()
-                        )
-                        )
-                    } else{
-                        _importExportSharedFlow.emit(value = ShowToast(
-                            messageResId = R.string.upload_fail,
-                            formatArgs = if (email != null) listOf(email) else emptyList()
-                        )
-                        )
                     }
                 }
             }

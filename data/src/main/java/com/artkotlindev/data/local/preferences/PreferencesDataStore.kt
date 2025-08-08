@@ -95,12 +95,12 @@ object PreferencesDataStore {
 
     // First launch
     fun getIsFirstLaunch(context: Context): Flow<Boolean> {
-        return context.dataStore.data.map { prefs ->
+        return context.dataStoreWithoutBackup.data.map { prefs ->
             prefs[IS_FIRST_LAUNCH_KEY] ?: false
         }
     }
 
     suspend fun setIsFirstLaunch(context: Context, isFirstLaunch: Boolean) {
-        context.dataStore.edit { it[IS_FIRST_LAUNCH_KEY] = isFirstLaunch }
+        context.dataStoreWithoutBackup.edit { it[IS_FIRST_LAUNCH_KEY] = isFirstLaunch }
     }
 }

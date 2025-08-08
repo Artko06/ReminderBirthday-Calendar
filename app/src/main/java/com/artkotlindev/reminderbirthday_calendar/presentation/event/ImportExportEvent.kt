@@ -9,10 +9,6 @@ sealed class ImportExportEvent {
     data class ImportEventsFromCsv(val uri: Uri): ImportExportEvent()
     object ImportEventsFromContacts: ImportExportEvent()
 
-    object GoogleSignInOrOut: ImportExportEvent()
-    object UploadEventsToRemote: ImportExportEvent()
-    object GetEventsFromRemote: ImportExportEvent()
-
     object ShowReadContactPermDialog: ImportExportEvent()
     object CloseReadContactPermDialog: ImportExportEvent()
 }

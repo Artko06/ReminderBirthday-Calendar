@@ -13,9 +13,6 @@
 -keep class com.artkotlindev.data.local.util.init.InitDataStore { *; }
 -keep class com.artkotlindev.data.local.util.init.InitRoomDb { *; }
 -keep class com.artkotlindev.data.local.util.serialization.Deserialization { *; }
--keep class com.artkotlindev.data.remote.repository.GoogleClientRepositoryImpl { *; }
--keep class com.artkotlindev.data.remote.util.google.GoogleAuthClient { *; }
--keep class com.artkotlindev.data.remote.util.google.GoogleDriveClient { *; }
 
 # ==============================================
 # Сохраняем методы доступа к DAO в Database классе

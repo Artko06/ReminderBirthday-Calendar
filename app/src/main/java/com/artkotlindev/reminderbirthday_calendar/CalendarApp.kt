@@ -7,7 +7,6 @@ import com.artkotlindev.data.local.util.init.InitDataStore
 import com.artkotlindev.data.local.util.init.InitRoomDb
 import com.artkotlindev.reminderbirthday_calendar.notification.common.NOTIFICATION_EVENT_CHANNEL_ID
 import com.artkotlindev.reminderbirthday_calendar.notification.common.NOTIFICATION_EVENT_CHANNEL_NAME
-import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +22,6 @@ class CalendarApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        // DB
-        FirebaseApp.initializeApp(this)
 
         // Preference datastore
         CoroutineScope(Dispatchers.IO).launch {

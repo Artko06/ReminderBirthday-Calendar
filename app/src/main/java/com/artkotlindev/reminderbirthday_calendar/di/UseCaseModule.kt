@@ -6,7 +6,6 @@ import com.artkotlindev.domain.repository.local.EventRepository
 import com.artkotlindev.domain.repository.local.ExportFileRepository
 import com.artkotlindev.domain.repository.local.ImportFileRepository
 import com.artkotlindev.domain.repository.local.SettingsRepository
-import com.artkotlindev.domain.repository.remote.GoogleClientRepository
 import com.artkotlindev.domain.useCase.calendar.contact.GetContactByIdUseCase
 import com.artkotlindev.domain.useCase.calendar.contact.ImportContactsUseCase
 import com.artkotlindev.domain.useCase.calendar.contact.LoadImageToContactUseCase
@@ -32,13 +31,6 @@ import com.artkotlindev.domain.useCase.calendar.zodiac.status.SetStatusChineseZo
 import com.artkotlindev.domain.useCase.calendar.zodiac.status.SetStatusWesternZodiacUseCase
 import com.artkotlindev.domain.useCase.exportFile.ExportEventsToCsvToExternalDirUseCase
 import com.artkotlindev.domain.useCase.exportFile.ExportEventsToJsonToExternalDirUseCase
-import com.artkotlindev.domain.useCase.google.GetAuthGoogleEmailUseCase
-import com.artkotlindev.domain.useCase.google.GetEventsFromRemoteUseCase
-import com.artkotlindev.domain.useCase.google.GetTimeLastUploadToRemoteUseCase
-import com.artkotlindev.domain.useCase.google.GoogleIsSignInUseCase
-import com.artkotlindev.domain.useCase.google.GoogleSignInUseCase
-import com.artkotlindev.domain.useCase.google.GoogleSignOutUseCase
-import com.artkotlindev.domain.useCase.google.UploadEventsToRemoteUseCase
 import com.artkotlindev.domain.useCase.importFile.ImportEventsFromCsvUseCase
 import com.artkotlindev.domain.useCase.importFile.ImportEventsFromJsonUseCase
 import com.artkotlindev.domain.useCase.settings.firstLaunch.GetIsFirstLaunchUseCase
@@ -204,48 +196,6 @@ object UseCaseModule {
     @Singleton
     fun provideSetStatusWesternZodiacUseCase(settingsRepository: SettingsRepository): SetStatusWesternZodiacUseCase{
         return SetStatusWesternZodiacUseCase(repository = settingsRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGoogleIsSignInUseCase(googleClientRepository: GoogleClientRepository): GoogleIsSignInUseCase{
-        return GoogleIsSignInUseCase(repository = googleClientRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGoogleSignInUseCase(googleClientRepository: GoogleClientRepository): GoogleSignInUseCase{
-        return GoogleSignInUseCase(repository = googleClientRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGoogleSignOutUseCase(googleClientRepository: GoogleClientRepository): GoogleSignOutUseCase{
-        return GoogleSignOutUseCase(repository = googleClientRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetAuthGoogleEmailUseCase(googleClientRepository: GoogleClientRepository): GetAuthGoogleEmailUseCase{
-       return GetAuthGoogleEmailUseCase(repository = googleClientRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetEventsFromRemoteUseCase(googleClientRepository: GoogleClientRepository): GetEventsFromRemoteUseCase{
-        return GetEventsFromRemoteUseCase(repository = googleClientRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetTimeLastUploadToRemoteUseCase(googleClientRepository: GoogleClientRepository): GetTimeLastUploadToRemoteUseCase{
-        return GetTimeLastUploadToRemoteUseCase(repository = googleClientRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUploadEventsToRemoteUseCase(googleClientRepository: GoogleClientRepository): UploadEventsToRemoteUseCase{
-        return UploadEventsToRemoteUseCase(repository = googleClientRepository)
     }
 
     @Provides

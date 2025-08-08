@@ -8,7 +8,4 @@ plugins {
 
     // Dagger - Hilt
     alias(libs.plugins.dagger.hilt.android) apply false
-
-    // Google services
-    alias(libs.plugins.gms.google.services) apply false
 }

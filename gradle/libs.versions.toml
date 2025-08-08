@@ -13,12 +13,6 @@ material = "1.12.0"
 jetbrainsKotlinJvm = "2.0.21"
 annotationJvm = "1.9.1"
 
-credentialsPlayServicesAuth = "1.5.0"
-googleid = "1.1.1"
-
-firebaseBom = "33.13.0"
-gmsGoogleServices = "4.4.2"
-
 iconsExtended = "1.7.8"
 
 roomDb = "2.7.1"
@@ -57,13 +51,6 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "jetpackComposePerm" }
 
-androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentialsPlayServicesAuth" }
-androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
-
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
-
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -92,7 +79,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltVersion" }
-
-gms-google-services = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServices" }
 
 kotlin-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}
