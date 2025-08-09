@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <full-backup-content>
-    <exclude domain="file" path="settings_without_backup/"/>
+    <exclude domain="file" path="datastore/settings_without_backup.preferences_pb"/>
 </full-backup-content>

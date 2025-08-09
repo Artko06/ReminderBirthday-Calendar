@@ -40,7 +40,7 @@ object InitDataStore {
             if (prefs[IS_INITIALIZED_DATASTORE_WITHOUT_BACKUPS_KEY] != true) {
                 prefs[IS_FIRST_LAUNCH_KEY] = true
 
-                prefs[IS_INITIALIZED_DATASTORE_WITHOUT_BACKUPS_KEY] == true
+                prefs[IS_INITIALIZED_DATASTORE_WITHOUT_BACKUPS_KEY] = true
             }
         }
     }
