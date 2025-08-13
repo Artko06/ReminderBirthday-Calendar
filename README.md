@@ -45,5 +45,5 @@
 
 # Private policy
 
-[Show private policy](docs/private_policy/private_policy.md)
+[Show private policy](https://artko06.github.io/Birthday-Reminder_private-policy/private_policy)
 
