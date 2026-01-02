@@ -33,7 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.artkotlindev.domain.models.settings.ThemeType
 import com.artkotlindev.domain.util.extensionFunc.calculateAgeInYear
 import com.artkotlindev.domain.util.extensionFunc.calculateDaysLeftWithMyYear

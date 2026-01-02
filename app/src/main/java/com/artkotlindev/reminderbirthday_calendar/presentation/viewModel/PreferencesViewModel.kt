@@ -16,6 +16,8 @@ import com.artkotlindev.domain.useCase.settings.showTypeEvent.GetStatusShowOther
 import com.artkotlindev.domain.useCase.settings.showTypeEvent.SetStatusShowAnniversaryEventUseCase
 import com.artkotlindev.domain.useCase.settings.showTypeEvent.SetStatusShowBirthdayEventUseCase
 import com.artkotlindev.domain.useCase.settings.showTypeEvent.SetStatusShowOtherEventUseCase
+import com.artkotlindev.domain.useCase.settings.snowflake.GetStatusSnowflakeUseCase
+import com.artkotlindev.domain.useCase.settings.snowflake.SetStatusSnowflakeUseCase
 import com.artkotlindev.domain.useCase.settings.theme.GetThemeUseCase
 import com.artkotlindev.domain.useCase.settings.theme.SetThemeUseCase
 import com.artkotlindev.reminderbirthday_calendar.presentation.event.PreferencesEvent
@@ -50,6 +52,9 @@ class PreferencesViewModel @Inject constructor(
     private val getLanguageUseCase: GetLanguageUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
 
+    private val getStatusSnowflakeUseCase: GetStatusSnowflakeUseCase,
+    private val setStatusSnowflakeUseCase: SetStatusSnowflakeUseCase,
+
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private val _preferencesState = MutableStateFlow(PreferencesState())
@@ -65,7 +70,8 @@ class PreferencesViewModel @Inject constructor(
                     isEnableShowBirthdayEvent = getStatusShowBirthdayEventUseCase.invoke().first(),
                     isEnableShowAnniversaryEvent = getStatusShowAnniversaryEventUseCase.invoke()
                         .first(),
-                    isEnableShowOtherEvent = getStatusShowOtherEventUseCase.invoke().first()
+                    isEnableShowOtherEvent = getStatusShowOtherEventUseCase.invoke().first(),
+                    onStatusSnowflake = getStatusSnowflakeUseCase.invoke().first()
                 )
             }
         }
@@ -221,6 +227,20 @@ class PreferencesViewModel @Inject constructor(
                         isShowAppLanguageDialog = true,
                         selectedLanguage = language
                     ) }
+                }
+            }
+
+            PreferencesEvent.ChangeStatusSnowflake -> {
+                _preferencesState.update {
+                    it.copy(
+                        onStatusSnowflake = !it.onStatusSnowflake
+                    )
+                }
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    setStatusSnowflakeUseCase(
+                        statusSnowflake = _preferencesState.value.onStatusSnowflake
+                    )
                 }
             }
 

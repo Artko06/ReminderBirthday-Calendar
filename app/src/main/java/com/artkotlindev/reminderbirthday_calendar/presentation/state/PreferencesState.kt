@@ -19,5 +19,7 @@ data class PreferencesState(
     val isShowAppLanguageDialog: Boolean = false,
 
     val selectedTheme: ThemeType = ThemeType.SYSTEM,
-    val selectedLanguage: LanguageType = LanguageType.SYSTEM
+    val selectedLanguage: LanguageType = LanguageType.SYSTEM,
+
+    val onStatusSnowflake: Boolean = true
 )

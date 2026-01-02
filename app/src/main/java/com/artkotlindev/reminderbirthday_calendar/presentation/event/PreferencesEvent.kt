@@ -23,4 +23,6 @@ sealed class PreferencesEvent {
     data class ChangeAppLanguage(val language: LanguageType): PreferencesEvent()
     object ShowAppLanguageDialog: PreferencesEvent()
     object CloseAppLanguageDialog: PreferencesEvent()
+
+    object ChangeStatusSnowflake: PreferencesEvent()
 }

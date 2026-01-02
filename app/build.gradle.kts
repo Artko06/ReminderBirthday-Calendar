@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    kotlin("kapt")
+    alias(libs.plugins.google.devtools.ksp)
 
     // Dagger - Hilt
     alias(libs.plugins.dagger.hilt.android)
@@ -26,8 +26,8 @@ android {
         applicationId = "com.artkotlindev.reminderbirthday_calendar"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1052
-        versionName = "1.0.5.2"
+        versionCode = 1053
+        versionName = "1.0.5.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -62,8 +62,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
     buildFeatures {
         compose = true
@@ -96,15 +98,15 @@ dependencies {
     // RoomDb
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
 
     // Dagger - Hilt
     implementation(libs.dagger.hilt.android)
-    kapt (libs.dagger.hilt.android.compiler)
+    ksp(libs.dagger.hilt.android.compiler)
 
     // Dagger - Hilt (navigation)
     implementation (libs.androidx.hilt.navigation.compose)
-    kapt (libs.androidx.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
 
     // Jetpack Compose permissions
     implementation(libs.accompanist.permissions)
@@ -112,3 +114,4 @@ dependencies {
     // For pick photos from gallery
     implementation(libs.coil.kt.compose)
 }
+

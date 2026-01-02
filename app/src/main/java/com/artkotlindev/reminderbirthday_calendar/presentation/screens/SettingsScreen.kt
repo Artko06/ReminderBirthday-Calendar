@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Cake
@@ -36,7 +37,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.artkotlindev.data.local.util.serialization.Deserialization
 import com.artkotlindev.domain.models.event.SortTypeEvent
 import com.artkotlindev.reminderbirthday_calendar.LocalizedContext
@@ -329,6 +330,22 @@ fun SettingsScreen(
                 },
                 onClick = {
                     preferencesViewModel.onEvent(event = PreferencesEvent.ChangeChineseZodiacStatus)
+                }
+            )
+        }
+
+        item(key = lazyKey++) {
+            SettingsItem(
+                icon = Icons.Filled.AcUnit,
+                title = LocalizedContext.current.getString(R.string.snowfall_title),
+                subtitle = LocalizedContext.current.getString(R.string.snowfall_info),
+                hasSwitch = true,
+                isSwitchChecked = preferencesState.onStatusSnowflake,
+                onSwitchChange = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusSnowflake)
+                },
+                onClick = {
+                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusSnowflake)
                 }
             )
         }

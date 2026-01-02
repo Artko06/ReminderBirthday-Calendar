@@ -15,6 +15,8 @@ val IS_SHOW_BIRTHDAY_EVENT_KEY = booleanPreferencesKey("app_show_birthday_event"
 val IS_SHOW_ANNIVERSARY_EVENT_KEY = booleanPreferencesKey("app_show_anniversary_event")
 val IS_SHOW_OTHER_EVENT_KEY = booleanPreferencesKey("app_show_other_event")
 
+val ON_STATUS_SNOWFLAKE = booleanPreferencesKey("on_status_snowflake")
+
 // DataStore without backups
 val IS_INITIALIZED_DATASTORE_WITHOUT_BACKUPS_KEY = booleanPreferencesKey("dataStore_without_backups_initialized")
 val IS_FIRST_LAUNCH_KEY = booleanPreferencesKey("app_first_launch")

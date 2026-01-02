@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-07-16T13:49:12.005315435Z">
+        <DropdownSelection timestamp="2025-12-28T15:34:57.504164235Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=78480e9d" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/koxan/.config/.android/avd/Pixel_8_API_35.avd" />
             </handle>
           </Target>
         </DropdownSelection>

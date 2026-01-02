@@ -123,6 +123,15 @@ class SettingsRepositoryImpl(
         PreferencesDataStore.setStatusZodiacChinese(context = context, activeStatus = activeStatus)
     }
 
+    // Snowflake
+    override fun getStatusSnowflake(): Flow<Boolean> {
+        return PreferencesDataStore.getStatusSnowflake(context = context)
+    }
+
+    override suspend fun setStatusSnowflake(activeStatus: Boolean) {
+        PreferencesDataStore.setStatusSnowflake(context = context, activeStatus = activeStatus)
+    }
+
     // First launch
     override fun getIsFirstLaunch(): Flow<Boolean> {
         return PreferencesDataStore.getIsFirstLaunch(context = context)

@@ -232,6 +232,9 @@
     <string name="zodiac_sign">Зодиакальный знак</string>
     <string name="chinese_sign">Китайский знак</string>
     <string name="sign_info">Показывать знак</string>
+        <!-- Cнегопад -->
+    <string name="snowfall_title">Снегопад</string>
+    <string name="snowfall_info">Показывать снегопад</string>
         <!-- Экспорт и импорт -->
     <string name="export_and_import">Экспорт и импорт</string>
     <string name="import_events">Импорт событий</string>

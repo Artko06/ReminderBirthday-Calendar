@@ -209,6 +209,9 @@
     <string name="zodiac_sign">Задыякальны знак</string>
     <string name="chinese_sign">Кітайскі знак</string>
     <string name="sign_info">Паказваць знак</string>
+        <!-- Снегапад -->
+    <string name="snowfall_title">Снегапад</string>
+    <string name="snowfall_info">Паказваць снегапад</string>
     <string name="export_and_import">Экспарт і імпарт</string>
     <string name="import_events">Імпарт падзей</string>
     <string name="import_events_info">Імпарт падзей з кантактаў</string>

@@ -93,6 +93,16 @@ object PreferencesDataStore {
         context.dataStore.edit { it[ZODIAC_CHINESE_ENABLE_KEY] = activeStatus }
     }
 
+    fun getStatusSnowflake(context: Context): Flow<Boolean> {
+        return context.dataStore.data.map { prefs ->
+            prefs[ON_STATUS_SNOWFLAKE] ?: true
+        }
+    }
+
+    suspend fun setStatusSnowflake(context: Context, activeStatus: Boolean) {
+        context.dataStore.edit { it[ON_STATUS_SNOWFLAKE] = activeStatus }
+    }
+
     // First launch
     fun getIsFirstLaunch(context: Context): Flow<Boolean> {
         return context.dataStoreWithoutBackup.data.map { prefs ->

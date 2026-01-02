@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 
-    kotlin("kapt")
+    alias(libs.plugins.google.devtools.ksp)
+
+    alias(libs.plugins.androidx.room)
 
     // Kotlin serialization
     alias(libs.plugins.kotlin.serialization)
@@ -34,14 +36,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
 }
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
 dependencies {
     implementation(project(":domain"))
@@ -56,14 +63,14 @@ dependencies {
     // roomDb
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
 
     //Dagger - Hilt
     implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.android.compiler)
+    ksp(libs.dagger.hilt.android.compiler)
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.mockito:mockito-core:4.0.0")

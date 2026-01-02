@@ -223,6 +223,9 @@
     <string name="zodiac_sign">Zodiac sign</string>
     <string name="chinese_sign">Chinese sign</string>
     <string name="sign_info">Show sign</string>
+        <!-- Snowfall -->
+    <string name="snowfall_title">Snowfall</string>
+    <string name="snowfall_info">Show snowfall</string>
         <!-- Export and Import -->
     <string name="export_and_import">Export and import</string>
     <string name="import_events">Import events</string>

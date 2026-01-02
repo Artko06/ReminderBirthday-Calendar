@@ -1,5 +1,6 @@
 package com.artkotlindev.reminderbirthday_calendar.presentation.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
@@ -11,15 +12,17 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.artkotlindev.reminderbirthday_calendar.LocalizedContext
 import com.artkotlindev.reminderbirthday_calendar.R
 import com.artkotlindev.reminderbirthday_calendar.presentation.components.main.BottomNavigationBar
+import com.artkotlindev.reminderbirthday_calendar.presentation.components.snowflake.Snowflake
 import com.artkotlindev.reminderbirthday_calendar.presentation.event.BottomNavigationEvent
 import com.artkotlindev.reminderbirthday_calendar.presentation.navigation.model.BottomNavigationItem
 import com.artkotlindev.reminderbirthday_calendar.presentation.navigation.model.NumberBottomScreen
@@ -84,6 +87,15 @@ fun BottomNavigationScreen(
             }
         }
     ) { paddingValues ->
+
+        if (state.onSnowflake) {
+            Snowflake(
+                modifier = Modifier.fillMaxSize(),
+                density = 3,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
         when(NumberBottomScreen.entries[state.selectedIndexScreen]){
             NumberBottomScreen.EVENTS -> EventsScreen(
                 modifier = Modifier.padding(paddingValues),

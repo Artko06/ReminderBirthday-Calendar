@@ -51,6 +51,8 @@ import com.artkotlindev.domain.useCase.settings.showTypeEvent.GetStatusShowOther
 import com.artkotlindev.domain.useCase.settings.showTypeEvent.SetStatusShowAnniversaryEventUseCase
 import com.artkotlindev.domain.useCase.settings.showTypeEvent.SetStatusShowBirthdayEventUseCase
 import com.artkotlindev.domain.useCase.settings.showTypeEvent.SetStatusShowOtherEventUseCase
+import com.artkotlindev.domain.useCase.settings.snowflake.GetStatusSnowflakeUseCase
+import com.artkotlindev.domain.useCase.settings.snowflake.SetStatusSnowflakeUseCase
 import com.artkotlindev.domain.useCase.settings.theme.GetThemeUseCase
 import com.artkotlindev.domain.useCase.settings.theme.SetThemeUseCase
 import com.artkotlindev.domain.useCase.settings.viewDaysLeft.GetStatusViewDaysLeftUseCase
@@ -374,5 +376,17 @@ object UseCaseModule {
     @Singleton
     fun provideLoadImageToContactUseCase(contactAppRepository: ContactAppRepository): LoadImageToContactUseCase{
         return LoadImageToContactUseCase(repository = contactAppRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetStatusSnowflakeUseCase(settingsRepository: SettingsRepository): GetStatusSnowflakeUseCase{
+        return GetStatusSnowflakeUseCase(settingsRepository = settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetStatusSnowflakeUseCase(settingsRepository: SettingsRepository): SetStatusSnowflakeUseCase {
+        return SetStatusSnowflakeUseCase(settingsRepository = settingsRepository)
     }
 }

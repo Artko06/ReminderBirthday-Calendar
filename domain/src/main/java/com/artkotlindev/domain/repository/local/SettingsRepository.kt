@@ -39,6 +39,10 @@ interface SettingsRepository {
     fun getStatusZodiacChinese(): Flow<Boolean>
     suspend fun setStatusZodiacChinese(activeStatus: Boolean)
 
+    // Snowflake
+    fun getStatusSnowflake(): Flow<Boolean>
+    suspend fun setStatusSnowflake(activeStatus: Boolean)
+
     // First launch
     fun getIsFirstLaunch(): Flow<Boolean>
     suspend fun setIsFirstLaunch(isFirstLaunch: Boolean)
