@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.artkotlindev.domain.util.extensionFunc.isNewYearRange
 import com.artkotlindev.reminderbirthday_calendar.LocalizedContext
 import com.artkotlindev.reminderbirthday_calendar.R
 import com.artkotlindev.reminderbirthday_calendar.presentation.components.main.BottomNavigationBar
@@ -88,7 +89,7 @@ fun BottomNavigationScreen(
         }
     ) { paddingValues ->
 
-        if (state.onSnowflake) {
+        if (state.onSnowflake && isNewYearRange()) {
             Snowflake(
                 modifier = Modifier.fillMaxSize(),
                 density = 3,

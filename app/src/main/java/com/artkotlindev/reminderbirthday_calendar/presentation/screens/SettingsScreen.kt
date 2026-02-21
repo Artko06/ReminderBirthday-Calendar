@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.artkotlindev.data.local.util.serialization.Deserialization
 import com.artkotlindev.domain.models.event.SortTypeEvent
+import com.artkotlindev.domain.util.extensionFunc.isNewYearRange
 import com.artkotlindev.reminderbirthday_calendar.LocalizedContext
 import com.artkotlindev.reminderbirthday_calendar.R
 import com.artkotlindev.reminderbirthday_calendar.intents.settingsAppIntent.settingsAppDetailsIntent
@@ -334,20 +335,22 @@ fun SettingsScreen(
             )
         }
 
-        item(key = lazyKey++) {
-            SettingsItem(
-                icon = Icons.Filled.AcUnit,
-                title = LocalizedContext.current.getString(R.string.snowfall_title),
-                subtitle = LocalizedContext.current.getString(R.string.snowfall_info),
-                hasSwitch = true,
-                isSwitchChecked = preferencesState.onStatusSnowflake,
-                onSwitchChange = {
-                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusSnowflake)
-                },
-                onClick = {
-                    preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusSnowflake)
-                }
-            )
+        if(isNewYearRange()) {
+            item(key = lazyKey++) {
+                SettingsItem(
+                    icon = Icons.Filled.AcUnit,
+                    title = LocalizedContext.current.getString(R.string.snowfall_title),
+                    subtitle = LocalizedContext.current.getString(R.string.snowfall_info),
+                    hasSwitch = true,
+                    isSwitchChecked = preferencesState.onStatusSnowflake,
+                    onSwitchChange = {
+                        preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusSnowflake)
+                    },
+                    onClick = {
+                        preferencesViewModel.onEvent(event = PreferencesEvent.ChangeStatusSnowflake)
+                    }
+                )
+            }
         }
 
         stickyHeader(key = lazyKey++) {
