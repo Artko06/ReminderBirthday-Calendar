@@ -1,5 +1,8 @@
 package com.artkotlindev.reminderbirthday_calendar.presentation.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -32,7 +35,13 @@ fun NavigationScreen(
 
         NavHost(
             navController = navController,
-            startDestination = stateNavigation.startDestinationRoute
+            startDestination = stateNavigation.startDestinationRoute,
+            enterTransition = {
+                fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(300))
+            },
         ) {
             composable(route = Screen.NotificationPermissionScreen.route) {
                 NotificationPermissionScreen(
