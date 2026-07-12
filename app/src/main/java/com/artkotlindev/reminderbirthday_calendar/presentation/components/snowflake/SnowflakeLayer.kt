@@ -172,8 +172,8 @@ class SnowflakeLayer(
                 repeat(6){
                     val x = 8.dp.toPx()
                     val y = 8.dp.toPx()
-                    var x1 = cos(angle.toDouble()).toFloat() * px
-                    var y1 = sin(angle.toDouble()).toFloat() * px
+                    var x1 = cos(angle).toFloat() * px
+                    var y1 = sin(angle).toFloat() * px
                     val cx = x1 * 0.66f
                     val cy = y1 * 0.66f
                     bitmapCanvas.drawLine(
@@ -183,16 +183,16 @@ class SnowflakeLayer(
                     )
 
                     val angle2 = angle - PI / 2
-                    x1 = (cos(angle2.toDouble()) * px1 - sin(angle2.toDouble()) * py1).toFloat()
-                    y1 = (sin(angle2.toDouble()) * px1 + cos(angle2.toDouble()) * py1).toFloat()
+                    x1 = (cos(angle2) * px1 - sin(angle2) * py1).toFloat()
+                    y1 = (sin(angle2) * px1 + cos(angle2) * py1).toFloat()
                     bitmapCanvas.drawLine(
                         Offset(x + cx, y + cy),
                         Offset(x + x1, y + y1),
                         particleThinPaint
                     )
 
-                    x1 = (-cos(angle2.toDouble()) * px1 - sin(angle2.toDouble()) * py1).toFloat()
-                    y1 = (-sin(angle2.toDouble()) * px1 + cos(angle2.toDouble()) * py1).toFloat()
+                    x1 = (-cos(angle2) * px1 - sin(angle2) * py1).toFloat()
+                    y1 = (-sin(angle2) * px1 + cos(angle2) * py1).toFloat()
                     bitmapCanvas.drawLine(
                         Offset(x + cx, y + cy),
                         Offset(x + x1, y + y1),
