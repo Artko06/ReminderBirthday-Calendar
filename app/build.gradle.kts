@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.artkotlindev.reminderbirthday_calendar"
-    compileSdk = 36
+    compileSdk = 37
 
     signingConfigs {
         create("release") {
@@ -25,7 +25,7 @@ android {
     defaultConfig {
         applicationId = "com.artkotlindev.reminderbirthday_calendar"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1054
         versionName = "1.0.5.4"
 
@@ -59,12 +59,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlin {
         compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
         }
     }
     buildFeatures {
