@@ -23,6 +23,8 @@ import com.artkotlindev.reminderbirthday_calendar.presentation.viewModel.EditEve
 import com.artkotlindev.reminderbirthday_calendar.presentation.viewModel.EventDetailViewModel
 import com.artkotlindev.reminderbirthday_calendar.presentation.viewModel.NavigationViewModel
 
+const val ANIMATION_SPEC = 300
+
 @Composable
 fun NavigationScreen(
     navigationViewModel: NavigationViewModel = hiltViewModel()
@@ -37,11 +39,11 @@ fun NavigationScreen(
             navController = navController,
             startDestination = stateNavigation.startDestinationRoute,
             enterTransition = {
-                fadeIn(animationSpec = tween(300))
+                fadeIn(animationSpec = tween(ANIMATION_SPEC))
             },
             exitTransition = {
-                fadeOut(animationSpec = tween(300))
-            },
+                fadeOut(animationSpec = tween(ANIMATION_SPEC))
+            }
         ) {
             composable(route = Screen.NotificationPermissionScreen.route) {
                 NotificationPermissionScreen(
@@ -72,7 +74,7 @@ fun NavigationScreen(
             composable(route = Screen.AddEventScreen.route) {
                 AddEventScreen(
                     onBackFromAddEventScreen = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                 )
             }
@@ -80,7 +82,7 @@ fun NavigationScreen(
             composable(route = Screen.TimeReminderScreen.route) {
                 TimeReminderScreen(
                     onBackFromTimeReminderScreen = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                 )
             }
@@ -94,7 +96,7 @@ fun NavigationScreen(
                 EventDetailScreen(
                     eventDetailViewModel = eventDetailViewModel,
                     onBackFromDetailScreen = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     },
                     onNavigateToEditEventScreen = { eventId ->
                         navController.navigate(Screen.EditEventScreen.passEventId(eventId))
@@ -111,7 +113,7 @@ fun NavigationScreen(
                 EditEventScreen(
                     editEventViewModel = editEventViewModel,
                     onBackFromEditEventScreen = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                 )
             }
