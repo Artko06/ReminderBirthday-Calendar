@@ -78,7 +78,6 @@ object Deserialization {
             e.printStackTrace()
             emptyList()
         }
-        return emptyList()
     }
 
     fun importEventsFromCsv(context: Context, uri: Uri): List<EventSerializable> {
