@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -23,20 +21,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.artkotlindev.domain.models.settings.ThemeType
 import com.artkotlindev.reminderbirthday_calendar.LocalTheme
+import com.artkotlindev.reminderbirthday_calendar.R
 import com.artkotlindev.reminderbirthday_calendar.ui.theme.ghostlyWhite
 import com.artkotlindev.reminderbirthday_calendar.ui.theme.veryDarkGray
 
 @Composable
 fun DetailItem(
     modifier: Modifier = Modifier,
-    icon: ImageVector,
+    icon: Painter,
     colorIcon: Color,
     text: String,
     aboutText: String,
@@ -62,7 +61,7 @@ fun DetailItem(
                 contentAlignment = Alignment.Center
             ){
                 Icon(
-                    imageVector = icon,
+                    painter = icon,
                     contentDescription = null,
                     tint = colorIcon,
                     modifier = Modifier.size(28.dp)
@@ -150,7 +149,7 @@ fun DetailItem(
 fun DetailItemPreview(){
     DetailItem(
         modifier = Modifier.fillMaxWidth(),
-        icon = Icons.Filled.Cake,
+        icon = painterResource(R.drawable.ic_cake_fill),
         colorIcon = MaterialTheme.colorScheme.primary,
         text = "1 January, 2000",
         aboutText = "Birthday"

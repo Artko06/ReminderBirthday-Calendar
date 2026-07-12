@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -61,7 +59,7 @@ fun TimeReminderScreen(
                 .fillMaxSize()
         ) {
             Icon(
-                imageVector = Icons.Outlined.Alarm,
+                painter = painterResource(R.drawable.ic_alarm),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.inverseOnSurface,
                 modifier = Modifier.fillMaxSize()
@@ -86,7 +84,7 @@ fun TimeReminderScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Alarm,
+                        painter = painterResource(R.drawable.ic_alarm),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )

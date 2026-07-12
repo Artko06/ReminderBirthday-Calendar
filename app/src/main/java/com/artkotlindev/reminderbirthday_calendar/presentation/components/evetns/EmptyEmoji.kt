@@ -1,14 +1,13 @@
 package com.artkotlindev.reminderbirthday_calendar.presentation.components.evetns
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SentimentVeryDissatisfied
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,7 +54,7 @@ fun EmptyEmoji(
         )
     } else{
         Icon(
-            imageVector = Icons.Filled.SentimentVeryDissatisfied,
+            painter = painterResource(R.drawable.ic_sentiment_dissatisfied),
             contentDescription = "No events icon",
             modifier = Modifier.size(100.dp),
             tint = when(sortTypeEvent) {

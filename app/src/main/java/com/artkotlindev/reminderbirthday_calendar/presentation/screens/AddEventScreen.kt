@@ -22,14 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddPhotoAlternate
-import androidx.compose.material.icons.filled.AutoStories
-import androidx.compose.material.icons.filled.Cake
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.NoteAlt
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -151,7 +144,7 @@ fun AddEventScreen(
                 .fillMaxSize()
         ) {
             Icon(
-                imageVector = Icons.Filled.Cake,
+                painter = painterResource(R.drawable.ic_cake_fill),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.inverseOnSurface,
                 modifier = Modifier.fillMaxSize()
@@ -183,7 +176,7 @@ fun AddEventScreen(
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Icon(
-                    imageVector = Icons.Filled.Cake,
+                    painter = painterResource(R.drawable.ic_cake_fill),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -212,7 +205,7 @@ fun AddEventScreen(
                     )
                 } else {
                     Icon(
-                        imageVector = Icons.Filled.AddPhotoAlternate,
+                        painter = painterResource(R.drawable.ic_add_photo_alternate),
                         contentDescription = "Select photo",
                         tint = Color.DarkGray,
                         modifier = Modifier.size(28.dp)
@@ -235,8 +228,8 @@ fun AddEventScreen(
             TextEntry(
                 description = LocalizedContext.current.getString(R.string.name),
                 hint = "",
-                leadingIcon = Icons.Filled.Person,
-                trailingIcon = Icons.Filled.AutoStories,
+                leadingIcon = painterResource(R.drawable.ic_person_text),
+                trailingIcon = painterResource(R.drawable.ic_auto_stories),
                 trailingIconClick = {
                     addEventViewModel.onEvent(event = AddEvent.ShowListContacts)
                 },
@@ -255,9 +248,9 @@ fun AddEventScreen(
             TextEntry(
                 description = LocalizedContext.current.getString(R.string.surname),
                 hint = "",
-                leadingIcon = Icons.Filled.Person,
+                leadingIcon = painterResource(R.drawable.ic_person_text),
                 textValue = addEventState.valueSurname,
-                trailingIcon = Icons.Filled.AutoStories,
+                trailingIcon = painterResource(R.drawable.ic_auto_stories),
                 trailingIconClick = {
                     addEventViewModel.onEvent(event = AddEvent.ShowListContacts)
                 },
@@ -297,7 +290,7 @@ fun AddEventScreen(
                     )
             ) {
                 Icon(
-                    imageVector = Icons.Filled.CalendarMonth,
+                    painter = painterResource(R.drawable.ic_calendar_month),
                     contentDescription = null
                 )
 
@@ -318,7 +311,7 @@ fun AddEventScreen(
                     .clickable(onClick = { addEventViewModel.onEvent(event = AddEvent.ChangeYearMatter) })
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Quiz,
+                    painter = painterResource(R.drawable.ic_quiz),
                     contentDescription = "Consider the year",
                     tint = if (addEventState.yearMatter) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onBackground
@@ -341,7 +334,7 @@ fun AddEventScreen(
             TextEntry(
                 description = LocalizedContext.current.getString(R.string.notes),
                 hint = "",
-                leadingIcon = Icons.Filled.NoteAlt,
+                leadingIcon = painterResource(R.drawable.ic_note_alt),
                 textValue = addEventState.notes,
                 onValueChanged = { notes ->
                     if(notes.length <= 500){

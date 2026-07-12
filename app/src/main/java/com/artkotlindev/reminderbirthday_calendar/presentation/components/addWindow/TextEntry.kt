@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoStories
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,19 +16,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.artkotlindev.reminderbirthday_calendar.R
 
 @Composable
 fun TextEntry(
     description: String,
     hint: String,
-    leadingIcon: ImageVector,
-    trailingIcon: ImageVector? = null,
+    leadingIcon: Painter,
+    trailingIcon: Painter? = null,
     trailingIconClick: (() -> Unit)? = null,
     isLoadingTrailingIcon: Boolean = false,
     textValue: String,
@@ -57,7 +56,7 @@ fun TextEntry(
             singleLine = true,
             leadingIcon = {
                 Icon(
-                    imageVector = leadingIcon,
+                    painter = leadingIcon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -77,7 +76,7 @@ fun TextEntry(
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
                             Icon(
-                                imageVector = trailingIcon,
+                                painter = trailingIcon,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.primary
                             )
@@ -110,10 +109,10 @@ fun TextEntryPreview() {
             .padding(10.dp, 0.dp, 10.dp, 5.dp)
         ,
         hint = "",
-        leadingIcon = Icons.Default.Person,
+        leadingIcon = painterResource(R.drawable.ic_person_text),
         textValue = "Some text",
         onValueChanged = {},
-        trailingIcon = Icons.Filled.AutoStories,
+        trailingIcon = painterResource(R.drawable.ic_auto_stories),
         trailingIconClick = {}
     )
 }

@@ -2,14 +2,6 @@ package com.artkotlindev.reminderbirthday_calendar.presentation.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material.icons.filled.Cake
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Cake
-import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.artkotlindev.domain.util.extensionFunc.isNewYearRange
 import com.artkotlindev.reminderbirthday_calendar.LocalizedContext
@@ -46,18 +39,18 @@ fun BottomNavigationScreen(
     val bottomItems = listOf<BottomNavigationItem>(
         BottomNavigationItem(
             title = LocalizedContext.current.getString(R.string.navbar_events),
-            selectedIcon = Icons.Filled.Cake,
-            unselectedIcon = Icons.Outlined.Cake
+            selectedIcon = painterResource(R.drawable.ic_cake_fill),
+            unselectedIcon = painterResource(R.drawable.ic_cake)
         ),
         BottomNavigationItem(
             title = LocalizedContext.current.getString(R.string.navbar_calendar),
-            selectedIcon = Icons.Filled.CalendarMonth,
-            unselectedIcon = Icons.Outlined.CalendarMonth
+            selectedIcon = painterResource(R.drawable.ic_calendar_month_fill),
+            unselectedIcon = painterResource(R.drawable.ic_calendar_month)
         ),
         BottomNavigationItem(
             title = LocalizedContext.current.getString(R.string.navbar_settings),
-            selectedIcon = Icons.Filled.Settings,
-            unselectedIcon = Icons.Outlined.Settings
+            selectedIcon = painterResource(R.drawable.ic_settings_fill),
+            unselectedIcon = painterResource(R.drawable.ic_settings)
         )
     )
 
@@ -81,7 +74,7 @@ fun BottomNavigationScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
+                        painter = painterResource(R.drawable.ic_playlist_add),
                         contentDescription = "Add events"
                     )
                 }

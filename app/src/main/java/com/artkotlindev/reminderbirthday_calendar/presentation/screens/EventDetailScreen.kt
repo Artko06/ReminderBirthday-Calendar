@@ -15,14 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.outlined.Cake
-import androidx.compose.material.icons.outlined.DeleteForever
-import androidx.compose.material.icons.outlined.ModeEditOutline
-import androidx.compose.material.icons.outlined.NoteAlt
-import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -133,7 +125,7 @@ fun EventDetailScreen(
                         onClick = { onBackFromDetailScreen() }
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                            painter = painterResource(R.drawable.ic_arrow_back),
                             contentDescription = "onBackFromDetailScreen"
                         )
                     }
@@ -145,7 +137,7 @@ fun EventDetailScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.ModeEditOutline,
+                        painter = painterResource(R.drawable.ic_edit),
                         contentDescription = "EditEvent"
                     )
                 }
@@ -156,7 +148,7 @@ fun EventDetailScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.DeleteForever,
+                        painter = painterResource(R.drawable.ic_delete_forever),
                         contentDescription = "DeleteEvent"
                     )
                 }
@@ -189,7 +181,7 @@ fun EventDetailScreen(
                     )
                 } else {
                     Icon(
-                        imageVector = Icons.Filled.AccountCircle,
+                        painter = painterResource(R.drawable.ic_account_circle_fill),
                         contentDescription = "Icon photo",
                         modifier = Modifier
                             .size(150.dp)
@@ -287,7 +279,7 @@ fun EventDetailScreen(
             ) {
                 DetailItem(
                     modifier = Modifier.fillMaxWidth(),
-                    icon = Icons.Outlined.Cake,
+                    icon = painterResource(R.drawable.ic_cake),
                     colorIcon = MaterialTheme.colorScheme.primary,
                     text = eventDetailState.event.originalDate.let {
                         val arrayWithDate =
@@ -305,7 +297,7 @@ fun EventDetailScreen(
 
                 DetailItem(
                     modifier = Modifier.fillMaxWidth(),
-                    icon = Icons.Outlined.StarRate,
+                    icon = painterResource(R.drawable.ic_star_rate),
                     colorIcon = MaterialTheme.colorScheme.primary,
                     text = when (eventDetailState.event.sortTypeEvent) {
                         SortTypeEvent.FAMILY -> LocalizedContext.current.getString(R.string.sort_type_event_family)
@@ -388,7 +380,7 @@ fun EventDetailScreen(
 
                 DetailItem(
                     modifier = Modifier.fillMaxWidth(),
-                    icon = Icons.Outlined.NoteAlt,
+                    icon = painterResource(R.drawable.ic_note_alt),
                     colorIcon = MaterialTheme.colorScheme.primary,
                     text = if (eventDetailState.event.notes.isNullOrBlank())
                         LocalizedContext.current.getString(R.string.notes_info)

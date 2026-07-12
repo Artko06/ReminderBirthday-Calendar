@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
-import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
@@ -24,18 +21,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.artkotlindev.reminderbirthday_calendar.R
 import com.artkotlindev.domain.models.settings.ThemeType
 import com.artkotlindev.reminderbirthday_calendar.LocalTheme
 import com.artkotlindev.reminderbirthday_calendar.ui.theme.platinum
 
 @Composable
 fun SettingsItem(
-    icon: ImageVector,
+    icon: Painter,
     title: String,
     subtitle: String,
     hasSwitch: Boolean = false,
@@ -67,7 +66,7 @@ fun SettingsItem(
             )
         } else {
             Icon(
-                imageVector = icon,
+                painter = icon,
                 contentDescription = title,
                 modifier = Modifier.size(32.dp),
                 tint = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
@@ -104,7 +103,7 @@ fun SettingsItem(
             )
         } else {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                painter = painterResource(R.drawable.ic_arrow_forward),
                 contentDescription = null,
                 modifier = Modifier.size(18.dp),
                 tint = if (LocalTheme.current == ThemeType.DARK) Color.White else Color.Black
@@ -117,7 +116,7 @@ fun SettingsItem(
 @Preview
 fun SettingsItemPreview(){
     SettingsItem(
-        icon = Icons.Outlined.NotificationsActive,
+        icon = painterResource(R.drawable.ic_notifications_active),
         title = "Notification",
         subtitle = "Receive birthday reminders",
         hasSwitch = false,

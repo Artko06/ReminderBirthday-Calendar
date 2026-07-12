@@ -31,7 +31,7 @@ fun BottomNavigationBar(
                 },
                 icon = {
                     Icon(
-                        imageVector = if (selectedNavItem == index) navItem.selectedIcon
+                        painter = if (selectedNavItem == index) navItem.selectedIcon
                             else navItem.unselectedIcon,
                         contentDescription = navItem.title
                     )

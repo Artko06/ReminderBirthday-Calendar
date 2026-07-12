@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrowseGallery
-import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -21,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,7 +48,7 @@ fun TimeReminderItem(
                 onClick = { isExpandedDropDown = !isExpandedDropDown }
             ) {
                 Icon(
-                    imageVector = Icons.Filled.EditCalendar,
+                    painter = painterResource(R.drawable.ic_edit_calendar),
                     contentDescription = "Day before event notification"
                 )
             }
@@ -85,7 +83,7 @@ fun TimeReminderItem(
             }
         ) {
             Icon(
-                imageVector = Icons.Filled.BrowseGallery,
+                painter = painterResource(R.drawable.ic_browse_gallery),
                 contentDescription = "Time notification"
             )
         }

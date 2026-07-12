@@ -92,9 +92,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // icons extended
-    implementation(libs.androidx.compose.material.icons.extended)
-
     // RoomDb
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)

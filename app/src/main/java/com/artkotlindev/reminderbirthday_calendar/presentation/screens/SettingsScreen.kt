@@ -11,20 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AcUnit
-import androidx.compose.material.icons.outlined.Alarm
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.Cake
-import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.ColorLens
-import androidx.compose.material.icons.outlined.CrueltyFree
-import androidx.compose.material.icons.outlined.DriveFileMoveRtl
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.NotificationsActive
-import androidx.compose.material.icons.outlined.SaveAs
-import androidx.compose.material.icons.outlined.UploadFile
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -239,7 +226,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.NotificationsActive,
+                icon = painterResource(R.drawable.ic_notifications_active),
                 title = LocalizedContext.current.getString(R.string.notification),
                 subtitle = LocalizedContext.current.getString(R.string.notification_info),
                 hasSwitch = false,
@@ -253,7 +240,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.Alarm,
+                icon = painterResource(R.drawable.ic_alarm),
                 title = LocalizedContext.current.getString(R.string.time_notifications),
                 subtitle = LocalizedContext.current.getString(R.string.time_notification_info),
                 hasSwitch = false,
@@ -265,7 +252,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.ColorLens,
+                icon = painterResource(R.drawable.ic_routine),
                 title = LocalizedContext.current.getString(R.string.theme),
                 subtitle = LocalizedContext.current.getString(R.string.theme_info),
                 hasSwitch = false,
@@ -279,7 +266,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.Language,
+                icon = painterResource(R.drawable.ic_language),
                 title = LocalizedContext.current.getString(R.string.language),
                 subtitle = LocalizedContext.current.getString(R.string.language_info),
                 hasSwitch = false,
@@ -293,7 +280,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.Cake,
+                icon = painterResource(R.drawable.ic_cake),
                 title = LocalizedContext.current.getString(R.string.type_event),
                 subtitle = LocalizedContext.current.getString(R.string.type_event_info),
                 hasSwitch = false,
@@ -305,7 +292,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.AutoAwesome,
+                icon = painterResource(R.drawable.ic_auto_awesome),
                 title = LocalizedContext.current.getString(R.string.zodiac_sign),
                 subtitle = LocalizedContext.current.getString(R.string.sign_info),
                 hasSwitch = true,
@@ -321,7 +308,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.CrueltyFree,
+                icon = painterResource(R.drawable.ic_cruelty_free),
                 title = LocalizedContext.current.getString(R.string.chinese_sign),
                 subtitle = LocalizedContext.current.getString(R.string.sign_info),
                 hasSwitch = true,
@@ -338,7 +325,7 @@ fun SettingsScreen(
         if(isNewYearRange()) {
             item(key = lazyKey++) {
                 SettingsItem(
-                    icon = Icons.Filled.AcUnit,
+                    icon = painterResource(R.drawable.ic_ac_unit),
                     title = LocalizedContext.current.getString(R.string.snowfall_title),
                     subtitle = LocalizedContext.current.getString(R.string.snowfall_info),
                     hasSwitch = true,
@@ -368,7 +355,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.SaveAs,
+                icon = painterResource(R.drawable.ic_contact_phone),
                 title = LocalizedContext.current.getString(R.string.import_events),
                 subtitle = LocalizedContext.current.getString(R.string.import_events_info),
                 hasSwitch = false,
@@ -381,7 +368,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.UploadFile,
+                icon = painterResource(R.drawable.ic_upload_file),
                 title = LocalizedContext.current.getString(R.string.export_event_json),
                 subtitle = LocalizedContext.current.getString(R.string.export_event_file_info),
                 hasSwitch = false,
@@ -396,7 +383,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.UploadFile,
+                icon = painterResource(R.drawable.ic_upload_file),
                 title = LocalizedContext.current.getString(R.string.export_event_csv),
                 subtitle = LocalizedContext.current.getString(R.string.export_event_file_info),
                 hasSwitch = false,
@@ -411,7 +398,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.DriveFileMoveRtl,
+                icon = painterResource(R.drawable.ic_drive_file_move_rtl),
                 title = LocalizedContext.current.getString(R.string.import_events_file),
                 subtitle = LocalizedContext.current.getString(R.string.import_events_file_info),
                 hasSwitch = false,
@@ -483,7 +470,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.CalendarMonth,
+                icon = painterResource(R.drawable.ic_calendar_month),
                 title = LocalizedContext.current.getString(R.string.total_events),
                 subtitle = eventsState.allEventsSize.let {
                     LocalizedContext.current.resources.getQuantityString(R.plurals.total_events_count, it, it)
@@ -528,7 +515,7 @@ fun SettingsScreen(
 
         item(key = lazyKey++) {
             SettingsItem(
-                icon = Icons.Outlined.Info,
+                icon = painterResource(R.drawable.ic_info),
                 title = LocalizedContext.current.getString(R.string.about_app),
                 subtitle = LocalizedContext.current.getString(R.string.about_app_info, versionApp),
                 hasSwitch = false,
