@@ -1,24 +1,19 @@
 package com.artkotlindev.reminderbirthday_calendar
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
-import android.view.Window
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.artkotlindev.domain.models.mappers.toLocale
 import com.artkotlindev.domain.models.settings.ThemeType
 import com.artkotlindev.reminderbirthday_calendar.presentation.navigation.NavigationScreen
@@ -39,17 +34,31 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         setContent {
             val mainActivityViewModel: MainActivityViewModel = hiltViewModel()
             val theme = mainActivityViewModel.themeType.collectAsState().value
             val language = mainActivityViewModel.languageType.collectAsState().value
-            
+
             val isDarkTheme = when (theme) {
                 ThemeType.DARK -> true
                 ThemeType.LIGHT -> false
                 ThemeType.SYSTEM -> isSystemInDarkTheme()
+            }
+
+            LaunchedEffect(isDarkTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(
+                        lightScrim = Color.TRANSPARENT,
+                        darkScrim = Color.TRANSPARENT,
+                        detectDarkMode = { isDarkTheme }
+                    ),
+                    navigationBarStyle = SystemBarStyle.auto(
+                        lightScrim = Color.TRANSPARENT,
+                        darkScrim = Color.TRANSPARENT,
+                        detectDarkMode = { isDarkTheme }
+                    )
+                )
             }
 
             val localizedContext = updateLocale(
@@ -60,41 +69,14 @@ class MainActivity : ComponentActivity() {
             CompositionLocalProvider(
                 LocalTheme provides if (isDarkTheme) ThemeType.DARK else ThemeType.LIGHT,
                 LocalizedContext provides localizedContext
-                ) {
+            ) {
                 ReminderBirthday_CalendarTheme(
                     darkTheme = isDarkTheme
                 ) {
-                    val navigationBarColor = NavigationBarDefaults.containerColor
-
-                    val view = LocalView.current
-                    val window = (view.context as Activity).window
-
-                    SideEffect {
-                        updateSystemColors(
-                            window = window,
-                            isDarkTheme = isDarkTheme,
-                            navigationBarColor = navigationBarColor
-                        )
-                    }
-
                     NavigationScreen()
                 }
             }
         }
-    }
-}
-
-fun updateSystemColors(
-    window: Window,
-    isDarkTheme: Boolean,
-    navigationBarColor: Color
-) {
-    window.statusBarColor = Color.Transparent.toArgb()
-    window.navigationBarColor = navigationBarColor.toArgb()
-
-    WindowCompat.getInsetsController(window, window.decorView).apply {
-        isAppearanceLightStatusBars = !isDarkTheme
-        isAppearanceLightNavigationBars = !isDarkTheme
     }
 }
 
