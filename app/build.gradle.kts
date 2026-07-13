@@ -25,8 +25,8 @@ android {
         applicationId = "com.artkotlindev.reminderbirthday_calendar"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1054
-        versionName = "1.0.5.4"
+        versionCode = 1055
+        versionName = "1.0.5.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
